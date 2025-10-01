@@ -20,13 +20,13 @@ module.exports = app => {
     require("./login.routes.js")(app);
     require("./selectionneur.routes.js")(app);
     require("./organisateur.routes.js")(app);
-    // require("../app/routes/equipe.routes.js")(app);
-    // require("../app/routes/tournoi.routes.js")(app);
-    // require("../app/routes/match.routes.js")(app);
-    // require("../app/routes/message.routes.js")(app);
-    // require("../app/routes/groupe.routes.js")(app);
+    require("./equipe.routes.js")(app);
+    // require("./tournoi.routes.js")(app);
+    // require("./match.routes.js")(app);
+    // require("./message.routes.js")(app);
+    // require("./groupe.routes.js")(app);
 
     app.use((req, res) => {
-        res.status(404).json({ message: "Route non trouvée" });
+        res.status(404).json({ message: "Route non trouvée "+req.path });
     });
 }

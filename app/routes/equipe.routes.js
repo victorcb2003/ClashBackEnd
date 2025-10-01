@@ -6,13 +6,19 @@ module.exports = app => {
 
     let router = express.Router();
 
-    // router.post("/update/:id", equipe.create);
+    router.post("/addJoueur", equipe.addJoueur);
 
-    // router.post("/create", equipe.create);
+    // router.delete("/removeJoueur", equipe.removeJoueur);
 
-    // router.get("/findAll", equipe.findAll);
+    // router.put("/addJoueur", equipe.name);
 
-    // router.delete("/delete/:id", equipe.delete);
+    router.post("/create", equipe.create);
+
+    router.get("/info/:id", equipe.info);
+
+    router.get("/findAll", equipe.findAll);
+
+    router.delete("/delete", equipe.delete);
 
     app.use('/api/equipe', router);
 };

@@ -8,7 +8,7 @@ module.exports = function dbConnection(multipleStatements = false) {
     port: 3306,
     password: process.env.DB_PASSWORD,
     database: process.env.DATABASE,
-    multipleStatements: multipleStatements
+    multipleStatements: true
   });
 
   connection.connect((err) => {
