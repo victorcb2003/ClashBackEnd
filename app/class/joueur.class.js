@@ -9,13 +9,13 @@ module.exports = class Joueur extends User {
     static findAll(req,res){
         const connection = dbconnection()
 
-        const sql = "SELECT User.id, User.prenom, User.nom from User Join Joueurs On Joueurs.User_id = User.id"
+        const sql = "SELECT User.id, User.prenom, User.nom, Joueurs.Equipe_id from User Join Joueurs On Joueurs.User_id = User.id"
 
         connection.execute(sql, (err, results, fields)=>{
             if (err){
                 res.status(401).send({message : "Erreur dans la requête "+err.message})
             }
-            res.status(200).send({users : results})
+            res.status(200).send({Joueurs : results})
         })
     }
 };

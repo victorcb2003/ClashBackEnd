@@ -4,23 +4,12 @@ exports.create = (req, res) => {
     if (req.tokenData.type != "Selectionneurs"){
         return res.status(401).send({message : "Route non autorisée"})
     }
-    if (req.body.nom == null){
+    if (!req.body.nom){
         return res.status(403).send({message : "req.body.nom est undefined"})
     }
 
     Equipe.create(req,res)
 };
-
-exports.delete = (req,res) =>{
-  if (!req.params.id){
-    return res.status(401).send({message : "params.id est vide"})
-  }
-
-};
-
-exports.findAll = (req,res) =>{
-
-}
 
 exports.addJoueur = (req,res) =>{
     if (req.tokenData.type != "Selectionneurs"){
@@ -72,4 +61,18 @@ exports.delete = (req,res) =>{
     }
 
     Equipe.delete(req,res)
+}
+
+exports.rename = (req,res) =>{
+    if (req.tokenData.type != "Selectionneurs"){
+        return res.status(401).send({message : "Route non autorisée"})
+    }
+    if (!req.body.Equipe_id){
+        return res.status(403).send({message : "req.body.Equipe_id est vide"})
+    }
+    if (!req.body.nom){
+        return res.status(403).send({message : "req.body.nom est vide"})
+    }
+
+    Equipe.rename(req,res)
 }

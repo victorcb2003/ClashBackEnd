@@ -114,18 +114,19 @@ module.exports = class User {
     static info(req, res) {
         const connection = dbconnection()
 
-        const sql = "select prenom,nom,email from User where id =" + req.tokenData.id
+        const sql = "select id,prenom,nom,email from User where id = ?"
+        const value = req.tokenData.id
 
-        connection.query(sql, (err, results, fields) => {
+        connection.query(sql,value, (err, results, fields) => {
             if (err) {
                 return res.status(401).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " + req.tokenData.id + err.message })
             }
-            const data = results[0]
+            const user = results[0]
 
-            if (data == null || data == undefined) {
+            if (user == null || user == undefined) {
                 return res.status(401).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " + req.tokenData.id })
             }
-            return res.status(200).send({ data })
+            return res.status(200).send({ user })
         })
     }
 

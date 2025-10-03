@@ -37,8 +37,5 @@ exports.findAll = (req,res) =>{
   if (req.tokenData == null){
     return res.status(401).send({message : "token invalide"})
   }
-  if (req.tokenData.type != "Organisateur"){
-    return res.status(403).send({message : "route non autorisée"})
-  }
   Selectionneur.findAll(req,res)
 }

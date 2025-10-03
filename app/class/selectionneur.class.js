@@ -14,7 +14,7 @@ module.exports = class Selectionneur extends User {
             if (err) {
                 res.status(401).send({ message: "Erreur dans la requête " + err.message })
             }
-            res.status(200).send({ users: results })
+            res.status(200).send({ Selectionneurs: results })
         })
     }
 };

@@ -8,9 +8,9 @@ module.exports = app => {
 
     router.post("/addJoueur", equipe.addJoueur);
 
-    // router.delete("/removeJoueur", equipe.removeJoueur);
+    router.delete("/removeJoueur", equipe.removeJoueur);
 
-    // router.put("/addJoueur", equipe.name);
+    router.put("/rename", equipe.rename);
 
     router.post("/create", equipe.create);
 

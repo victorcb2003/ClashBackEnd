@@ -8,7 +8,7 @@ module.exports = app => {
 
     router.post("/create", joueur.create);
 
-    // router.get("/findAll", joueur.findAll);
+    router.get("/findAll", joueur.findAll);
 
     router.delete("/delete/:id", joueur.delete);
 
