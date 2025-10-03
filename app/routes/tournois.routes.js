@@ -14,13 +14,13 @@ module.exports = app => {
 
     router.delete("/delete", tournois.delete);
 
-    // router.post("/addEquipe", tournois.addEquipe);
+    router.post("/addEquipe", tournois.addEquipe);
 
-    // router.delete("/removeEquipe", tournois.removeEquipe);
+    router.delete("/removeEquipe", tournois.removeEquipe);
 
     // router.post("/start", tournois.start);
 
-    // router.get("/info/:id", tournois.info);
+    router.get("/info/:id", tournois.info);
 
     app.use('/api/tournois', router);
 };

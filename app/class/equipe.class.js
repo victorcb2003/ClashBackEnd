@@ -1,4 +1,3 @@
-const connection = require('../db/connection');
 const dbconnection = require('../db/connection');
 
 module.exports = class Equipe {
@@ -55,7 +54,7 @@ module.exports = class Equipe {
         let sql = "Select id from Joueurs where Equipe_id = ?;Select nom from Equipes where id = ?"
         let values = [req.params.id,req.params.id]
 
-        connection.execute(sql, values, (err, results, fields) => {
+        connection.query(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des info de l'Équipe " + err.message })
             }
@@ -66,18 +65,21 @@ module.exports = class Equipe {
             sql = ""
             values = []
 
-            results.forEach((joueur) => {
+            results[0].forEach((joueur) => {
                 sql += "Select id,prenom,nom from User Where id = ?;"
                 values.push(joueur.id)
             })
-            connection.query(sql, values, (err, results, fields) => {
+            connection.query(sql, values, (err, result, fields) => {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des info de l'Équipe " + err.message })
                 }
-                if (results.length == 0) {
+                if (result.length == 0) {
                     return res.status(400).send({ message: "Une erreur s'est produite lors de la récupération des info de l'Équipe" })
                 }
-                return res.status(200).send({ results })
+                return res.status(200).send({
+                    Équipe : results[1][0].nom,
+                    result
+                 })
             })
         })
     }

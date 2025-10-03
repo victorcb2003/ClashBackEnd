@@ -68,3 +68,45 @@ exports.update = (req, res) => {
 
     Tournois.update(req, res)
 }
+
+exports.addEquipe = (req ,res) => {
+    if (req.tokenData.type != "Organisateurs") {
+        return res.status(401).send({ message: "Route non autorisée" })
+    }
+    if (!req.body.Tournois_id) {
+        return res.status(403).send({ message: "req.body.Tournois_id est vide" })
+    }
+    if (!req.body.Equipe_id) {
+        return res.status(403).send({ message: "req.body.Equipe_id est vide" })
+    }
+    Tournois.addEquipe(req,res)
+}
+
+exports.removeEquipe = (req ,res) => {
+    if (req.tokenData.type != "Organisateurs") {
+        return res.status(401).send({ message: "Route non autorisée" })
+    }
+    if (!req.body.Tournois_id) {
+        return res.status(403).send({ message: "req.body.Tournois_id est vide" })
+    }
+    if (!req.body.Equipe_id) {
+        return res.status(403).send({ message: "req.body.Equipe_id est vide" })
+    }
+    Tournois.removeEquipe(req,res)
+}
+
+exports.info = (req,res)=>{
+    if (!req.params.id){
+        return res.status(403).send({message : "req.params.id est vide"})
+    }
+
+    Tournois.info(req,res)
+}
+
+exports.start = (req,res) =>{
+    if (req.tokenData.type != "Organisateurs") {
+        return res.status(401).send({ message: "Route non autorisée" })
+    }
+
+    Tournois.start(req,res)
+}
