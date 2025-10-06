@@ -247,20 +247,74 @@ module.exports = class Tournois {
 
                 const equipes = []
 
-                equipe.forEach((element)=>{
+                equipe.forEach((element) => {
                     equipes.push(element.Equipe_id)
                 })
 
-                if (equipes.length <= 1){
+                if (equipes.length <= 1) {
                     return res.status(403).send({ message: "Il y a pas asser d'équipe inscrite a ce tournois" })
                 }
-                
-                const date = new Date(results[0].date_debut)
 
-                req.lieu = results[0].lieu
-                req.equipes = equipes
-                req.date_debut = date.toLocaleString("fr-FR").split(' ')[0]
-                Match.base(req , res)
+                if (Math.sqrt(equipes.length) != Math.round(Math.sqrt(equipes.length))) {
+                    return res.status(403).send({ message: `Il y a ${equipes.length} équipes dans le tournois, il faut que se soit un carré de 2` })
+                }
+
+                const date_debut = new Date(results[0].date_debut)
+
+                const tours = Math.ceil(Math.sqrt(equipes.length))
+
+                sql = ""
+                values = []
+                let h = 0
+                let d = 0
+
+                for (let y = 0; y < tours; y++) {
+                    for (let i = 0; i < 2 ** (tours - y) / 2; i++) {
+
+                        sql += "insert into Matchs (date_heure,lieu,tour,Tournois_id) values (?,?,?,?);"
+
+                        const date = new Date(date_debut)
+
+                        date.setHours(date.getHours() + h)
+                        date.setDate(date.getDate() + d)
+
+                        h += 3
+
+                        if (h == 9) {
+                            h = 0
+                            d += 1
+                        }
+
+                        values.push(date)
+                        values.push(results[0].lieu)
+                        values.push(y + 1)
+                        values.push(req.body.Tournois_id)
+                    }
+                }
+                connection.query(sql, values, (err, results1, fields) => {
+                    if (err) {
+                        return res.status(403).send({ message: "Une erreur s'est produite lors du démarrage tournois " + err.message })
+                    }
+
+                    const arbre = []
+                    let index = 0
+
+                    while (equipes.length != 0) {
+                        const rdm = Math.floor(Math.random() * equipes.length)
+                        arbre[index] = equipes[rdm]
+                        equipes.splice(rdm, 1)
+                        index += 1
+                    }
+
+                    sql = ""
+                    values = []
+
+                    for (let i = 0; i < arbre.length ; i++){
+                        sql+=""
+                    }
+                    res.status(200).send({message : "aaaa"})
+                    console.log(results1.insertId)
+                })
             })
         })
     }
