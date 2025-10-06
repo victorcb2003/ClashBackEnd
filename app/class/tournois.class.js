@@ -1,4 +1,5 @@
 const dbconnection = require('../db/connection');
+const Match = require("./match.class")
 
 module.exports = class Tournois {
 
@@ -55,7 +56,7 @@ module.exports = class Tournois {
 
         let sql = "Select id,nom,date_debut,lieu,Organisateurs_id from Tournois"
 
-        connection.execute(sql,[], (err, Tournois, fields) => {
+        connection.execute(sql, [], (err, Tournois, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des tournois " + err.message })
             }
@@ -80,8 +81,8 @@ module.exports = class Tournois {
                     tournois.push({
                         id: Tournois[i].id,
                         nom: Tournois[i].nom,
-                        date : Tournois[i].date_debut,
-                        lieu : Tournois[i].lieu,
+                        date: Tournois[i].date_debut,
+                        lieu: Tournois[i].lieu,
                         Organisateurs: results[i]
                     })
                 }
@@ -181,15 +182,15 @@ module.exports = class Tournois {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors de l'ajout de l'équipe au tournois " + err.message })
                 }
-                return res.status(200).send({message : "L'équipe a bien été ajouté au tournois"})
+                return res.status(200).send({ message: "L'équipe a bien été ajouté au tournois" })
             })
         })
     }
-        static removeEquipe(req, res) {
+    static removeEquipe(req, res) {
         const connection = dbconnection()
 
         let sql = "Select Organisateurs_id from Tournois where id = ?;Select id from Participants where Tournois_id = ? and Equipe_id = ?"
-        let values = [req.body.Tournois_id,req.body.Tournois_id,req.body.Equipe_id]
+        let values = [req.body.Tournois_id, req.body.Tournois_id, req.body.Equipe_id]
 
         connection.query(sql, values, (err, results, fields) => {
             if (err) {
@@ -212,7 +213,54 @@ module.exports = class Tournois {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors de la suppression de l'équipe du tournois " + err.message })
                 }
-                return res.status(200).send({message : "L'équipe a bien été supprimé au tournois"})
+                return res.status(200).send({ message: "L'équipe a bien été supprimé au tournois" })
+            })
+        })
+    }
+    static start(req, res) {
+        const connection = dbconnection()
+
+        let sql = "Select Organisateurs_id,date_debut,lieu from Tournois where id = ?"
+        let values = [req.body.Tournois_id]
+
+        connection.execute(sql, values, (err, results, fields) => {
+            if (err) {
+                return res.status(403).send({ message: "Une erreur s'est produite lors du démarrage tournois " + err.message })
+            }
+            if (results.length == 0) {
+                return res.status(403).send({ message: "Il y a aucun tournois avec cette id" })
+            }
+            if (results[0].Organisateurs_id != req.tokenData.id) {
+                return res.status(401).send({ message: "Vous ne pouvez pas faire de changement dans ce tournois" })
+            }
+
+            sql = "Select Equipe_id from Participants where Tournois_id = ?"
+            values = [req.body.Tournois_id]
+
+            connection.execute(sql, values, (err, equipe, fields) => {
+                if (err) {
+                    return res.status(403).send({ message: "Une erreur s'est produite lors du démarrage tournois " + err.message })
+                }
+                if (results.length == 0) {
+                    return res.status(403).send({ message: "Il y a aucun équipe inscrite a ce tournois" })
+                }
+
+                const equipes = []
+
+                equipe.forEach((element)=>{
+                    equipes.push(element.Equipe_id)
+                })
+
+                if (equipes.length <= 1){
+                    return res.status(403).send({ message: "Il y a pas asser d'équipe inscrite a ce tournois" })
+                }
+                
+                const date = new Date(results[0].date_debut)
+
+                req.lieu = results[0].lieu
+                req.equipes = equipes
+                req.date_debut = date.toLocaleString("fr-FR").split(' ')[0]
+                Match.base(req , res)
             })
         })
     }

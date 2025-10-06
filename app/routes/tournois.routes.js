@@ -18,7 +18,7 @@ module.exports = app => {
 
     router.delete("/removeEquipe", tournois.removeEquipe);
 
-    // router.post("/start", tournois.start);
+    router.post("/start", tournois.start);
 
     router.get("/info/:id", tournois.info);
 

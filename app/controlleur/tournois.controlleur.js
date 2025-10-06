@@ -107,6 +107,9 @@ exports.start = (req,res) =>{
     if (req.tokenData.type != "Organisateurs") {
         return res.status(401).send({ message: "Route non autorisée" })
     }
+    if (!req.body.Tournois_id) {
+        return res.status(403).send({ message: "req.body.Tournois_id est vide" })
+    }
 
     Tournois.start(req,res)
 }
