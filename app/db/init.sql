@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS Tournois (
   date_debut DATE NOT NULL,
   lieu VARCHAR(100) NOT NULL,
   Organisateurs_id INT,
+  lancer BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (Organisateurs_id) REFERENCES Organisateurs(User_id) ON DELETE CASCADE
 );

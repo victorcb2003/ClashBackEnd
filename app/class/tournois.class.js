@@ -217,10 +217,19 @@ module.exports = class Tournois {
             })
         })
     }
+    static abortStart(req) {
+        const connection = dbconnection()
+
+        sql = "UPDATE Tournois SET lancer = 1 WHERE id = ?;Delete from Matchs where Tournois_id = ?"
+        values = [req.body.Tournois_id, req.body.Tournois_id]
+
+        connection.query(sql, values)
+
+    }
     static start(req, res) {
         const connection = dbconnection()
 
-        let sql = "Select Organisateurs_id,date_debut,lieu from Tournois where id = ?"
+        let sql = "Select Organisateurs_id,date_debut,lieu,lancer from Tournois where id = ?"
         let values = [req.body.Tournois_id]
 
         connection.execute(sql, values, (err, results, fields) => {
@@ -232,6 +241,9 @@ module.exports = class Tournois {
             }
             if (results[0].Organisateurs_id != req.tokenData.id) {
                 return res.status(401).send({ message: "Vous ne pouvez pas faire de changement dans ce tournois" })
+            }
+            if (results[0].lancer == 1) {
+                return res.status(403).send({ message: "Ce tournois a déja été lancé" })
             }
 
             sql = "Select Equipe_id from Participants where Tournois_id = ?"
@@ -260,6 +272,7 @@ module.exports = class Tournois {
                 }
 
                 const date_debut = new Date(results[0].date_debut)
+                date_debut.setHours(date_debut.getHours()+10)
 
                 const tours = Math.ceil(Math.sqrt(equipes.length))
 
@@ -269,7 +282,7 @@ module.exports = class Tournois {
                 let d = 0
 
                 for (let y = 0; y < tours; y++) {
-                    for (let i = 0; i < 2 ** (tours - y) / 2; i++) {
+                    for (let i = 0; i < 2 ** (tours - y - 1); i++) {
 
                         sql += "insert into Matchs (date_heure,lieu,tour,Tournois_id) values (?,?,?,?);"
 
@@ -291,8 +304,11 @@ module.exports = class Tournois {
                         values.push(req.body.Tournois_id)
                     }
                 }
+                sql += "UPDATE Tournois SET lancer = 1 WHERE id = ?;"
+                values.push(req.body.Tournois_id)
                 connection.query(sql, values, (err, results1, fields) => {
                     if (err) {
+                        Tournois.abortStart()
                         return res.status(403).send({ message: "Une erreur s'est produite lors du démarrage tournois " + err.message })
                     }
 
@@ -306,14 +322,32 @@ module.exports = class Tournois {
                         index += 1
                     }
 
-                    sql = ""
-                    values = []
+                    sql = "Select id from Matchs where Tournois_id = ? and tour = 1"
+                    values = [req.body.Tournois_id]
 
-                    for (let i = 0; i < arbre.length ; i++){
-                        sql+=""
-                    }
-                    res.status(200).send({message : "aaaa"})
-                    console.log(results1.insertId)
+                    connection.execute(sql, values, (err, results, fields) => {
+                        if (err) {
+                            Tournois.abortStart()
+                            return res.status(403).send({ message: "Une erreur s'est produite lors du démarrage tournois " + err.message })
+                        }
+
+                        sql = ""
+                        values = []
+
+                        for (let i = 0; i < arbre.length / 2; i++) {
+                            sql += "UPDATE Matchs SET Equipe1_id = ?,Equipe2_id = ? WHERE id = ?;"
+                            values.push(arbre[2 * i])
+                            values.push(arbre[2 * i + 1])
+                            values.push(results[i].id)
+                        }
+                        connection.query(sql, values, (err, results, fields) => {
+                            if (err) {
+                                Tournois.abortStart()
+                                return res.status(403).send({ message: "Une erreur s'est produite lors du démarrage tournois " + err.message })
+                            }
+                            return res.status(200).send({ message: "Le tournois a bien été lancé" })
+                        })
+                    })
                 })
             })
         })
