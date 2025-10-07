@@ -6,13 +6,13 @@ module.exports = app => {
 
     let router = express.Router();
 
-    router.post("/create", message.create);
+    // router.post("/create", message.create);
 
-    router.put("/update", message.update);
+    // router.put("/update", message.update);
 
-    router.delete("/delete/:id", message.delete);
+    // router.delete("/delete/:id", message.delete);
 
-    router.get("/findAll/:id", message.findAll);
+    // router.get("/findAll/:id", message.findAll);
 
     app.use('/api/message', router);
 };
