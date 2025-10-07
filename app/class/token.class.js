@@ -6,7 +6,7 @@ module.exports = class Token {
 
   // génére un token d'accès
   static generateToken(id) {
-    return jwt.sign( id , process.env.TOKEN_SECRET, { expiresIn: '1h' });
+    return jwt.sign( id , process.env.TOKEN_SECRET, { expiresIn: '1d' });
   }
 
   // vérifie un token d'accès

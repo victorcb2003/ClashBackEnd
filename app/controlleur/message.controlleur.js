@@ -1,21 +1,20 @@
-const Organisateur = require("../class/organisateur.class.js");
+const message = require("../class/message.class.js");
 
 exports.create = (req, res) => {
   if (!req.body.prenom || !req.body.nom || !req.body.email || !req.body.password) {
-    res.status(400).send({
+    return res.status(400).send({
       message: "Veuillez remplir tous les champs !"
     });
-    return;
   }
 
-  const organisateur = new Organisateur({
+  const message = new message({
     prenom: req.body.prenom,
     nom: req.body.nom,
     email: req.body.email,
     password: req.body.password
   });
 
-  organisateur.create(res,"Organisateurs");
+  message.create(res, "messages");
 };
 
 exports.delete = (req,res) =>{
@@ -23,19 +22,19 @@ exports.delete = (req,res) =>{
     return res.status(401).send({message : "params.id est vide"})
   }
 
-  if (req.dataToken == null){
+  if (req.tokenData == null && typeof(req.tokenData.id) == 'number'){
     return res.status(401).send({message : "token invalide"})
   } 
 
-  if (req.dataToken.data.id != req.params.id ){
+  if (req.tokenData.id != req.params.id ){
     return res.status(403).send({message : "route non autorisée"})
   }
-  Organisateur.delete(req,res)
+  message.delete(req,res)
 };
 
 exports.findAll = (req,res) =>{
   if (req.tokenData == null){
     return res.status(401).send({message : "token invalide"})
   }
-  Organisateur.findAll(req,res)
+  message.findAll(req,res)
 }
