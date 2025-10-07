@@ -7,13 +7,6 @@ exports.create = (req, res) => {
     });
   }
 
-  const message = new message({
-    prenom: req.body.prenom,
-    nom: req.body.nom,
-    email: req.body.email,
-    password: req.body.password
-  });
-
   message.create(res, "messages");
 };
 

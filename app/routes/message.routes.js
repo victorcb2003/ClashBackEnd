@@ -8,9 +8,11 @@ module.exports = app => {
 
     router.post("/create", message.create);
 
-    router.get("/findAll", message.findAll);
+    router.put("/update", message.update);
 
     router.delete("/delete/:id", message.delete);
+
+    router.get("/findAll/:id", message.findAll);
 
     app.use('/api/message', router);
 };
