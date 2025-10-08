@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS Messages (
   expediteur_id INT NOT NULL,
   destinataire_id INT NOT NULL,
   message TEXT NOT NULL,
+  lu BOOLEAN DEFAULT FALSE,
   date_envoi DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (expediteur_id) REFERENCES User(id) ON DELETE CASCADE,
   FOREIGN KEY (destinataire_id) REFERENCES User(id) ON DELETE CASCADE

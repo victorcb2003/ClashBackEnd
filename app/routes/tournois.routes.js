@@ -12,7 +12,7 @@ module.exports = app => {
 
     router.get("/findAll", tournois.findAll);
 
-    router.delete("/delete", tournois.delete);
+    router.delete("/delete/:id", tournois.delete);
 
     router.post("/addEquipe", tournois.addEquipe);
 

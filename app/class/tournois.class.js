@@ -94,7 +94,7 @@ module.exports = class Tournois {
         const connection = dbconnection()
 
         let sql = "Select Organisateurs_id from Tournois where id = ?"
-        let values = [req.body.Tournois_id]
+        let values = [req.params.id]
 
         connection.execute(sql, values, (err, results, fields) => {
             if (err) {
@@ -108,7 +108,7 @@ module.exports = class Tournois {
             }
 
             sql = "Delete from Tournois where id = ?"
-            values = [req.body.Tournois_id]
+            values = [req.params.id]
 
             connection.execute(sql, values, (err, results, fields) => {
                 if (err) {
