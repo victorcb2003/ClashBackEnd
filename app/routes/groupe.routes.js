@@ -6,9 +6,9 @@ module.exports = app => {
 
     let router = express.Router();
 
-    router.post("/add", groupe.addJoueur);
+    router.post("/add", groupe.add);
 
-    router.delete("/remove", groupe.removeJoueur);
+    router.delete("/remove", groupe.remove);
 
     router.put("/rename", groupe.rename);
 

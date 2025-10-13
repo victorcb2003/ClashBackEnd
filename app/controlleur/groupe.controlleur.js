@@ -1,7 +1,7 @@
 const Groupe = require("../class/groupe.class.js");
 
 exports.create = (req, res) => {
-    if (req.tokenData != null){
+    if (req.tokenData == null){
         return res.status(401).send({message : "invalide token"})
     }
     if (!req.body.nom){
@@ -11,32 +11,32 @@ exports.create = (req, res) => {
     Groupe.create(req,res)
 };
 
-exports.addJoueur = (req,res) =>{
-    if (req.tokenData != null){
+exports.add = (req,res) =>{
+    if (req.tokenData == null){
         return res.status(401).send({message : "invalide token"})
     }
-    if (!req.body.Joueur_id){
-        return res.status(403).send({message : "req.body.User_id est vide"})
+    if (!req.body.user_id){
+        return res.status(403).send({message : "req.body.user_id est vide"})
     }
     if (!req.body.groupe_id){
         return res.status(403).send({message : "req.body.groupe_id est vide"})
     }
 
-    Groupe.addJoueur(req,res)
+    Groupe.add(req,res)
 }
 
-exports.removeJoueur = (req,res) =>{
-    if (req.tokenData != null){
+exports.remove = (req,res) =>{
+    if (req.tokenData == null){
         return res.status(401).send({message : "invalide token"})
     }
-    if (!req.body.Joueur_id){
-        return res.status(403).send({message : "req.body.User_id est vide"})
+    if (!req.body.user_id){
+        return res.status(403).send({message : "req.body.user_id est vide"})
     }
     if (!req.body.groupe_id){
         return res.status(403).send({message : "req.body.groupe_id est vide"})
     }
 
-    Groupe.removeJoueur(req,res)
+    Groupe.remove(req,res)
 }
 
 exports.info = (req,res)=>{
@@ -44,7 +44,7 @@ exports.info = (req,res)=>{
         return res.status(403).send({message : "req.params.id est vide"})
     }
 
-    Grouperoupe.info(req,res)
+    Groupe.info(req,res)
 }
 
 exports.findAll = (req, res)=>{
@@ -53,7 +53,7 @@ exports.findAll = (req, res)=>{
 }
 
 exports.delete = (req,res) =>{
-    if (req.tokenData != null){
+    if (req.tokenData == null){
         return res.status(401).send({message : "invalide token"})
     }
     if (!req.body.groupe_id){
@@ -64,7 +64,7 @@ exports.delete = (req,res) =>{
 }
 
 exports.rename = (req,res) =>{
-    if (req.tokenData != null){
+    if (req.tokenData == null){
         return res.status(401).send({message : "Route non autorisée"})
     }
     if (!req.body.groupe_id){
