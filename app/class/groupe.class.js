@@ -104,43 +104,43 @@ module.exports = class Groupe {
         })
     }
 
-    // static findAll(req, res) {
-    //     const connection = dbconnection();
+    static findAll(req, res) {
+        const connection = dbconnection();
 
-    //     let sql = "Select id,nom,Selectionneurs_id from Groupes"
+        let sql = "Select id,nom from Groupes"
 
-    //     connection.execute(sql, (err, groupes, fields) => {
-    //         if (err) {
-    //             return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des noms des équipes " + err.message })
-    //         }
-    //         if (groupes.length == 0){
-    //             return res.status(403).send({ message : "Il y a pas d'équipe"})
-    //         }
-    //         sql = ""
-    //         let values = []
-    //         equipes.forEach((equipe)=>{
-    //             sql += "Select prenom,nom from User where id = ?;"
-    //             values.push(equipe.Selectionneurs_id)
-    //         })
-    //         connection.query(sql,values,(err,results,fields)=>{
-    //             if (err) {
-    //                 return res.status(403).send({message : "Une erreur s'est produite lors de la récupération des noms des équipes " + err.message })
-    //             }
-    //             if (results.length == 0){
-    //                 return res.status(403).send({message : "Une erreur s'est produite lors de la récupération des noms des équipes " })
-    //             }
-    //             const equipe = []
-    //             for (let i = 0; i< results.length; i++ ){
-    //                 equipe.push({
-    //                     id : equipes[i].id,
-    //                     nom : equipes[i].nom,
-    //                     Selectionneurs : results[i]
-    //                 })
-    //             }
-    //             return res.status(200).send({ equipes : equipe})
-    //         })
-    //     })
-    // }
+        connection.execute(sql, (err, groupes, fields) => {
+            if (err) {
+                return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des noms des équipes " + err.message })
+            }
+
+            sql = ""
+            let values = []
+
+            groupes.forEach((groupe)=>{
+                sql += "Select id from Groupes_Membres where Groupe_id = ?;"
+                values.push(groupe.id)
+            })
+
+            connection.query(sql,values,(err,results,fields)=>{
+                if (err) {
+                    return res.status(403).send({message : "Une erreur s'est produite lors de la récupération des noms des équipes " + err.message })
+                }
+                if (results.length == 0){
+                    return res.status(403).send({message : "Une erreur s'est produite lors de la récupération des noms des équipes " })
+                }
+                const groupe = []
+                for (let i = 0; i< results.length; i++ ){
+                    groupe.push({
+                        id : groupes[i].id,
+                        nom : groupes[i].nom,
+                        taille : results[i].length
+                    })
+                }
+                return res.status(200).send({ Groupe : groupe})
+            })
+        })
+    }
     static delete(req,res){
         const connection = dbconnection()
 
