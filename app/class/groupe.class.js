@@ -113,6 +113,9 @@ module.exports = class Groupe {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des noms des équipes " + err.message })
             }
+            if (groupes.length == 0){
+                return res.status(400).send({message : "Il y a aucun groupe"})
+            }
 
             sql = ""
             let values = []
