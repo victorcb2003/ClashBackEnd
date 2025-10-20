@@ -16,7 +16,7 @@ module.exports = app => {
 
     router.get("/info/:id", groupe.info);
 
-    router.get("/findAll", groupe.findAll);
+    // router.get("/findAll", groupe.findAll);
 
     router.delete("/delete/:id", groupe.delete);
 
