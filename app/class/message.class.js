@@ -46,7 +46,7 @@ module.exports = class Message {
         const connection = dbconnection()
 
         const sql = "Select * from Messages where expediteur_id = ? or destinataire_id = ?"
-        const values = [req.params.id, req.params.id]
+        const values = [req.tokenData.id,req.tokenData.id]
 
         connection.execute(sql, values, (err, results, fields) => {
             if (err) {

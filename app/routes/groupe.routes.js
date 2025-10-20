@@ -18,7 +18,15 @@ module.exports = app => {
 
     router.get("/findAll", groupe.findAll);
 
-    router.delete("/delete", groupe.delete);
+    router.delete("/delete/:id", groupe.delete);
+
+    router.delete("/messageDelete/:id", groupe.messageDelete);
+
+    router.post("/messageCreate", groupe.messageCreate);
+
+    router.get("/messageFindAll/:id", groupe.messageFindAll);
+
+    router.put("/messageUpdate", groupe.messageUpdate);
 
     app.use('/api/groupe', router);
 };

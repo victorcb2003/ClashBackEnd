@@ -12,7 +12,7 @@ module.exports = app => {
 
     router.delete("/delete/:id", message.delete);
 
-    router.get("/findAll/:id", message.findAll);
+    router.get("/findAll", message.findAll);
 
     app.use('/api/message', router);
 };

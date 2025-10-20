@@ -94,7 +94,7 @@ module.exports = class Equipe {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des noms des équipes " + err.message })
             }
             if (equipes.length == 0){
-                return res.status(403).send({ message : "Il y a pas d'équipe"})
+                return res.status(200).send({ equipes : []})
             }
             sql = ""
             let values = []

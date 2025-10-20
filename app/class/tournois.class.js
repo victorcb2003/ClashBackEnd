@@ -61,7 +61,7 @@ module.exports = class Tournois {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des tournois " + err.message })
             }
             if (Tournois.length == 0) {
-                return res.status(403).send({ message: "Il y a pas de tournois" })
+                return res.status(403).send({ Tournois: [] })
             }
             sql = ""
             let values = []

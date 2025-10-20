@@ -1,5 +1,4 @@
 const Message = require("../class/message.class.js");
-const message = require("../class/message.class.js");
 
 exports.create = (req, res) => {
     if (req.tokenData == null) {
@@ -9,7 +8,7 @@ exports.create = (req, res) => {
         return res.status(406).send({message: "Veuillez remplir tous les champs !"});
     }
 
-    message.create(req, res);
+    Message.create(req, res);
 };
 
 exports.delete = (req, res) => {
@@ -20,18 +19,15 @@ exports.delete = (req, res) => {
         return res.status(406).send({ message: "params.id est vide" })
     }
 
-    message.delete(req, res)
+    Message.delete(req, res)
 };
 
 exports.findAll = (req, res) => {
     if (req.tokenData == null) {
         return res.status(401).send({ message: "token invalide" })
     }
-    if (!req.params.id) {
-        return res.status(406).send({ message: "params.id est vide" })
-    }
 
-    message.findAll(req, res)
+    Message.findAll(req, res)
 }
 
 exports.update = (req,res)=>{

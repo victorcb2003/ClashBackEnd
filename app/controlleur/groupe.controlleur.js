@@ -56,8 +56,8 @@ exports.delete = (req,res) =>{
     if (req.tokenData == null){
         return res.status(401).send({message : "invalide token"})
     }
-    if (!req.body.groupe_id){
-        return res.status(403).send({message : "req.body.groupe_id est vide"})
+    if (!req.params.id){
+        return res.status(403).send({message : "req.params.id est vide"})
     }
 
     Groupe.delete(req,res)
@@ -75,4 +75,51 @@ exports.rename = (req,res) =>{
     }
 
     Groupe.rename(req,res)
+}
+
+exports.messageCreate = (req, res) => {
+    if (req.tokenData == null) {
+        return res.status(401).send({ message: "token invalide" })
+    }
+    if (!req.body.message || !req.body.groupe_id) {
+        return res.status(406).send({message: "Veuillez remplir tous les champs !"});
+    }
+
+    Groupe.messageCreate(req, res);
+};
+
+exports.messageDelete = (req, res) => {
+    if (req.tokenData == null) {
+        return res.status(401).send({ message: "token invalide" })
+    }
+    if (!req.params.id) {
+        return res.status(406).send({ message: "params.id est vide" })
+    }
+
+    Groupe.messageDelete(req, res)
+};
+
+exports.messageFindAll = (req, res) => {
+    if (req.tokenData == null) {
+        return res.status(401).send({ message: "token invalide" })
+    }
+    if (!req.params.id) {
+        return res.status(406).send({ message: "params.id est vide" })
+    }
+
+    Groupe.messageFindAll(req, res)
+}
+
+exports.messageUpdate = (req,res)=>{
+    if (req.tokenData == null) {
+        return res.status(401).send({ message: "token invalide" })
+    }
+    if (!req.body.message_id){
+        res.status(406).send({message : "req.body.message_id est vide"})
+    }
+    if (!req.body.message){
+        res.status(406).send({message : "req.body.message est vide"})
+    }
+
+    Groupe.messageUpdate(req,res)
 }
