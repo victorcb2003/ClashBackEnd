@@ -40,6 +40,9 @@ exports.remove = (req,res) =>{
 }
 
 exports.info = (req,res)=>{
+    if (req.tokenData == null){
+        return res.status(401).send({message : "invalide token"})
+    }
     if (!req.params.id){
         return res.status(403).send({message : "req.params.id est vide"})
     }

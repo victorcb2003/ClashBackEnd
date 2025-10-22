@@ -34,8 +34,30 @@ exports.info = (req,res) =>{
 
 exports.update = (req,res) =>{
   if (req.tokenData == null || typeof(req.tokenData.id) != 'number'){
-    console.log('aaa')
     return res.status(401).send({message : "token invalide"})
   } 
   User.update(req,res)
 };
+
+exports.getVerif = (req,res)=>{
+  if (req.tokenData == null){
+    return res.status(400).send({message : "token invalide"})
+  }
+  if (req.tokenData.type != "admin" && req.tokenData.type != "Selectionneurs" && req.tokenData.type != "Organisateurs"){
+    return res.status(400).send({message : "Vous n'avez pas accès a cette route"})
+  }
+  User.getVerif(req,res)
+}
+
+exports.putVerif = (req,res)=>{
+  if (req.tokenData == null){
+    return res.status(400).send({message : "token invalide"})
+  }
+  if (req.tokenData.type != "admin" && req.tokenData.type != "Selectionneurs" && req.tokenData.type != "Organisateurs"){
+    return res.status(400).send({message : "Vous n'avez pas accès a cette route"})
+  }
+  if (req.body.id == undefined || req.body.value == undefined){
+    return res.send(400).send({message : "req.body.id ou/et req.body.value est/sont undefined"})
+  }
+  User.putVerif(req,res)
+}

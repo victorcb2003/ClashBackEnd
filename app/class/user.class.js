@@ -65,6 +65,9 @@ module.exports = class User {
                 });
                 return;
             }
+            if (results[0].verified == 0){
+                return res.status(400).send({message : "L'utilisateur n'est pas vérifié"})
+            }
             const user = results[0];
             if (!bcrypt.compareSync(this.password, user.password)) {
                 res.status(401).send({
@@ -167,5 +170,28 @@ module.exports = class User {
 
             return res.status(200).send({ message: "modification des données de l'utilisateur " + req.tokenData.id })
         })
+    }
+    static getVerif(req,res){
+        const connection = dbconnection()
+
+        if (req.tokenData.type == "admin"){
+            const sql = "Select id from User where verified = 0"
+        } else 
+        {
+            const sql = "SELECT id FROM Joueurs JOIN User ON Joueurs.User_id = User.id WHERE User.verified = 0"
+        }
+
+        connection.execute(sql,[],(err,results,field)=>{
+            if (err){
+                return res.status(500).send({message : "Erreur lors de la récupération des utilisateurs non vérifiés. "+err.message})
+            }
+            return res.status(200).send({ results : results})
+        })
+    }
+    static putVerif(req,res){
+        const connection = dbconnection()
+
+        if (req.tokenData.type != "admin"){
+        } 
     }
 };

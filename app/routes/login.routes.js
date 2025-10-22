@@ -13,5 +13,9 @@ module.exports = app => {
 
     router.put("/update/", user.update);
 
+    router.get("/verif", user.getVerif);
+
+    router.put("/verif", user.putVerif);
+
     app.use('/api/user', router);
 };
