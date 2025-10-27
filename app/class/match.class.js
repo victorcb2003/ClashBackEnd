@@ -34,7 +34,6 @@ module.exports = class match {
                     return res.status(403).send({ message: "Érreur lors de la modification d'un match " + err.message })
                 }
                 if (results[0].Organisateurs_id != req.tokenData.id) {
-                    console.log(req.tokenData.id,results[0].Organisateurs_id)
                     return res.status(401).send({ message: "route non autorisée" })
                 }
 

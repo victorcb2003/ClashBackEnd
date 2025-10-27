@@ -17,21 +17,6 @@ exports.create = (req, res) => {
   joueur.create(res, "Joueurs");
 };
 
-exports.delete = (req,res) =>{
-  if (!req.params.id){
-    return res.status(401).send({message : "params.id est vide"})
-  }
-
-  if (req.tokenData == null && typeof(req.tokenData.id) == 'number'){
-    return res.status(401).send({message : "token invalide"})
-  } 
-
-  if (req.tokenData.id != req.params.id ){
-    return res.status(403).send({message : "route non autorisée"})
-  }
-  Joueur.delete(req,res)
-};
-
 exports.findAll = (req,res) =>{
   if (req.tokenData == null){
     return res.status(401).send({message : "token invalide"})

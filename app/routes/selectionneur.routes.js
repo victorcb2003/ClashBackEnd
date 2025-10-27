@@ -9,7 +9,5 @@ module.exports = app => {
 
     router.get("/findAll", selectionneur.findAll);
 
-    router.delete("/delete/:id", selectionneur.delete);
-
     app.use('/api/selectionneur', router);
 };

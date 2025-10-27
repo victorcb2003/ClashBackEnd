@@ -9,7 +9,5 @@ module.exports = app => {
 
     router.get("/findAll", organisateur.findAll);
 
-    router.delete("/delete/:id", organisateur.delete);
-
     app.use('/api/organisateur', router);
 };

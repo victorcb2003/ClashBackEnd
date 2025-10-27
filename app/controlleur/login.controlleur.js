@@ -16,6 +16,20 @@ exports.login = (req, res) => {
   user.login(res);
 };
 
+exports.delete = (req,res) =>{
+  if (!req.params.id){
+    return res.status(401).send({message : "params.id est vide"})
+  }
+
+  if (req.tokenData == null && typeof(req.tokenData.id) == 'number'){
+    return res.status(401).send({message : "token invalide"})
+  } 
+
+  if (req.tokenData.id != req.params.id && req.tokenData.type != "Admin"){
+    return res.status(403).send({message : "route non autorisée"})
+  }
+  User.delete(req,res)
+};
 
 exports.test = (req, res) => {
     if (!req.tokenData) {
@@ -43,7 +57,7 @@ exports.getVerif = (req,res)=>{
   if (req.tokenData == null){
     return res.status(400).send({message : "token invalide"})
   }
-  if (req.tokenData.type != "admin" && req.tokenData.type != "Selectionneurs" && req.tokenData.type != "Organisateurs"){
+  if (req.tokenData.type != "Admin" && req.tokenData.type != "Selectionneurs" && req.tokenData.type != "Organisateurs"){
     return res.status(400).send({message : "Vous n'avez pas accès a cette route"})
   }
   User.getVerif(req,res)
@@ -53,7 +67,7 @@ exports.putVerif = (req,res)=>{
   if (req.tokenData == null){
     return res.status(400).send({message : "token invalide"})
   }
-  if (req.tokenData.type != "admin" && req.tokenData.type != "Selectionneurs" && req.tokenData.type != "Organisateurs"){
+  if (req.tokenData.type != "Admin" && req.tokenData.type != "Selectionneurs" && req.tokenData.type != "Organisateurs"){
     return res.status(400).send({message : "Vous n'avez pas accès a cette route"})
   }
   if (req.body.id == undefined || req.body.value == undefined){

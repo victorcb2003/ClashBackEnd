@@ -13,6 +13,8 @@ module.exports = app => {
 
     router.put("/update/", user.update);
 
+    router.delete("/delete/:id", user.delete);
+
     router.get("/verif", user.getVerif);
 
     router.put("/verif", user.putVerif);

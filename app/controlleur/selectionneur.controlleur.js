@@ -18,21 +18,6 @@ exports.create = (req, res) => {
   selectionneur.create(res, "Selectionneurs");
 };
 
-exports.delete = (req,res) =>{
-  if (!req.params.id){
-    return res.status(401).send({message : "params.id est vide"})
-  }
-
-  if (req.header.dataToken == null){
-    return res.status(401).send({message : "token invalide"})
-  } 
-
-  if (req.header.dataToken.data.id != req.params.id ){
-    return res.status(403).send({message : "route non autorisée"})
-  }
-  Selectionneur.delete(req,res)
-}
-
 exports.findAll = (req,res) =>{
   if (req.tokenData == null){
     return res.status(401).send({message : "token invalide"})

@@ -18,21 +18,6 @@ exports.create = (req, res) => {
   organisateur.create(res,"Organisateurs");
 };
 
-exports.delete = (req,res) =>{
-  if (!req.params.id){
-    return res.status(401).send({message : "params.id est vide"})
-  }
-
-  if (req.dataToken == null){
-    return res.status(401).send({message : "token invalide"})
-  } 
-
-  if (req.dataToken.data.id != req.params.id ){
-    return res.status(403).send({message : "route non autorisée"})
-  }
-  Organisateur.delete(req,res)
-};
-
 exports.findAll = (req,res) =>{
   if (req.tokenData == null){
     return res.status(401).send({message : "token invalide"})

@@ -10,7 +10,5 @@ module.exports = app => {
 
     router.get("/findAll", joueur.findAll);
 
-    router.delete("/delete/:id", joueur.delete);
-
     app.use('/api/joueur', router);
 };

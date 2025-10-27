@@ -65,8 +65,8 @@ module.exports = class User {
                 });
                 return;
             }
-            if (results[0].verified == 0){
-                return res.status(400).send({message : "L'utilisateur n'est pas vérifié"})
+            if (results[0].verified == 0) {
+                return res.status(400).send({ message: "L'utilisateur n'est pas vérifié" })
             }
             const user = results[0];
             if (!bcrypt.compareSync(this.password, user.password)) {
@@ -75,7 +75,7 @@ module.exports = class User {
                 });
                 return;
             }
-            const type = ["Joueurs", "Organisateurs", "Selectionneurs"]
+            const type = ["Joueurs", "Organisateurs", "Selectionneurs","Admin"]
 
             for (const element of type) {
 
@@ -88,10 +88,10 @@ module.exports = class User {
                     if (results[0] != undefined) {
                         res.status(200).send({
                             message: "Login réussi !",
-                            token: Token.generateToken({ 
+                            token: Token.generateToken({
                                 id: user.id,
                                 type: element
-                             })
+                            })
                         });
                     }
                 })
@@ -104,13 +104,16 @@ module.exports = class User {
         const connection = dbconnection()
 
         const sql = "DELETE FROM User WHERE id = ?"
-        const values = [req.tokenData.id]
+        const values = [req.params.id]
 
         connection.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(401).send({ message: "Erreur l'hors de la suppression de l'utilisateur " + req.tokenData.id + err.message })
+                return res.status(401).send({ message: "Erreur l'hors de la suppression de l'utilisateur " + req.params.id + err.message })
             }
-            return res.status(200).send({ message: "Suppression de l'utilisateur " + req.tokenData.id })
+            if (results.affectedRows == 0){
+                return res.status(400).send({message : "aucune utilisateur avec l'id "+req.params.id})
+            }
+            return res.status(200).send({ message: "Suppression de l'utilisateur " + req.params.id })
         })
     }
 
@@ -120,7 +123,7 @@ module.exports = class User {
         const sql = "select id,prenom,nom,email from User where id = ?"
         const value = req.tokenData.id
 
-        connection.query(sql,value, (err, results, fields) => {
+        connection.query(sql, value, (err, results, fields) => {
             if (err) {
                 return res.status(401).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " + req.tokenData.id + err.message })
             }
@@ -160,7 +163,7 @@ module.exports = class User {
 
         arg = arg.slice(0, -2);
 
-        sql = "update User set " + arg + " where id = "+req.tokenData.id
+        sql = "update User set " + arg + " where id = " + req.tokenData.id
 
 
         connection.execute(sql, values, (err, results, fields) => {
@@ -171,27 +174,66 @@ module.exports = class User {
             return res.status(200).send({ message: "modification des données de l'utilisateur " + req.tokenData.id })
         })
     }
-    static getVerif(req,res){
+    static getVerif(req, res) {
         const connection = dbconnection()
 
-        if (req.tokenData.type == "admin"){
-            const sql = "Select id from User where verified = 0"
-        } else 
-        {
-            const sql = "SELECT id FROM Joueurs JOIN User ON Joueurs.User_id = User.id WHERE User.verified = 0"
+        let sql;
+
+        if (req.tokenData.type == "Admin") {
+            sql = "Select id from User where verified = 0"
+        } else {
+            sql = "SELECT User.id FROM Joueurs JOIN User ON Joueurs.User_id = User.id WHERE User.verified = 0"
         }
 
-        connection.execute(sql,[],(err,results,field)=>{
-            if (err){
-                return res.status(500).send({message : "Erreur lors de la récupération des utilisateurs non vérifiés. "+err.message})
+        connection.execute(sql, [], (err, results, field) => {
+            if (err) {
+                return res.status(500).send({ message: "Erreur lors de la récupération des utilisateurs non vérifiés. " + err.message })
             }
-            return res.status(200).send({ results : results})
+            return res.status(200).send({ results: results })
         })
     }
-    static putVerif(req,res){
+    static putVerif(req, res) {
         const connection = dbconnection()
 
-        if (req.tokenData.type != "admin"){
-        } 
+        if (req.tokenData.type == "Admin") {
+            const sql = "Update User set verified = ? where id = ?"
+            const values = [req.body.value, req.body.id]
+
+            connection.execute(sql, values, (err, results, fields) => {
+                if (err) {
+                    return res.status(400).send({ message: "Erreur lors de la verification" })
+                }
+                if (results.affectedRows == 0) {
+                    return res.status(400).send({ message: "aucune colonne a été modifié" })
+                }
+                return res.status(200).send({ message: "L'utilisateur a bien été verifié" })
+            })
+        } else {
+
+            let sql = "SELECT User.id FROM Joueurs JOIN User ON Joueurs.User_id = User.id WHERE User.id = ?"
+            let values = [req.body.id]
+
+            connection.execute(sql, values, (err, results, fields) => {
+                if (err) {
+                    return res.status(400).send({ message: "Erreur lors de la verification. " + err })
+                }
+                if (results.length == 0) {
+                    return res.status(400).send({ message: "Vous ne pouvez pas verifier cette utilisateur" })
+                } else {
+                    sql = "Update User set verified = ? where id = ?"
+                    values = [req.body.value, req.body.id]
+
+                    connection.execute(sql, values, (err, results, fields) => {
+                        if (err) {
+                            return res.status(400).send({ message: "Erreur lors de la verification. " + err })
+                        }
+                        if (results.affectedRows == 0) {
+                            return res.status(400).send({ message: "aucune colonne a été modifié" })
+                        }
+                        return res.status(200).send({ message: "L'utilisateur a bien été verifié" })
+                    })
+                }
+            })
+        }
     }
 };
