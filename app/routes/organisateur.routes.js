@@ -5,8 +5,6 @@ module.exports = app => {
 
     let router = express.Router();
 
-    router.post("/create", organisateur.create);
-
     router.get("/findAll", organisateur.findAll);
 
     app.use('/api/organisateur', router);

@@ -5,8 +5,6 @@ module.exports = app => {
 
     let router = express.Router();
 
-    router.post("/create", selectionneur.create);
-
     router.get("/findAll", selectionneur.findAll);
 
     app.use('/api/selectionneur', router);
