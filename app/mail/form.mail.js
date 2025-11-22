@@ -12,7 +12,7 @@ module.exports = class Mail {
     });
 
     // 1. Lire le template
-    const templateSource = await fs.readFile("./emails/welcome.hbs", "utf8");
+    const templateSource = await fs.readFile("./send.mail.hbs", "utf8");
 
     // 2. Compiler le template
     const template = Handlebars.compile(templateSource);
