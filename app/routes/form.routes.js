@@ -10,7 +10,7 @@ module.exports = app => {
 
     router.get("/", form.get)
 
-    router.put("/verifEmail", form.verifEmail)
+    // router.put("/verifEmail", form.verifEmail)
 
     app.use('/api/form', router);
 };
