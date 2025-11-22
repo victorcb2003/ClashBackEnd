@@ -1,5 +1,4 @@
 const nodemailer = require("nodemailer");
-const fs = require("fs").promises;
 const Handlebars = require("handlebars");
 const Token = require("../class/token.class");
 
@@ -10,9 +9,6 @@ module.exports = class Mail {
       newline: "unix",
       path: "/usr/sbin/sendmail",
     });
-
-    // 1. Lire le template
-    const templateSource = await fs.readFile("./send.mail.hbs", "utf8");
 
     // 2. Compiler le template
     const template = Handlebars.compile(templateSource);
@@ -28,7 +24,8 @@ module.exports = class Mail {
       from: '"Clash of Leagues" <no-reply@clashofleagues.fr>',
       to: req.body.email,
       subject: "Bienvenue sur Clash of Leagues !",
-      html,
+      html : "<!DOCTYPE html><html><body><h1>Bienvenue {{prenom}} !</h1> <p>Merci pour votre inscription sur Clash of Leagues.</p> <p>Pour confirmer votre compte, cliquez ici :<br><a href=\"{{confirmUrl}}\">Confirmer mon compte</a></p> <p>À bientôt,<br>L'équipe Clash of Leagues</p> </body></html>"
+,
     };
 
     // Envoi du mail
