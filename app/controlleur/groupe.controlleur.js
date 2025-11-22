@@ -2,7 +2,7 @@ const Groupe = require("../class/groupe.class.js");
 
 exports.create = (req, res) => {
     if (req.tokenData == null){
-        return res.status(401).send({message : "invalide token"})
+        return res.status(401).send({message : "token invalide"})
     }
     if (!req.body.nom){
         return res.status(403).send({message : "req.body.nom est undefined"})
@@ -13,7 +13,7 @@ exports.create = (req, res) => {
 
 exports.add = (req,res) =>{
     if (req.tokenData == null){
-        return res.status(401).send({message : "invalide token"})
+        return res.status(401).send({message : "token invalide"})
     }
     if (!req.body.user_id){
         return res.status(403).send({message : "req.body.user_id est vide"})
@@ -27,7 +27,7 @@ exports.add = (req,res) =>{
 
 exports.remove = (req,res) =>{
     if (req.tokenData == null){
-        return res.status(401).send({message : "invalide token"})
+        return res.status(401).send({message : "token invalide"})
     }
     if (!req.body.user_id){
         return res.status(403).send({message : "req.body.user_id est vide"})
@@ -41,7 +41,7 @@ exports.remove = (req,res) =>{
 
 exports.info = (req,res)=>{
     if (req.tokenData == null){
-        return res.status(401).send({message : "invalide token"})
+        return res.status(401).send({message : "token invalide"})
     }
     if (!req.params.id){
         return res.status(403).send({message : "req.params.id est vide"})
@@ -57,7 +57,7 @@ exports.findAll = (req, res)=>{
 
 exports.delete = (req,res) =>{
     if (req.tokenData == null){
-        return res.status(401).send({message : "invalide token"})
+        return res.status(401).send({message : "token invalide"})
     }
     if (!req.params.id){
         return res.status(403).send({message : "req.params.id est vide"})
