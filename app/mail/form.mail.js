@@ -34,7 +34,7 @@ module.exports = class Mail {
     // 3. Générer le HTML final avec variables
     const html = template({
       prenom: req.body.prenom,
-      confirmUrl: `https://clashofleagues.fr/confirm/${Token.generateToken({ email: req.body.email, prenom: req.body.prenom, nom: req.body.nom }, '1d')}`,
+      confirmUrl: `https://clashofleagues.fr/confirm/${Token.generateToken({ email: req.body.email, prenom: req.body.prenom, nom: req.body.nom }, '30m')}`,
     });
 
     // 4. Préparer l’email

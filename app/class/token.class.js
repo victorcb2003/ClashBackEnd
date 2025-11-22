@@ -5,8 +5,8 @@ const dbconnection = require('../db/connection');
 module.exports = class Token {
 
   // génére un token d'accès
-  static generateToken(id) {
-    return jwt.sign( id , process.env.TOKEN_SECRET, { expiresIn: '1h' });
+  static generateToken(id, t = '1h') {
+    return jwt.sign( id , process.env.TOKEN_SECRET, { expiresIn: t });
   }
 
   // vérifie un token d'accès
