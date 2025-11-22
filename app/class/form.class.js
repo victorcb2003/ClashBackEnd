@@ -1,5 +1,6 @@
 const dbconnection = require('../db/connection');
 const Mail = require("../mail/form.mail")
+const Token = require("../class/token.class.js")
 
 module.exports = class Form {
 
@@ -26,5 +27,8 @@ module.exports = class Form {
             }
             return res.status(200).send({message : results})
         })
+    }
+    static confirm(req, res) {
+        res.status(200).send({ message: Token.verifyToken(req.params.token,res) });
     }
 }
