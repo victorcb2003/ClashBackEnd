@@ -1,5 +1,5 @@
 const dbconnection = require('../db/connection');
-const Form = require("../mail/form.mail")
+const Mail = require("../mail/form.mail")
 
 module.exports = class Form {
 
@@ -12,7 +12,7 @@ module.exports = class Form {
             if (err){
                 return res.status(400).send({message : err.message})
             }
-            Form.sendMail(req,res)
+            Mail.sendMail(req,res)
         })
     }
 
