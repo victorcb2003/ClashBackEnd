@@ -6,7 +6,7 @@ module.exports = class Form {
     static post(req,res){
         const connection = dbconnection()
         const sql = "INSERT INTO Forms (prenom, nom, email) values (?,?,?)"
-        values = [req.body.prenom, req.body.nom, req.body.email]
+        const values = [req.body.prenom, req.body.nom, req.body.email]
 
         connection.execute(sql,values,(err,results,fields)=>{
             if (err){
