@@ -3,8 +3,8 @@ const fs = require("fs").promises;
 const Handlebars = require("handlebars");
 const Token = require("./token.class.js");
 
-module.exports = class Selectionneur extends User {
-  static sendMail(req, res) {
+module.exports = class Mail {
+  static async sendMail(req, res) {
     let transporter = nodemailer.createTransport({
       sendmail: true,
       newline: "unix",

@@ -10,8 +10,8 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-const iniDb = require('./app/db/init');
-iniDb();
+// const iniDb = require('./app/db/init');
+// iniDb();
 
 const routes =  require("./app/routes/index");
 routes(app);
