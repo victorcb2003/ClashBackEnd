@@ -20,12 +20,9 @@ exports.get = (req, res)=>{
     Form.get(req,res)
 }
 
-exports .confirm = (req, res) => {
-    if (!req.params.token) {
+exports.confirm = (req, res) => {
+    if (!req.body.token) {
         return res.status(400).send({message: "Le token est manquant"});
-    }
-    if (req.tokenData != null) {
-        return res.status(400).send({message: "Token invalide"});
     }
 
     Form.confirm(req, res)
