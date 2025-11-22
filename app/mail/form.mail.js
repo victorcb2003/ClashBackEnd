@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const fs = require("fs").promises;
 const Handlebars = require("handlebars");
-const Token = require("./token.class.js");
+const Token = require("../class/token.class");
 
 module.exports = class Mail {
   static async sendMail(req, res) {
