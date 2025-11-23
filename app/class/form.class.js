@@ -1,6 +1,7 @@
 const dbconnection = require('../db/connection');
 const Mail = require("../mail/form.mail")
 const Token = require("../class/token.class.js")
+const User = require("../class/user.class.js")
 
 module.exports = class Form {
 
@@ -30,6 +31,19 @@ module.exports = class Form {
     }
     
     static confirm(req, res) {
-        res.status(200).send({ message: Token.verifyToken(req.body.token,res) });
+        const token =  Token.verifyToken(req.body.token,res);
+
+        if (!token.email || !token.prenom || !token.nom || !token.type) {
+            return res.status(400).send({ message: "Token invalide" });
+        }
+
+        const user = new User({
+            prenom: token.prenom,
+            nom: token.nom,
+            email: token.email,
+            password: token.type
+        });
+
+        user.create(res, token.type);
     }
 }
