@@ -42,7 +42,7 @@ module.exports = class User {
                     }
                     return res.status(201).send({ message: "Utilisateur créé avec succès.",
                         mdp : this.password,
-                        hash : bcrypt.hashSync(this.password, 10);
+                        hash : bcrypt.hashSync(this.password, 10)
                      });
                 });
             });
