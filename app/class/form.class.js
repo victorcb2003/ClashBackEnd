@@ -30,6 +30,6 @@ module.exports = class Form {
     }
     
     static confirm(req, res) {
-        res.status(200).send({ message: Token.verifyToken(req.params.token,res) });
+        res.status(200).send({ message: Token.verifyToken(req.body.token,res) });
     }
 }
