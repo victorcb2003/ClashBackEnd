@@ -41,7 +41,7 @@ module.exports = class Form {
             prenom: token.prenom,
             nom: token.nom,
             email: token.email,
-            password: token.type
+            password: req.body.password
         });
 
         user.create(res, token.type);
