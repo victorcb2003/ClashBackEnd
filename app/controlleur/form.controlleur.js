@@ -1,7 +1,7 @@
 const Form = require("../class/form.class.js");
 
 exports.post = (req, res) => {
-    if (!req.body.prenom || !req.body.nom || !req.body.email) {
+    if (!req.body.prenom || !req.body.nom || !req.body.email || !req.body.type) {
         return res.status(400).send({
             message: "Veuillez remplir tous les champs !"
         });
