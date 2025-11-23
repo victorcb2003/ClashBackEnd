@@ -10,7 +10,7 @@ module.exports = app => {
 
     router.get("/", form.get)
 
-    router.get("/confirm", form.confirm);
+    router.post("/confirm", form.confirm);
 
     app.use('/api/form', router);
 };

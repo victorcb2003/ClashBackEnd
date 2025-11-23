@@ -1,37 +1,6 @@
 const User = require("../class/user.class.js");
 const Token = require("../class/token.class.js")
 
-exports.register = (req, res) => {
-  if (!req.body.tocken){
-    return res.status(400).send({
-      message: "body.tocken est vide"
-    });
-  }
-  const tokenData = Token.verifyToken(req.body.tocken,res)
-
-  if (tokenData == null){
-    return res.status(400).send({
-      message: "token invalide"
-    });
-  }
-
-  if (!req.body.password || !req.body.type) {
-    res.status(400).send({
-      message: "body.password ou body.type est vide"
-    });
-    return;
-  }
-
-  const user = new User({
-    prenom : tokenData.prenom,
-    nom : tokenData.nom,
-    email: tokenData.email,
-    password: req.body.password
-  });
-
-  user.create(res, req.body.type);
-}
-
 exports.login = (req, res) => {
   if (!req.body.email || !req.body.password) {
     res.status(400).send({
