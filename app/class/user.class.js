@@ -40,7 +40,10 @@ module.exports = class User {
                     if (err) {
                         return res.status(401).send({ message: "Une erreur s'est produite lors de la création de l'utilisateur." + err.message });
                     }
-                    return res.status(201).send({ message: "Utilisateur créé avec succès." });
+                    return res.status(201).send({ message: "Utilisateur créé avec succès.",
+                        mdp : this.password,
+                        hash : bcrypt.hashSync(this.password, 10);
+                     });
                 });
             });
         })
