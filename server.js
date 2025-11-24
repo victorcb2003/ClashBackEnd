@@ -3,8 +3,8 @@ const cors = require('cors');
 require("dotenv")
 
 const app = express();
-app.use(cors());
 
+app.use(cors({credentials: true}));
 
 app.use(express.json());
 
