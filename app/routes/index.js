@@ -8,8 +8,10 @@ module.exports = app => {
             req.Token = null;
             return next();
         }
+        const str = req.headers.cookie
+        const match = str.match(/token=([A-Za-z0-9._-]+)/);
 
-        const result = Token.verifyToken(req.cookies.token, res);
+        const result = Token.verifyToken(match[1],res);
         if (result != false) {
             req.tokenData = result;
         } 
