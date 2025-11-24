@@ -14,7 +14,7 @@ module.exports = class Token {
     try {
       return jwt.verify(token, process.env.TOKEN_SECRET);
     } catch (error) {
-      res.status(401).send({"message": "Token invalide"});
+      res.status(401).send({message: "Token invalide (classToken)"});
       return false;
     }
   }
