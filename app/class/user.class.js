@@ -91,17 +91,15 @@ module.exports = class User {
                     }
                     if (results[0] != undefined) {
                         const token = Token.generateToken({id: user.id,type: element})
-                        res.status(200).send({
-                            message: "Login réussi !",
-                            token
-                        })
-                        .cookie(
-                            "token", 
-                            token,
+                        res.cookie("token", token,
                             {  
                             maxAge: 60 * 60 * 1000 
                             }
                         );
+                        res.status(200).send({
+                            message: "Login réussi !",
+                            token
+                        })
                     }
                 })
             }
