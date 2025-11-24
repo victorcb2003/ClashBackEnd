@@ -10,9 +10,7 @@ module.exports = app => {
         }
         const str = req.headers.cookie
         const match = str.match(/token=([A-Za-z0-9._-]+)/);
-
         const result = Token.verifyToken(match[1],res);
-        console.log(match[1], result, "token middleware");
         if (result != false) {
             req.tokenData = result;
         } 
