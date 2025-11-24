@@ -14,10 +14,12 @@ module.exports = app => {
             req.tokenData = null;
             return next();
         }
-        const result = Token.verifyToken(match[1],res);
+        const result = Token.verifyToken(match[1],req);
         if (result != false) {
             req.tokenData = result;
-        } 
+        } else {
+            req.tokenData = null;
+        }
         next();
     });
 

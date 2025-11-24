@@ -10,11 +10,10 @@ module.exports = class Token {
   }
 
   // vérifie un token d'accès
-  static verifyToken(token , res) {
+  static verifyToken(token , req) {
     try {
       return jwt.verify(token, process.env.TOKEN_SECRET);
     } catch (error) {
-      req.tokenData = null;
       return false;
     }
   }
