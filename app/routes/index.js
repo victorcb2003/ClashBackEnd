@@ -4,7 +4,7 @@ module.exports = app => {
 
     // middleware
     app.use((req, res, next) => {
-        if (!req.cookies && !req.cookies.token) {
+        if (!req.cookies || !req.cookies.token) {
             req.Token = null;
             return next();
         }
