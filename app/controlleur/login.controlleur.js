@@ -32,7 +32,7 @@ exports.delete = (req,res) =>{
 };
 
 exports.test = (req, res) => {
-  console.log(req.rawHeaders,req.header);
+  console.log(req.rawHeaders,req.header.cookie);
     if (!req.tokenData) {
         res.status(401).send({ message: "Token invalide" });
     } else {
