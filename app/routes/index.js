@@ -10,6 +10,10 @@ module.exports = app => {
         }
         const str = req.headers.cookie
         const match = str.match(/token=([A-Za-z0-9._-]+)/);
+        if (!match) {
+            req.tokenData = null;
+            return next();
+        }
         const result = Token.verifyToken(match[1],res);
         if (result != false) {
             req.tokenData = result;
