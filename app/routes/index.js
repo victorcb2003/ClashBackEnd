@@ -14,6 +14,7 @@ module.exports = app => {
             req.tokenData = null;
             return next();
         }
+        console.log("Token trouvé dans les cookies :", match[1]);
         const result = Token.verifyToken(match[1],res);
         if (result != false) {
             req.tokenData = result;
