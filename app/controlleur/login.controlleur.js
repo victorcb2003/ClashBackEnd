@@ -32,7 +32,10 @@ exports.delete = (req,res) =>{
 };
 
 exports.test = (req, res) => {
-  console.log(req.headers.cookie,req);
+
+  const str = req.headers.cookie
+  const match = str.match(/token=([A-Za-z0-9._-]+)/);
+  console.log(match[1]);
     if (!req.tokenData) {
         res.status(401).send({ message: "Token invalide" });
     } else {
