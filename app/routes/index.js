@@ -4,15 +4,16 @@ module.exports = app => {
 
     // middleware
     app.use((req, res, next) => {
-        if (!req.cookies.token && !req.cookies) {
-            req.Token = null;
-            return next();
-        }
+        // if (!req.cookies.token && !req.cookies) {
+        //     req.Token = null;
+        //     return next();
+        // }
 
-        const result = Token.verifyToken(req.cookies.token, res);
-        if (result != false) {
-            req.tokenData = result;
-        }  
+        // const result = Token.verifyToken(req.cookies.token, res);
+        // if (result != false) {
+        //     req.tokenData = result;
+        // } 
+        console.log(req.cookies);
         next();
     });
 
