@@ -97,8 +97,8 @@ module.exports = class User {
                             "token", 
                             Token.generateToken({id: user.id,type: element}),
                             {
-                            httpOnly: true,       
-                            secure: true,         
+                            httpOnly: false,       
+                            secure: false,         
                             sameSite: "strict",   
                             maxAge: 60 * 60 * 1000 
                             }
