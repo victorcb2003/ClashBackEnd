@@ -90,12 +90,13 @@ module.exports = class User {
                         res.status(400).send({ message: "Erreur lors de la récupération du type d'utilisateur." + err.message });
                     }
                     if (results[0] != undefined) {
-                        const token = Token.generateToken({id: user.id,type: element})
-                        res.cookie("token", token,
-                            {  
-                            maxAge: 60 * 60 * 1000 
-                            }
-                        );
+                        const token = Token.generateToken({ id: user.id, type: element })
+                        res.cookie("token", token, {
+                            httpOnly: true,
+                            secure: true,           
+                            sameSite: "None",         
+                            path: "/"
+                        });
                         res.status(200).send({
                             message: "Login réussi !",
                             token
