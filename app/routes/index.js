@@ -4,12 +4,12 @@ module.exports = app => {
 
     // middleware
     app.use((req, res, next) => {
-        if (!req.headers.token) {
+        if (!req.cookies.token) {
             req.Token = null;
             return next();
         }
 
-        const result = Token.verifyToken(req.headers.token, res);
+        const result = Token.verifyToken(req.cookies.token, res);
         if (result != false) {
             req.tokenData = result;
             next();

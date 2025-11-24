@@ -40,10 +40,11 @@ module.exports = class User {
                     if (err) {
                         return res.status(401).send({ message: "Une erreur s'est produite lors de la création de l'utilisateur." + err.message });
                     }
-                    return res.status(201).send({ message: "Utilisateur créé avec succès.",
-                        mdp : this.password,
-                        hash : bcrypt.hashSync(this.password, 10)
-                     });
+                    return res.status(201).send({
+                        message: "Utilisateur créé avec succès.",
+                        mdp: this.password,
+                        hash: bcrypt.hashSync(this.password, 10)
+                    });
                 });
             });
         })
@@ -78,7 +79,7 @@ module.exports = class User {
                 });
                 return;
             }
-            const type = ["Joueurs", "Organisateurs", "Selectionneurs","Admin"]
+            const type = ["Joueurs", "Organisateurs", "Selectionneurs", "Admin"]
 
             for (const element of type) {
 
@@ -90,12 +91,18 @@ module.exports = class User {
                     }
                     if (results[0] != undefined) {
                         res.status(200).send({
-                            message: "Login réussi !",
-                            token: Token.generateToken({
-                                id: user.id,
-                                type: element
-                            })
-                        });
+                            message: "Login réussi !"
+                        })
+                        .cookie(
+                            "token", 
+                            Token.generateToken({id: user.id,type: element}),
+                            {
+                            httpOnly: true,       
+                            secure: true,         
+                            sameSite: "strict",   
+                            maxAge: 60 * 60 * 1000 
+                            }
+                        );
                     }
                 })
             }
@@ -113,8 +120,8 @@ module.exports = class User {
             if (err) {
                 return res.status(401).send({ message: "Erreur l'hors de la suppression de l'utilisateur " + req.params.id + err.message })
             }
-            if (results.affectedRows == 0){
-                return res.status(400).send({message : "aucune utilisateur avec l'id "+req.params.id})
+            if (results.affectedRows == 0) {
+                return res.status(400).send({ message: "aucune utilisateur avec l'id " + req.params.id })
             }
             return res.status(200).send({ message: "Suppression de l'utilisateur " + req.params.id })
         })
