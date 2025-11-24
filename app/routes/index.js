@@ -12,8 +12,8 @@ module.exports = app => {
         const result = Token.verifyToken(req.cookies.token, res);
         if (result != false) {
             req.tokenData = result;
-            next();
-        }
+        }  
+        next();
     });
 
     require("./joueur.routes.js")(app);
