@@ -19,7 +19,8 @@ module.exports = class Mail {
     <p>Merci pour votre inscription sur Clash of Leagues.</p>
 
     <p>
-      Pour confirmer votre compte, cliquez ici :<br>
+      Pour confirmer votre compte, cliquez ici :<br>sudo tail -n 20 /var/log/mail.log
+
       <a href="{{confirmUrl}}">Confirmer mon compte</a>
     </p>
 
