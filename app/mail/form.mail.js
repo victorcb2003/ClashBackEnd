@@ -21,7 +21,7 @@ module.exports = class Mail {
     <p>
       Pour confirmer votre compte, cliquez ici :
 
-      <a href="{{confirmUrl}}">Confirmer mon compte</a>
+      <a href="{{confirmUrl}}" title="">Confirmer mon compte</a>
     </p>
 
     <p>À bientôt,<br>L'équipe Clash of Leagues</p>
