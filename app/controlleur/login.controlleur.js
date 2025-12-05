@@ -31,6 +31,11 @@ exports.delete = (req,res) =>{
   User.delete(req,res)
 };
 
+exports.logout = (req,res) =>{
+
+  User.logout(req,res)
+};
+
 exports.test = (req, res) => {
     if (!req.tokenData) {
         res.status(401).send({ message: "Token invalide" });

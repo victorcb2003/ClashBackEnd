@@ -7,6 +7,8 @@ module.exports = app => {
 
     router.post("/login", user.login);
 
+    router.get("/logout", user.logout)
+
     router.get("/info", user.info);
 
     router.put("/update/", user.update);

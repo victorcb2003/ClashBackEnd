@@ -106,6 +106,16 @@ module.exports = class User {
         });
     }
 
+    static logout(req,res) {
+        try {
+            res.clearCookie("token")
+        }
+        catch(err){
+            res.status(400).send({message : err})
+        }
+        res.status(200).send({message : "Vous êtes déconnecté"})
+    }
+
     static delete(req, res) {
 
         const connection = dbconnection()
