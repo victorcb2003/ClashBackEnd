@@ -98,8 +98,7 @@ module.exports = class User {
                             path: "/"
                         });
                         res.status(200).send({
-                            message: "Login réussi !",
-                            token
+                            message: "Login réussi !"
                         })
                     }
                 })
