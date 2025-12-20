@@ -96,9 +96,9 @@ module.exports = class User {
                         //     sameSite: "None",         
                         //     path: "/"
                         // });
-                        res.status(200).send({
-                            message: "Login réussi !"
-                        })
+                        // res.status(200).send({
+                        //     message: "Login réussi !"
+                        // })
                     }
                 })
             }
