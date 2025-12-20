@@ -74,10 +74,9 @@ module.exports = class User {
             }
             const user = results[0];
             if (!bcrypt.compareSync(this.password, user.password)) {
-                res.status(401).send({
+                return res.status(401).send({
                     message: "Mot de passe incorrect."
                 });
-                return;
             }
             const type = ["Joueurs", "Organisateurs", "Selectionneurs", "Admin"]
 
@@ -87,7 +86,7 @@ module.exports = class User {
 
                 connection.query(sql, [user.id], (err, results, fields) => {
                     if (err) {
-                        res.status(400).send({ message: "Erreur lors de la récupération du type d'utilisateur." + err.message });
+                        return res.status(400).send({ message: "Erreur lors de la récupération du type d'utilisateur." + err.message });
                     }
                     if (results[0] != undefined) {
                         const token = Token.generateToken({ id: user.id, type: element })

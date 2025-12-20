@@ -8,9 +8,9 @@ module.exports = function iniDb() {
   const sql = fs.readFileSync('./app/db/init.sql', 'utf8');
   connection.query(sql, (err) => {
     if (err) {
-      console.error('Erreur lors de l\'initialisation de la base de données:', err);
+      console.error("Erreur lors de l'initialisation de la base de données:", err);
     } else {
-      console.log('Base de données initialisée avec succès');
+      // console.log('Base de données initialisée avec succès');
     }
   });
 }

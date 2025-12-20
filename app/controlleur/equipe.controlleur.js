@@ -7,6 +7,9 @@ exports.create = (req, res) => {
     if (!req.body.nom){
         return res.status(403).send({message : "req.body.nom est undefined"})
     }
+    if (!(typeof(req.body.nom) == "string")) {
+        return res.status(403).send({message : "req.body.nom n'est pas un string"})
+    }
 
     Equipe.create(req,res)
 };

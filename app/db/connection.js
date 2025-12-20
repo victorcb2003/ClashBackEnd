@@ -1,7 +1,7 @@
 require('dotenv').config({ quiet: true });
 const mysql = require('mysql2');
 
-module.exports = function dbConnection(multipleStatements = false) {
+module.exports = function dbConnection() {
   const connection =  mysql.createConnection({
     host: 'localhost',
     user: process.env.DB_USER,

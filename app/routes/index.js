@@ -4,6 +4,13 @@ module.exports = app => {
 
     // middleware
     app.use((req, res, next) => {
+        const start = Date.now();
+
+        res.on("finish", ()=>{
+            console.log(`[FINISH] ${req.method} ${req.url} -> ${res.statusCode} (${Date.now() - start}ms)`)
+        })
+
+
         if (!req.headers.cookie) {
             req.tokenData = null;
             return next();
@@ -22,6 +29,7 @@ module.exports = app => {
         }
         next();
     });
+
 
     require("./joueur.routes.js")(app);
     require("./login.routes.js")(app);

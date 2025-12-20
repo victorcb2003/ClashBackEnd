@@ -33,8 +33,6 @@ module.exports = class Form {
     static confirm(req, res) {
         const token =  Token.verifyToken(req.body.token,res);
 
-        console.log(token);
-
         if (!token.email || !token.prenom || !token.nom || !token.type) {
             return res.status(400).send({ message: "Token invalide" });
         }
