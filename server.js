@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 const iniDb = require('./app/db/init');
 iniDb();
 
-const middleware = { log : require("./app/middleware/log"), decrypteToken : "./app/middleware/decrypteToken" }
+const middleware = { log : require("./app/middleware/log"), decrypteToken : require("./app/middleware/decrypteToken") }
 middleware.log(app)
 middleware.decrypteToken(app)
 
