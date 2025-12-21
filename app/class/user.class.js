@@ -80,15 +80,21 @@ module.exports = class User {
             }
             const type = ["Joueurs", "Organisateurs", "Selectionneurs", "Admin"]
 
+            let done = false
+
             for (const element of type) {
 
                 sql = "SELECT id from " + element + " WHERE User_id = ?"
 
                 connection.query(sql, [user.id], (err, results, fields) => {
+                    if (done) return
+
                     if (err) {
+                        done = true
                         return res.status(400).send({ message: "Erreur lors de la récupération du type d'utilisateur." + err.message });
                     }
                     if (results[0] != undefined) {
+                        done = true
                         const token = Token.generateToken({ id: user.id, type: element })
                         res.cookie("token", token, {
                             httpOnly: true,
