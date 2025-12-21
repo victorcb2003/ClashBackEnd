@@ -6,11 +6,11 @@ module.exports = app => {
 
         res.on("finish", () => {
             
-            const couleur = req.method[0] == "4" ? "\x1b[31m" : "\x1b[32m"
+            const couleur = parseInt(res.statusCode/100) == 4 || parseInt(res.statusCode/100) == 5 ? "\x1b[31m" :  "\x1b[32m"
 
             const user = req.tokenData && req.tokenData.id ? `UserID : ${req.tokenData.id}` : ""
 
-            console.log(` [FINISH] ${req.method} ${req.url} -> ${couleur} ${res.statusCode} \x1b[37m  (${Date.now() - start}ms) ${user}`)
+            console.log(` [FINISH] ${req.method} ${req.url} -> ${couleur} ${res.statusCode} \x1b[37m  (${Date.now() - start}ms) | UserIP : ${req.ip} ${user}`)
         })
 
         next()
