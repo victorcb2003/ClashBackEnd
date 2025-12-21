@@ -90,12 +90,12 @@ module.exports = class User {
                     }
                     if (results[0] != undefined) {
                         const token = Token.generateToken({ id: user.id, type: element })
-                        // res.cookie("token", token, {
-                        //     httpOnly: true,
-                        //     secure: true,           
-                        //     sameSite: "None",         
-                        //     path: "/"
-                        // });
+                        res.cookie("token", token, {
+                            httpOnly: true,
+                            secure: true,           
+                            sameSite: "None",         
+                            path: "/"
+                        });
                         return res.status(200).send({
                             message: "Login réussi !"
                         })
