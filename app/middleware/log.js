@@ -8,7 +8,9 @@ module.exports = app => {
             
             const couleur = req.method[0] == "4" ? "\x1b[31m" : "\x1b[32m"
 
-            console.log(`${couleur} [FINISH] ${req.method} \x1b[37m ${req.url} -> ${res.statusCode} (${Date.now() - start}ms)`)
+            const user = req.tokenData && req.tokenData.id ? `UserID : ${req.tokenData.id}` : ""
+
+            console.log(` [FINISH] ${req.method} ${req.url} -> ${couleur} ${res.statusCode} \x1b[37m  (${Date.now() - start}ms) ${user}`)
         })
 
         next()
