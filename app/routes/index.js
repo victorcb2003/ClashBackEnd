@@ -1,5 +1,3 @@
-const Token = require("../class/token.class.js")
-
 module.exports = app => {
 
     // middleware

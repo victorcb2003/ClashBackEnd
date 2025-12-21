@@ -1,3 +1,5 @@
+const Token = require("../class/token.class.js")
+
 module.exports = app => {
 
     app.use((req, res, next) => {
