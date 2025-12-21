@@ -10,7 +10,7 @@ module.exports = function iniDb() {
     if (err) {
       console.error("Erreur lors de l'initialisation de la base de données:", err);
     } else {
-      // console.log('Base de données initialisée avec succès');
+      console.log('Base de données initialisée avec succès');
     }
   });
 }
