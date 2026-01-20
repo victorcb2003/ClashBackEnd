@@ -1,7 +1,7 @@
 const express = require("express");
 
 module.exports = app => {
-    const user = require("../controler/login.controlleur.js");
+    const user = require("../controler/login.controler.js");
 
     let router = express.Router();
 
