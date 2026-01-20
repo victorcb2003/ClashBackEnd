@@ -1,7 +1,7 @@
 const express = require("express");
 
 module.exports = app => {
-    const selectionneur = require("../controlleur/selectionneur.controlleur.js");
+    const selectionneur = require("../controler/selectionneur.controlleur.js");
 
     let router = express.Router();
 

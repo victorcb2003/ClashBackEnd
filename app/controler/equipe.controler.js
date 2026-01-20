@@ -1,7 +1,7 @@
 const Equipe = require("../class/equipe.class.js");
 
 exports.create = (req, res) => {
-    if (req.tokenData.type != "Selectionneurs"){
+    if (!req.tokenData || req.tokenData.type != "Selectionneurs"){
         return res.status(401).send({message : "Route non autorisée"})
     }
     if (!req.body.nom){
@@ -43,8 +43,8 @@ exports.removeJoueur = (req,res) =>{
 }
 
 exports.info = (req,res)=>{
-    if (!req.params.id){
-        return res.status(403).send({message : "req.params.id est vide"})
+    if (!req.params.Equipe_id){
+        return res.status(403).send({message : "req.params.Equipe_id est vide"})
     }
 
     Equipe.info(req,res)

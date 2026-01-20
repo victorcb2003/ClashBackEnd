@@ -1,7 +1,7 @@
 const express = require("express");
 
 module.exports = app => {
-    const message = require("../controlleur/message.controlleur.js");
+    const message = require("../controler/message.controlleur.js");
 
 
     let router = express.Router();

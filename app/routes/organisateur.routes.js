@@ -1,7 +1,7 @@
 const express = require("express");
 
 module.exports = app => {
-    const organisateur = require("../controlleur/organisateur.controlleur.js");
+    const organisateur = require("../controler/organisateur.controlleur.js");
 
     let router = express.Router();
 
