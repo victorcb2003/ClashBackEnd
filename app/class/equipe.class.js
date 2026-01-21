@@ -65,6 +65,8 @@ module.exports = class Equipe {
             sql = ""
             values = []
 
+            console.log(results[0])
+
             results[0].forEach((joueur) => {
                 sql += "Select id,prenom,nom from User Where id = ?;"
                 values.push(joueur.id)

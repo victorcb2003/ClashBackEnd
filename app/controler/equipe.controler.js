@@ -50,6 +50,8 @@ exports.info = (req,res)=>{
         return res.status(403).send({message : "req.params est vide"})
     }
 
+    console.log(req.params.id)
+
     Equipe.info(req,res)
 }
 
