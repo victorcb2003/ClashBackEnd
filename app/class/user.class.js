@@ -142,11 +142,7 @@ module.exports = class User {
     static info(req, res) {
         const connection = dbconnection()
 
-        const sql = `select id,prenom,nom,email from User where id = ?;
-        select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.score,Matchs.Tournois_id from Match 
-        inner join Joueurs
-        where Joueurs.User_id = ? AND (Joueurs.Equipe_id = Matchs.Equipe1_id OR Joueurs.Equipe_id = Matchs.Equipe2_id)
-        `
+        const sql = `select id,prenom,nom,email from User where id = ?;select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.score,Matchs.Tournois_id from Match inner join Joueurs where Joueurs.User_id = ? AND (Joueurs.Equipe_id = Matchs.Equipe1_id OR Joueurs.Equipe_id = Matchs.Equipe2_id)`
 
         const value = [req.tokenData.id,req.tokenData.id,req.tokenData.id]
 
