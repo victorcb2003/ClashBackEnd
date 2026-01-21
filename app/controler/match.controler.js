@@ -52,3 +52,14 @@ exports.create = (req,res)=>{
 
     Match.create(req,res)
 }
+
+exports.getById = (req,res)=>{
+    if (!req.tokenData){
+        return res.status(401).send({ message: "Route non autorisée" })
+    }
+    if (!req.params.id){
+        return res.status(401).send({ message: "req.params.id est vide" })
+    }
+
+    Match.getById(req,res)
+}

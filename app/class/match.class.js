@@ -118,4 +118,18 @@ module.exports = class match {
             res.status(201).send({message:"Le Match a bien été créé"})
         })
     }
+
+    static getById(req,res){
+        const sql = "select date_heure,lieu,Equipe1_id,Equipe2_id,tour,Tournois_id,score from Matchs where id = ?"
+        const value = req.params.id
+
+        const connection = dbconnection()
+
+        connection.query(sql,value,(err,response)=>{
+            if (err){
+                res.status(403).send({message : `Érreur lors de la récupération d'un match ${err.message}`})
+            }
+            res.status(201).send({match : results[0]})
+        })
+    }
 }

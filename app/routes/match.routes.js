@@ -12,5 +12,7 @@ module.exports = app => {
 
     router.get("/findByTournoisId/:id", match.findAll);
 
+    router.get("/:id", match.getById)
+
     app.use('/api/match', router);
 };
