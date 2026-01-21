@@ -46,8 +46,8 @@ exports.info = (req,res)=>{
     if (!req.tokenData){
         return res.status(401).send({message : "Route non autorisée"})
     }
-    if (!req.params.Equipe_id){
-        return res.status(403).send({message : "req.params.Equipe_id est vide"})
+    if (!req.params){
+        return res.status(403).send({message : "req.params est vide"})
     }
 
     Equipe.info(req,res)

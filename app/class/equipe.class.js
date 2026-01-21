@@ -52,7 +52,7 @@ module.exports = class Equipe {
         const connection = dbconnection()
 
         let sql = "Select id from Joueurs where Equipe_id = ?;Select nom from Equipes where id = ?"
-        let values = [req.params.Equipe_id,req.params.Equipe_id]
+        let values = [req.params,req.params]
 
         connection.query(sql, values, (err, results, fields) => {
             if (err) {
