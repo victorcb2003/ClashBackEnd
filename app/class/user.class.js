@@ -142,7 +142,7 @@ module.exports = class User {
     static info(req, res) {
         const connection = dbconnection()
 
-        const sql = "select id,prenom,nom,email from User where id = ?;select "
+        const sql = "select id,prenom,nom,email from User where id = ?;"
         const value = req.tokenData.id
 
         connection.query(sql, value, (err, results, fields) => {
