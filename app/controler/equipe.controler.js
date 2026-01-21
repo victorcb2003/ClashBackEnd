@@ -15,7 +15,7 @@ exports.create = (req, res) => {
 };
 
 exports.addJoueur = (req,res) =>{
-    if (req.tokenData.type != "Selectionneurs"){
+    if (req.tokenData || req.tokenData.type != "Selectionneurs"){
         return res.status(401).send({message : "Route non autorisée"})
     }
     if (!req.body.Joueur_id){
@@ -29,7 +29,7 @@ exports.addJoueur = (req,res) =>{
 }
 
 exports.removeJoueur = (req,res) =>{
-    if (req.tokenData.type != "Selectionneurs"){
+    if (req.tokenData || req.tokenData.type != "Selectionneurs"){
         return res.status(401).send({message : "Route non autorisée"})
     }
     if (!req.body.Joueur_id){
@@ -43,6 +43,9 @@ exports.removeJoueur = (req,res) =>{
 }
 
 exports.info = (req,res)=>{
+    if (req.tokenData){
+        return res.status(401).send({message : "Route non autorisée"})
+    }
     if (!req.params.Equipe_id){
         return res.status(403).send({message : "req.params.Equipe_id est vide"})
     }
@@ -56,7 +59,7 @@ exports.findAll = (req, res)=>{
 }
 
 exports.delete = (req,res) =>{
-    if (req.tokenData.type != "Selectionneurs"){
+    if (req.tokenData || req.tokenData.type != "Selectionneurs"){
         return res.status(401).send({message : "Route non autorisée"})
     }
     if (!req.body.Equipe_id){
@@ -67,7 +70,7 @@ exports.delete = (req,res) =>{
 }
 
 exports.rename = (req,res) =>{
-    if (req.tokenData.type != "Selectionneurs"){
+    if (req.tokenData || req.tokenData.type != "Selectionneurs"){
         return res.status(401).send({message : "Route non autorisée"})
     }
     if (!req.body.Equipe_id){
