@@ -42,11 +42,11 @@ exports.create = (req,res)=>{
     if (!req.body.Equipe2_id) {
         return res.status(403).send({ message: "req.body.Equipe2_id est vide" })
     }
-    if (!req.body.date) {
+    if (!req.body.date_heure) {
         return res.status(403).send({ message: "req.body.date est vide" })
     }
     const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
-    if (!regex.test(req.body.date)) {
+    if (!regex.test(req.body.date_heure)) {
         return res.status(403).send({ message: "req.body.date est pas au format YYYY-MM-DD" })
     }
     if (!req.body.lieu) {
