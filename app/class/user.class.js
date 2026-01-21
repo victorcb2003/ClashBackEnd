@@ -144,7 +144,7 @@ module.exports = class User {
 
         const sql = `select id,prenom,nom,email from User where id = ?;select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.score,Matchs.Tournois_id from Matchs inner join Joueurs where Joueurs.User_id = ?`
 
-        const value = [req.tokenData.id]
+        const value = [req.tokenData.id,req.tokenData.id]
 
         connection.query(sql, value, (err, results, fields) => {
             if (err) {
