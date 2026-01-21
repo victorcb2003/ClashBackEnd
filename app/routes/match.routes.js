@@ -8,7 +8,7 @@ module.exports = app => {
 
     router.put("/update", match.update);
 
-    router.get("/findAll/:id", match.findAll);
+    router.get("/findByTournoisId/:id", match.findAll);
 
     app.use('/api/match', router);
 };

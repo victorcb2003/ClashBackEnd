@@ -9,7 +9,7 @@ module.exports = app => {
 
     router.get("/logout", user.logout)
 
-    router.get("/info", user.info);
+    router.get("/me", user.info);
 
     router.put("/update/", user.update);
 

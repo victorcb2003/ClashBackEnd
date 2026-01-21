@@ -21,6 +21,9 @@ exports.update = (req,res)=>{
     if (!req.body.Equipe1_id && !req.body.Equipe2_id && !req.body.score && !req.body.lieu && !req.body.date_heure){
         return res.status(403).send({ message: "Aucun argument valide dans req.body" })
     }
+    if (req.body.score && req.body.score.match(/^\d+-\d+$/)==null){
+        return res.status(403).send({ message : "le score doit être du format 'n-n' avec n un nombre"})
+    }
 
     Match.update(req,res)
 }
