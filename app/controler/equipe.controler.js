@@ -1,7 +1,7 @@
 const Equipe = require("../class/equipe.class.js");
 
 exports.create = (req, res) => {
-    if (!req.tokenData || req.tokenData.type != "Selectionneurs"){
+    if (!req.tokenData || req.tokenData.type != "Selectionneurs" && req.tokenData.type != "Admin"){
         return res.status(401).send({message : "Route non autorisée"})
     }
     if (!req.body.nom){
