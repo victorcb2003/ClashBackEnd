@@ -107,7 +107,7 @@ module.exports = class match {
     }
     static create(req,res){
         const sql = "insert into Matchs (nom,date_heure,lieu,Equipe1_id,Equipe2_id) values (?,?,?,?,?)"
-        const value = [req.body.nom,req.bosy.date_heure,req.body.lieu,req.body.Equipe1_id,req.body.Equipe2_id]
+        const value = [req.body.nom,req.body.date_heure,req.body.lieu,req.body.Equipe1_id,req.body.Equipe2_id]
 
         const connection = dbconnection()
 
