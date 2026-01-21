@@ -51,7 +51,7 @@ module.exports = class Equipe {
     static info(req, res) {
         const connection = dbconnection()
 
-        let sql = "Select User.email,User.prenom,User.nom from User inner join Joueurs where Joueurs.Equipe_id = ? AND Joueur.User_id = User.id;Select nom from Equipes where id = ?"
+        let sql = "Select User.email,User.prenom,User.nom from User inner join Joueurs where Joueurs.Equipe_id = ? AND Joueurs.User_id = User.id;Select nom from Equipes where id = ?"
         let values = [req.params.id, req.params.id]
 
         connection.query(sql, values, (err, results, fields) => {
