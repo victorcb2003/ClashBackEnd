@@ -58,19 +58,18 @@ module.exports = class Equipe {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des info de l'Équipe " + err.message })
             }
-            if (results.length == 0) {
+            if (results[0].length == 0) {
                 return res.status(200).send({ message: "Il y a aucun Joueur dans cette Équipe" })
             }
 
             sql = ""
             values = []
 
-            console.log(results[0])
-
             results[0].forEach((joueur) => {
                 sql += "Select id,prenom,nom from User Where id = ?;"
                 values.push(joueur.id)
             })
+
             connection.query(sql, values, (err, result, fields) => {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des info de l'Équipe " + err.message })
