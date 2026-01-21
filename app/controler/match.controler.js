@@ -12,7 +12,7 @@ exports.findAll = (req, res) => {
 }
 
 exports.update = (req,res)=>{
-    if (req.tokenData.type != "Organisateurs") {
+    if (!req.tokenData || eq.tokenData.type != "Organisateurs") {
         return res.status(401).send({ message: "Route non autorisée" })
     }
     if (!req.body.Match_id){
@@ -26,4 +26,29 @@ exports.update = (req,res)=>{
     }
 
     Match.update(req,res)
+}
+
+exports.create = (req,res)=>{
+    if (!req.tokenData || req.tokenData.type != "Organisateurs") {
+        return res.status(401).send({ message: "Route non autorisée" })
+    }
+    if (!req.body.nom) {
+        return res.status(403).send({ message: "req.body.nom est vide" })
+    }
+    if (!req.body.Equipe1_id) {
+        return res.status(403).send({ message: "req.body.Equipe1_id est vide" })
+    }
+    if (!req.body.Equipe2_id) {
+        return res.status(403).send({ message: "req.body.Equipe2_id est vide" })
+    }
+    if (!req.body.date) {
+        return res.status(403).send({ message: "req.body.date est vide" })
+    }
+    const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+    if (!regex.test(req.body.date)) {
+        return res.status(403).send({ message: "req.body.date est pas au format YYYY-MM-DD" })
+    }
+    if (!req.body.lieu) {
+        return res.status(403).send({ message: "req.body.lieu est vide" })
+    }
 }
