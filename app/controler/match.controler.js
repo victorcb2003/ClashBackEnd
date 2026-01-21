@@ -58,7 +58,7 @@ exports.getById = (req,res)=>{
         return res.status(401).send({ message: "Route non autorisée" })
     }
     if (!req.params.id){
-        return res.status(401).send({ message: "req.params.id est vide" })
+        return res.status(403).send({ message: "req.params.id est vide" })
     }
 
     Match.getById(req,res)

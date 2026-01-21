@@ -125,7 +125,7 @@ module.exports = class match {
 
         const connection = dbconnection()
 
-        connection.query(sql,value,(err,response)=>{
+        connection.query(sql,value,(err,results)=>{
             if (err){
                 res.status(403).send({message : `Érreur lors de la récupération d'un match ${err.message}`})
             }
