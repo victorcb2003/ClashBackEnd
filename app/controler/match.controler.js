@@ -1,7 +1,7 @@
 const Match = require("../class/match.class")
 
 exports.findAll = (req, res) => {
-    if (req.tokenData == null) {
+    if (!req.tokenData) {
         return res.status(401).send({ message: "token invalide" })
     }
     if (!req.params.id){
@@ -12,7 +12,7 @@ exports.findAll = (req, res) => {
 }
 
 exports.update = (req,res)=>{
-    if (!req.tokenData || eq.tokenData.type != "Organisateurs") {
+    if (!req.tokenData || req.tokenData.type != "Organisateurs") {
         return res.status(401).send({ message: "Route non autorisée" })
     }
     if (!req.body.Match_id){
@@ -29,6 +29,7 @@ exports.update = (req,res)=>{
 }
 
 exports.create = (req,res)=>{
+
     if (!req.tokenData || req.tokenData.type != "Organisateurs") {
         return res.status(401).send({ message: "Route non autorisée" })
     }
@@ -51,4 +52,6 @@ exports.create = (req,res)=>{
     if (!req.body.lieu) {
         return res.status(403).send({ message: "req.body.lieu est vide" })
     }
+
+    Match.create(req,res)
 }
