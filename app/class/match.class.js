@@ -113,7 +113,7 @@ module.exports = class match {
 
         connection.query(sql,value,(err,results)=>{
             if (err){
-                res.status(403).send({message:"Érreur lors de la création du match"})
+                res.status(403).send({message:`Érreur lors de la création du match ${err.message}`})
             }
             res.status(201).send({message:"Le Match a bien été créé"})
         })
