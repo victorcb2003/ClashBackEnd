@@ -24,6 +24,10 @@ exports.update = (req,res)=>{
     if (req.body.score && req.body.score.match(/^\d+-\d+$/)==null){
         return res.status(403).send({ message : "le score doit être du format 'n-n' avec n un nombre"})
     }
+    if (req.body.date_heure && !regex.test(req.body.date_heure)) {
+        return res.status(403).send({ message: "req.body.date est pas au format YYYY-MM-DD" })
+    }
+
 
     Match.update(req,res)
 }
@@ -42,7 +46,8 @@ exports.create = (req,res)=>{
     if (!req.body.date_heure) {
         return res.status(403).send({ message: "req.body.date_heure est vide" })
     }
-    const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+    const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0-3]):[0-5]\d:[0-5]\d$/
+;
     if (!regex.test(req.body.date_heure)) {
         return res.status(403).send({ message: "req.body.date est pas au format YYYY-MM-DD" })
     }

@@ -142,9 +142,22 @@ module.exports = class User {
     static info(req, res) {
         const connection = dbconnection()
 
-        const sql = `select id,prenom,nom,email from User where id = ?;select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.score,Matchs.Tournois_id from Matchs inner join Joueurs where Joueurs.User_id = ?`
+        const sql = `
+        select id,prenom,nom,email from User where id = ?;
+        select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.score,Matchs.Tournois_id from Matchs
+        inner join Joueurs
+        where Joueurs.User_id = ? AND (Joueurs.Equipe_id = Matchs.Equipe1_id OR Joueurs.Equipe_id = Matchs.Equipe2_id);
+        select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.score,Matchs.Tournois_id from Matchs
+        inner join Selectionneurs
+        inner join Equipes
+        Selectionneurs.User_id = ? AND Equipes.Selectionneurs_id = Selectionneurs.id;
+        select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.score,Matchs.Tournois_id from Matchs
+        inner join Organisateurs
+        inner join Tournois
+        Organisateurs.User_id = ? AND Tournois.Organisateurs_id = Organisateurs.id;
+        `
 
-        const value = [req.tokenData.id,req.tokenData.id]
+        const value = [req.tokenData.id,req.tokenData.id,req.tokenData.id,req.tokenData.id]
 
         connection.query(sql, value, (err, results, fields) => {
             if (err) {
