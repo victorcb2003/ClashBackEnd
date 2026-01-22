@@ -2,6 +2,7 @@ const dbconnection = require('../db/connection');
 const bcrypt = require('bcrypt');
 const Token = require("./token.class.js");
 const connection = require('../db/connection');
+const match = require('./match.class.js');
 
 module.exports = class User {
 
@@ -145,17 +146,15 @@ module.exports = class User {
         const sql = `
         select id,prenom,nom,email from User where id = ?;
         select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.score,Matchs.Tournois_id from Matchs
-        inner join Joueurs
-        where Joueurs.User_id = ? AND (Joueurs.Equipe_id = Matchs.Equipe1_id OR Joueurs.Equipe_id = Matchs.Equipe2_id);
-        select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.score,Matchs.Tournois_id from Matchs
-        inner join Selectionneurs
-        inner join Equipes
-        Selectionneurs.User_id = ? AND Equipes.Selectionneurs_id = Selectionneurs.id;
-        select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.score,Matchs.Tournois_id from Matchs
-        inner join Organisateurs
-        inner join Tournois
-        Organisateurs.User_id = ? AND Tournois.Organisateurs_id = Organisateurs.id;
+        left join Joueurs ON Joueurs.Equipe_id = Matchs.Equipe1_id OR Joueurs.Equipe_id = Matchs.Equipe2_id
+        left join Equipes ON Joueurs.Equipe_id = Equipes.id
+        left join Tournois ON Matchs.Tournois_id = Tournois.id
+        where Joueurs.User_id = 6
+        OR Equipes.Selectionneurs_id = 6
+        OR Tournois.Organisateurs_id = 6;
         `
+
+        
 
         const value = [req.tokenData.id,req.tokenData.id,req.tokenData.id,req.tokenData.id]
 
@@ -164,11 +163,14 @@ module.exports = class User {
                 return res.status(401).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " + req.tokenData.id + err.message })
             }
             const user = results[0]
+            const match = results[1] ? results[1] : results[2] ? results[2] : results[3]
+            user.type = req.tokenData.type
 
+ 
             if (user == null || user == undefined) {
                 return res.status(401).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " + req.tokenData.id })
             }
-            return res.status(200).send({ user })
+            return res.status(200).send({ user,match })
         })
     }
 
