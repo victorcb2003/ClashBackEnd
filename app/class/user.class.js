@@ -149,9 +149,9 @@ module.exports = class User {
         left join Joueurs ON Joueurs.Equipe_id = Matchs.Equipe1_id OR Joueurs.Equipe_id = Matchs.Equipe2_id
         left join Equipes ON Joueurs.Equipe_id = Equipes.id
         left join Tournois ON Matchs.Tournois_id = Tournois.id
-        where Joueurs.User_id = 6
-        OR Equipes.Selectionneurs_id = 6
-        OR Tournois.Organisateurs_id = 6;
+        where Joueurs.User_id = ?
+        OR Equipes.Selectionneurs_id = ?
+        OR Tournois.Organisateurs_id = ?;
         `
 
         const value = [req.tokenData.id,req.tokenData.id,req.tokenData.id,req.tokenData.id]
