@@ -154,8 +154,6 @@ module.exports = class User {
         OR Tournois.Organisateurs_id = 6;
         `
 
-        
-
         const value = [req.tokenData.id,req.tokenData.id,req.tokenData.id,req.tokenData.id]
 
         connection.query(sql, value, (err, results, fields) => {
@@ -164,12 +162,11 @@ module.exports = class User {
             }
             const user = results[0]
             const match = results[1] ? results[1] : results[2] ? results[2] : results[3]
-            user.type = req.tokenData.type
 
- 
             if (user == null || user == undefined) {
                 return res.status(401).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " + req.tokenData.id })
             }
+            user[0].type = (req.tokenData.type)
             return res.status(200).send({ user,match })
         })
     }
