@@ -31,7 +31,7 @@ module.exports = class Tournois {
         `
         let values = [req.params.id,req.params.id,req.params.id]
 
-        connection.execute(sql, values, (err, results, fields) => {
+        connection.query(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération du tournois " + err.message })
             }
