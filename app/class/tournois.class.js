@@ -22,32 +22,20 @@ module.exports = class Tournois {
     static info(req, res) {
         const connection = dbconnection()
 
-        let sql = "Select Equipe_id from Participants where Tournois_id = ?"
-        let values = [req.params.id]
+        let sql = `
+        Select nom,lieu,date from Tournois where id = ?;
+        Select Equipes.id,Equipes.nom from Equipes
+        Inner Join Participants On Participants.Equipe_id = Equipes.id
+        where Participants.Tournois_id = ?:
+        select date_heure,lieu,Equipe1_id,Equipe2_id,score from Matchs where Tournois_id = ?
+        `
+        let values = [req.params.id,req.params.id,req.params.id]
 
         connection.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des equipes " + err.message })
+                return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération du tournois " + err.message })
             }
-            if (results.length == 0) {
-                return res.status(200).send({ message: "Il y a aucune équipe dans ce tournois" })
-            }
-            sql = ""
-            values = []
-
-            results.forEach((equipe) => {
-                sql += "Select id,nom from Equipes Where id = ?;"
-                values.push(equipe.Equipe_id)
-            })
-            connection.query(sql, values, (err, results, fields) => {
-                if (err) {
-                    return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des info de l'Équipe " + err.message })
-                }
-                if (results.length == 0) {
-                    return res.status(400).send({ message: "Une erreur s'est produite lors de la récupération des info de l'Équipe" })
-                }
-                return res.status(200).send({ results })
-            })
+            res.status(200).send({Tournois : results[0],Equipe : results[1]})
         })
     }
 
