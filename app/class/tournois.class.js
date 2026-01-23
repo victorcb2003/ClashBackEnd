@@ -35,7 +35,7 @@ module.exports = class Tournois {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération du tournois " + err.message })
             }
-            res.status(200).send({Tournois : results[0],Equipe : results[1],Matchs: results[2]})
+            res.status(200).send({Tournois : results[0],Equipes_Participantes : results[1],Matchs: results[2]})
         })
     }
 
