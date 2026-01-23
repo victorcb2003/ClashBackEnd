@@ -29,7 +29,7 @@ module.exports = class Tournois {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des equipes " + err.message })
             }
-            if (results[0].length == 0) {
+            if (results.length == 0) {
                 return res.status(200).send({ message: "Il y a aucune équipe dans ce tournois" })
             }
             sql = ""
