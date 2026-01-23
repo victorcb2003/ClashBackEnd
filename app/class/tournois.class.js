@@ -23,11 +23,11 @@ module.exports = class Tournois {
         const connection = dbconnection()
 
         let sql = `
-        Select nom,lieu,date from Tournois where id = ?;
+        Select nom,lieu,date_debut,lancer,Organisateur_id from Tournois where id = 1;
         Select Equipes.id,Equipes.nom from Equipes
         Inner Join Participants On Participants.Equipe_id = Equipes.id
-        where Participants.Tournois_id = ?:
-        select date_heure,lieu,Equipe1_id,Equipe2_id,score from Matchs where Tournois_id = ?
+        where Participants.Tournois_id = 1;
+        select date_heure,lieu,Equipe1_id,Equipe2_id,score from Matchs where Tournois_id = 1;
         `
         let values = [req.params.id,req.params.id,req.params.id]
 
@@ -35,7 +35,7 @@ module.exports = class Tournois {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération du tournois " + err.message })
             }
-            res.status(200).send({Tournois : results[0],Equipe : results[1]})
+            res.status(200).send({Tournois : results[0],Equipe : results[1],Matchs: results[2]})
         })
     }
 
