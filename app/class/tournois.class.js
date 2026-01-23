@@ -6,7 +6,7 @@ module.exports = class Tournois {
     static create(req, res) {
         const connection = dbconnection()
 
-        const sql = "insert into Tournois (nom,date_debut,lieu,Organisateurs_id) values ( ?, ?,?,?)"
+        const sql = "insert into Tournois (nom,date_debut,lieu,Organisateurs_id) values (?,?,?,?)"
         const values = [req.body.nom, req.body.date, req.body.lieu, req.tokenData.id]
 
         connection.execute(sql, values, (err, results, fields) => {

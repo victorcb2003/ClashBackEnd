@@ -12,7 +12,7 @@ exports.create = (req, res) => {
     }
     const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
     if (!regex.test(req.body.date)) {
-        return res.status(403).send({ message: "req.body.date est pas au format YYYY-MM-DD" })
+        return res.status(403).send({ message: "req.body.date est pas au format 'YYYY-MM-DD'" })
     }
     if (!req.body.lieu) {
         return res.status(403).send({ message: "req.body.lieu est vide" })
@@ -22,6 +22,9 @@ exports.create = (req, res) => {
 };
 
 exports.info = (req, res) => {
+    if (!req.tokenData) {
+        return res.status(401).send({ message: "Route non autorisée" })
+    }
     if (!req.params.id) {
         return res.status(403).send({ message: "req.params.id est vide" })
     }
