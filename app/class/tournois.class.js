@@ -23,11 +23,11 @@ module.exports = class Tournois {
         const connection = dbconnection()
 
         let sql = `
-        Select nom,lieu,date_debut,lancer,Organisateur_id from Tournois where id = 1;
+        Select nom,lieu,date_debut,lancer,Organisateurs_id from Tournois where id = ?;
         Select Equipes.id,Equipes.nom from Equipes
         Inner Join Participants On Participants.Equipe_id = Equipes.id
-        where Participants.Tournois_id = 1;
-        select date_heure,lieu,Equipe1_id,Equipe2_id,score from Matchs where Tournois_id = 1;
+        where Participants.Tournois_id = ?;
+        select date_heure,lieu,Equipe1_id,Equipe2_id,score from Matchs where Tournois_id = ?;
         `
         let values = [req.params.id,req.params.id,req.params.id]
 
