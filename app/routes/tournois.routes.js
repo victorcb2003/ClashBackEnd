@@ -1,7 +1,7 @@
 const express = require("express");
 
 module.exports = app => {
-    const tournois = require("../controler/tournois.controler.js");
+    const tournois = require("../controller/tournois.controller.js");
 
 
     let router = express.Router();

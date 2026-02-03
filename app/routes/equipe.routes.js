@@ -1,7 +1,7 @@
 const express = require("express");
 
 module.exports = app => {
-    const equipe = require("../controler/equipe.controler.js");
+    const equipe = require("../controller/equipe.controller.js");
 
 
     let router = express.Router();
@@ -14,7 +14,7 @@ module.exports = app => {
 
     router.post("/create", equipe.create);
 
-    router.get("/info/:id", equipe.info);
+    router.get("/:id", equipe.info);
 
     router.get("/findAll", equipe.findAll);
 

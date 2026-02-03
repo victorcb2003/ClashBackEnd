@@ -1,7 +1,7 @@
 const express = require("express");
 
 module.exports = app => {
-    const user = require("../controler/login.controler.js");
+    const user = require("../controller/login.controller.js");
 
     let router = express.Router();
 
@@ -10,6 +10,8 @@ module.exports = app => {
     router.get("/logout", user.logout)
 
     router.get("/me", user.info);
+
+    router.get("/:id", user.info);
 
     router.put("/update/", user.update);
 

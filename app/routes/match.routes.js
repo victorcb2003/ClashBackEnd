@@ -1,7 +1,7 @@
 const express = require("express");
 
 module.exports = app => {
-    const match = require("../controler/match.controler.js");
+    const match = require("../controller/match.controller.js");
 
 
     let router = express.Router();

@@ -34,7 +34,7 @@ module.exports = class Form {
         const token =  Token.verifyToken(req.body.token,res);
 
         if (!token.email || !token.prenom || !token.nom || !token.type) {
-            return res.status(400).send({ message: "Token invalide" });
+            return res.status(400).send({ message: "Accès non autorisé." });
         }
 
         const user = new User({

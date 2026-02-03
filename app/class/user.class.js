@@ -2,7 +2,6 @@ const dbconnection = require('../db/connection');
 const bcrypt = require('bcrypt');
 const Token = require("./token.class.js");
 const connection = require('../db/connection');
-const match = require('./match.class.js');
 
 module.exports = class User {
 
@@ -99,8 +98,8 @@ module.exports = class User {
                         const token = Token.generateToken({ id: user.id, type: element })
                         res.cookie("token", token, {
                             httpOnly: true,
-                            secure: true,           
-                            sameSite: "None",         
+                            secure: true,
+                            sameSite: "None",
                             path: "/"
                         });
                         return res.status(200).send({
@@ -109,17 +108,28 @@ module.exports = class User {
                     }
                 })
             }
+            if (!done) return
+            const token = Token.generateToken({ id: user.id, type: null })
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "None",
+                path: "/"
+            });
+            return res.status(200).send({
+                message: "Login réussi !"
+            })
         });
     }
 
-    static logout(req,res) {
+    static logout(req, res) {
         try {
             res.clearCookie("token")
         }
-        catch(err){
-            res.status(400).send({message : err})
+        catch (err) {
+            res.status(400).send({ message: err })
         }
-        res.status(200).send({message : "Vous êtes déconnecté"})
+        res.status(200).send({ message: "Vous êtes déconnecté" })
     }
 
     static delete(req, res) {
@@ -145,7 +155,7 @@ module.exports = class User {
 
         const sql = `
         select id,prenom,nom,email from User where id = ?;
-        select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.score,Matchs.Tournois_id from Matchs
+        select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.Tournois_id from Matchs
         left join Joueurs ON Joueurs.Equipe_id = Matchs.Equipe1_id OR Joueurs.Equipe_id = Matchs.Equipe2_id
         left join Equipes ON Joueurs.Equipe_id = Equipes.id
         left join Tournois ON Matchs.Tournois_id = Tournois.id
@@ -153,12 +163,16 @@ module.exports = class User {
         OR Equipes.Selectionneurs_id = ?
         OR Tournois.Organisateurs_id = ?;
         `
-
-        const value = [req.tokenData.id,req.tokenData.id,req.tokenData.id,req.tokenData.id]
+        let value;
+        if (req.params.id){
+            value = [req.params.id, req.params.id, req.params.id, req.params.id]
+        } else {
+            value = [req.tokenData.id, req.tokenData.id, req.tokenData.id, req.tokenData.id]   
+        }
 
         connection.query(sql, value, (err, results, fields) => {
             if (err) {
-                return res.status(401).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " + req.tokenData.id + err.message })
+                return res.status(500).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " + req.tokenData.id + err.message })
             }
             const user = results[0]
             const match = results[1] ? results[1] : results[2] ? results[2] : results[3]
@@ -167,7 +181,7 @@ module.exports = class User {
                 return res.status(401).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " + req.tokenData.id })
             }
             user[0].type = (req.tokenData.type)
-            return res.status(200).send({ user,match })
+            return res.status(200).send({ user, match })
         })
     }
 

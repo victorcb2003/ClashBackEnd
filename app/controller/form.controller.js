@@ -11,9 +11,9 @@ exports.post = (req, res) => {
 }
 
 exports.get = (req, res)=>{
-    if (req.tokenData == null || req.tokenData.type != "Admin"){
-        return res.status(400).send({
-            message: "token invalide"
+    if (!req.tokenData || req.tokenData.type != "Admin"){
+        return res.status(403).send({
+            message: "Accès non autorisé."
         });
     }
 
@@ -22,7 +22,7 @@ exports.get = (req, res)=>{
 
 exports.confirm = (req, res) => {
     if (!req.body.token) {
-        return res.status(400).send({message: "Le token est manquant"});
+        return res.status(400).send({message: "Accès non autorisé."});
     }
 
     Form.confirm(req, res)

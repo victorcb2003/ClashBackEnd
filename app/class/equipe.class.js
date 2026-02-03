@@ -42,7 +42,7 @@ module.exports = class Equipe {
 
             connection.execute(sql, values, (err, results, fields) => {
                 if (err) {
-                    return res.status(403).send({ message: "Une erreur s'est produite lors de l'ajout d'un joueur a l'équipe. " + err.message })
+                    return res.status(500).send({ message: "Une erreur s'est produite lors de l'ajout d'un joueur a l'équipe. " + err.message })
                 }
                 return res.status(200).send({ message: "Le joueur a bien été ajouté dans l'équipe" })
             })
@@ -51,16 +51,20 @@ module.exports = class Equipe {
     static info(req, res) {
         const connection = dbconnection()
 
-        let sql = "Select User.email,User.prenom,User.nom from User inner join Joueurs where Joueurs.Equipe_id = ? AND Joueurs.User_id = User.id;Select nom from Equipes where id = ?"
+        let sql = "Select User.id,User.email,User.prenom,User.nom from User inner join Joueurs where Joueurs.Equipe_id = ? AND Joueurs.User_id = User.id;Select id,nom from Equipes where id = ?"
         let values = [req.params.id, req.params.id]
 
         connection.query(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des info de l'Équipe " + err.message })
+                return res.status(500).send({ message: "Une erreur s'est produite lors de la récupération des info de l'Équipe " + err.message })
+            }
+            if (results[1].length == 0){
+                return res.status(400).send({message : "Aucune équipe avec cette id"})
             }
 
             return res.status(200).send({
-                Équipe: results[1][0].nom,
+                id: results[1][0].id,
+                nom: results[1][0].nom,
                 Joueurs : results[0]
             })
         })
