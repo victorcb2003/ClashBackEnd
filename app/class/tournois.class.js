@@ -54,7 +54,7 @@ module.exports = class Tournois {
             sql = ""
             let values = []
             Tournois.forEach((user) => {
-                sql += "Select prenom,nom from User where id = ?;"
+                sql += "Select id,prenom,nom from User where id = ?;"
                 values.push(user.Organisateurs_id)
             })
             connection.query(sql, values, (err, results, fields) => {
