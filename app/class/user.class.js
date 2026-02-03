@@ -2,6 +2,7 @@ const dbconnection = require('../db/connection');
 const bcrypt = require('bcrypt');
 const Token = require("./token.class.js");
 const connection = require('../db/connection');
+const Joueur = require('./joueur.class.js');
 
 module.exports = class User {
 
@@ -54,7 +55,7 @@ module.exports = class User {
         const connection = dbconnection();
 
         let sql = 'select * from User where email = ?';
-        const values = [this.email];
+        let values = [this.email];
 
         connection.execute(sql, values, (err, results, fields) => {
             if (err) {
@@ -78,24 +79,20 @@ module.exports = class User {
                     message: "Mot de passe incorrect."
                 });
             }
-            const type = ["Joueurs", "Organisateurs", "Selectionneurs", "Admin"]
+            const types = ["Joueurs", "Selectionneurs", "Organisateurs", "Admin"]
 
-            let done = false
+            sql = "Select id from Joueurs where User_id = ?;Select id from Selectionneurs where User_id = ?;Select id from Organisateurs where User_id = ?;Select id from Admin where User_id = ?;"
+            values = [user.id, user.id, user.id, user.id]
 
-            for (const element of type) {
-
-                sql = "SELECT id from " + element + " WHERE User_id = ?"
-
-                connection.query(sql, [user.id], (err, results, fields) => {
-                    if (done) return
-
-                    if (err) {
+            connection.query(sql, values, (err, results) => {
+                if (err) {
+                    return res.status(500).send({ message: "Une erreur s'est produite lors du login. " + err.message })
+                }
+                let done = false;
+                types.forEach((type, index) => {
+                    if (results[index].length != 0 && !done) {
                         done = true
-                        return res.status(400).send({ message: "Erreur lors de la récupération du type d'utilisateur." + err.message });
-                    }
-                    if (results[0] != undefined) {
-                        done = true
-                        const token = Token.generateToken({ id: user.id, type: element })
+                        const token = Token.generateToken({ id: user.id, type: type })
                         res.cookie("token", token, {
                             httpOnly: true,
                             secure: true,
@@ -107,17 +104,18 @@ module.exports = class User {
                         })
                     }
                 })
-            }
-            if (!done) return
-            const token = Token.generateToken({ id: user.id, type: null })
-            res.cookie("token", token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: "None",
-                path: "/"
-            });
-            return res.status(200).send({
-                message: "Login réussi !"
+                if (!done) {
+                    const token = Token.generateToken({ id: user.id, type: null })
+                    res.cookie("token", token, {
+                        httpOnly: true,
+                        secure: true,
+                        sameSite: "None",
+                        path: "/"
+                    });
+                    return res.status(200).send({
+                        message: "Login réussi !"
+                    })
+                }
             })
         });
     }
@@ -164,10 +162,10 @@ module.exports = class User {
         OR Tournois.Organisateurs_id = ?;
         `
         let value;
-        if (req.params.id){
+        if (req.params.id) {
             value = [req.params.id, req.params.id, req.params.id, req.params.id]
         } else {
-            value = [req.tokenData.id, req.tokenData.id, req.tokenData.id, req.tokenData.id]   
+            value = [req.tokenData.id, req.tokenData.id, req.tokenData.id, req.tokenData.id]
         }
 
         connection.query(sql, value, (err, results, fields) => {
