@@ -5,9 +5,9 @@ module.exports = class But {
     static create(req, res) {
         const connection = dbconnection()
 
-        const sql = "insert into Buts (date_heure, User_id, Matchs_id, Type_But) values ( ?, ?, ?,?)"
+        const sql = "insert into Buts (date_heure, User_id, Match_id, Type_But) values ( ?, ?, ?,?)"
 
-        const values = [req.body.date_heure, req.body.User_id, req.body.Matchs_id, req.body.Type_But]
+        const values = [req.body.date_heure, req.body.User_id, req.body.Match_id, req.body.Type_But]
 
         connection.execute(sql, values, (err, results, fields) => {
             if (err) {
@@ -43,7 +43,7 @@ module.exports = class But {
         const connection = dbconnection();
 
         let sql = `
-        Select date_heure, User_id, Matchs_id, Type_but from Buts where Matchs_id = ?
+        Select date_heure, User_id, Match_id, Type_but from Buts where Match_id = ?
         `
 
         connection.query(sql, req.params.id, (err, results, fields) => {
@@ -80,7 +80,7 @@ module.exports = class But {
         let sql = "update from But "
         let values = []
 
-        const allowedFields = ["date_heure", "User_id", "Matchs_id", "Type_But"];
+        const allowedFields = ["date_heure", "User_id", "Match_id", "Type_But"];
 
         for (const key of allowedFields) {
             if (req.body[key] !== undefined) {

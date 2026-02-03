@@ -104,18 +104,6 @@ module.exports = class User {
                         })
                     }
                 })
-                if (!done) {
-                    const token = Token.generateToken({ id: user.id, type: null })
-                    res.cookie("token", token, {
-                        httpOnly: true,
-                        secure: true,
-                        sameSite: "None",
-                        path: "/"
-                    });
-                    return res.status(200).send({
-                        message: "Login réussi !"
-                    })
-                }
             })
         });
     }

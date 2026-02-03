@@ -10,19 +10,19 @@ exports.create = (req, res) => {
     if (!req.body.User_id){
         return res.status(400).send({message : "req.body.User_id est requis."})
     }
-    if (!req.body.Matchs_id){
-        return res.status(400).send({message : "req.body.Matchs_id est requis."})
+    if (!req.body.Match_id){
+        return res.status(400).send({message : "req.body.Match_id est requis."})
     }
     if (!req.body.Type_But){
         return res.status(400).send({message : "req.body.Type_But est requis."})
     }
-    const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0-3]):[0-5]\d:[0-5]\d$/;
+    // const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0-3]):[0-5]\d:[0-5]\d$/;
 
-    if (!regex.test(req.body.date_heure)) {
-        return res.status(400).send({ message: "La date doit être au format 'YYYY-MM-DD HH:mm:SS'."  })
-    }
-    if (typeof(req.body.Matchs_id) != "number" || parseInt(req.body.Matchs_id) != req.body.Matchs_id){
-        return res.status(400).send({message : "req.body.Matchs_id est pas un entier"})
+    // if (!regex.test(req.body.date_heure)) {
+    //     return res.status(400).send({ message: "La date doit être au format 'YYYY-MM-DD HH:mm:SS'."  })
+    // }
+    if (typeof(req.body.Match_id) != "number" || parseInt(req.body.Match_id) != req.body.Match_id){
+        return res.status(400).send({message : "req.body.Match_id est pas un entier"})
     }
     if (typeof(req.body.Type_But) != "number" || [0,1].includes(req.body.Type_But)){
         return res.status(400).send({message : "req.body.Type_But doit être soit 1 ou 0"})
@@ -86,14 +86,14 @@ exports.update = (req,res) =>{
     if (typeof(req.body.But_id) != "number" || parseInt(req.body.But_id) != req.body.But_id){
         return res.status(400).send({message : "req.body.But_id est pas un entier"})
     }
-    if (!req.body.date_heure && !req.body.User_id && !req.body.Matchs_id && !req.body.Type_But){
-        return res.status(400).send({ message: "il faut au moins remplir req.body.date_heure ou req.body.User_id ou req.body.Matchs_id ou req.body.Type_But"  })
+    if (!req.body.date_heure && !req.body.User_id && !req.body.Match_id && !req.body.Type_But){
+        return res.status(400).send({ message: "il faut au moins remplir req.body.date_heure ou req.body.User_id ou req.body.Match_id ou req.body.Type_But"  })
     }
     if (req.body.date_heure && !regex.test(req.body.date_heure)) {
         return res.status(400).send({ message: "req.body.date est pas au format 'YYYY-MM-DD HH:mm:SS'"  })
     }
-    if (req.body.Matchs_id && (typeof(req.body.Matchs_id) != "number" || parseInt(req.body.Matchs_id) != req.body.Matchs_id)){
-        return res.status(400).send({message : "req.body.Matchs_id est pas un entier"})
+    if (req.body.Match_id && (typeof(req.body.Match_id) != "number" || parseInt(req.body.Match_id) != req.body.Match_id)){
+        return res.status(400).send({message : "req.body.Match_id est pas un entier"})
     }vide
     if (req.body.Type_But && (typeof(req.body.Type_But) != "number" || [0,1].includes(req.body.Type_But))){
         return res.status(400).send({message : "req.body.Type_But doit être soit 1 ou 0"})
