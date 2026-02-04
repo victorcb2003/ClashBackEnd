@@ -26,31 +26,6 @@ module.exports = class match {
             if (results.length == 0) {
                 return res.status(400).send({ message: "Il y a aucun match avec cette id" })
             }
-            sql = ""
-            values = []
-
-            if (req.body.Equipe1_id) {
-                sql += "Select id from Equipes where id = ?"
-                values.push(req.body.Equipe1_id)
-            }
-            if (req.body.Equipe2_id) {
-                sql += "Select id from Equipes where id = ?"
-                values.push(req.body.Equipe2_id)
-            }
-            if (values.length != 0) {
-                await (async () => connection.query(sql, values, (err, results, fields) => {
-                    if (err) {
-                        return res.status(403).send({ message: "Érreur lors de la modification d'un match " + err.message })
-                    }
-                    console.log(results, results.length, values)
-                    if (results.length == 0) {
-                        return res.status(403).send({ message: "req.body.Equipe1_id et req.body.Equipe2_id non valide" })
-                    }
-                    if (values.length == 2 && results.length == 1) {
-                        return res.status(403).send({ message: "req.body.Equipe1_id ou req.body.Equipe2_id non valide" })
-                    }
-                }))
-            }
             sql = "Update Matchs Set "
             values = []
 

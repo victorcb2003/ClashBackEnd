@@ -13,7 +13,7 @@ exports.findAll = (req, res) => {
 
 exports.update = (req,res)=>{
     if (!req.tokenData || req.tokenData.type != "Organisateurs" && req.tokenData.type !="Admin") {
-        return res.status(403).send({ message: "Accès non autorisé." })
+        return res.status(401).send({ message: "Accès non autorisé." })
     }
     if (!req.body.Match_id){
         return res.status(400).send({ message: "req.body.Match_id est requis." })
