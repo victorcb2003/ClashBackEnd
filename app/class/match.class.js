@@ -29,11 +29,11 @@ module.exports = class match {
             sql = "Update Matchs Set "
             values = []
 
-            if (req.body.Equipe1) {
+            if (req.body.Equipe1_id) {
                 sql += "Equipe1_id = ?, "
                 values.push(req.body.Equipe1)
             }
-            if (req.body.Equipe2) {
+            if (req.body.Equipe2_id) {
                 sql += "Equipe2_id = ?, "
                 values.push(req.body.Equipe2)
             }
@@ -49,8 +49,6 @@ module.exports = class match {
             sql = sql.slice(0, -2)
             sql += " where id = ?"
             values.push(req.body.Match_id)
-
-            console.log(sql,values)
 
             connection.query(sql, values, (err, results, fields) => {
                 if (err) {
