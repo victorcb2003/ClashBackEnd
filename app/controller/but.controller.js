@@ -16,11 +16,11 @@ exports.create = (req, res) => {
     if (!req.body.Type_But){
         return res.status(400).send({message : "req.body.Type_But est requis."})
     }
-    // const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0-3]):[0-5]\d:[0-5]\d$/;
+    const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0-3]):[0-5]\d:[0-5]\d$/;
 
-    // if (!regex.test(req.body.date_heure)) {
-    //     return res.status(400).send({ message: "La date doit être au format 'YYYY-MM-DD HH:mm:SS'."  })
-    // }
+    if (!regex.test(req.body.date_heure)) {
+        return res.status(400).send({ message: "La date doit être au format 'YYYY-MM-DD HH:mm:SS'."  })
+    }
     if (parseInt(req.body.Match_id) != req.body.Match_id){
         return res.status(400).send({message : "req.body.Match_id est pas un entier"})
     }
@@ -71,7 +71,7 @@ exports.delete = (req,res) =>{
     if (!req.params.id){
         return res.status(400).send({message : "req.body.But_id est requis."})
     }
-    if (typeof(req.params.id) != "number" || parseInt(req.params.id) != req.params.id){
+    if (parseInt(req.params.id) != req.params.id){
         return res.status(400).send({message : "req.body.But_id est pas un entier"})
     }
 

@@ -27,7 +27,7 @@ module.exports = class Tournois {
         Select Equipes.id,Equipes.nom from Equipes
         Inner Join Participants On Participants.Equipe_id = Equipes.id
         where Participants.Tournois_id = ?;
-        select date_heure,lieu,Equipe1_id,Equipe2_id from Matchs where Tournois_id = ?;
+        select id,date_heure,lieu,Equipe1_id,Equipe2_id from Matchs where Tournois_id = ?;
         `
         let values = [req.params.id,req.params.id,req.params.id]
 

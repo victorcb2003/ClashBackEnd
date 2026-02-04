@@ -60,7 +60,7 @@ module.exports = class But {
     static delete(req, res) {
         const connection = dbconnection()
 
-        let sql = "delete But where id = ?"
+        let sql = "delete from Buts where id = ?"
         let values = [req.params.id]
 
         connection.execute(sql, values, (err, results) => {
