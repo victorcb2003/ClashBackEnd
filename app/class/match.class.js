@@ -31,11 +31,11 @@ module.exports = class match {
 
             if (req.body.Equipe1_id) {
                 sql += "Equipe1_id = ?, "
-                values.push(req.body.Equipe1)
+                values.push(req.body.Equipe1_id)
             }
             if (req.body.Equipe2_id) {
                 sql += "Equipe2_id = ?, "
-                values.push(req.body.Equipe2)
+                values.push(req.body.Equipe2_id)
             }
             if (req.body.date_heure) {
                 sql += "date_heure = ?, "
