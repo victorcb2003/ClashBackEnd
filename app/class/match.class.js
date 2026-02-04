@@ -50,6 +50,8 @@ module.exports = class match {
             sql += " where id = ?"
             values.push(req.body.Match_id)
 
+            console.log(sql,values)
+
             connection.query(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(500).send({ message: "Érreur lors de la modification d'un match " + err.message })
