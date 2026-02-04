@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config({ quiet: true });
-const dbconnection = require('../db/connection');
+const pool = require('../db/connection');
 
 module.exports = class Token {
 

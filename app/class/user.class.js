@@ -1,4 +1,4 @@
-const dbconnection = require('../db/connection');
+const pool = require('../db/connection');
 const bcrypt = require('bcrypt');
 const Token = require("./token.class.js");
 const connection = require('../db/connection');
@@ -14,12 +14,12 @@ module.exports = class User {
     }
 
     create(res, type) {
-        const connection = dbconnection();
+        ;
 
         let sql = 'insert into User (prenom, nom, email, password) values (?, ?, ?, ?)';
         let values = [this.prenom, this.nom, this.email, bcrypt.hashSync(this.password, 10)];
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(401).send({
                     message: "Une erreur s'est produite lors de la création de l'utilisateur. " + err.message
@@ -28,7 +28,7 @@ module.exports = class User {
             sql = 'Select id from User where email = ?';
             values = [this.email];
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(500).send({ message: "Une erreur s'est produite lors de la récupération de l'ID de l'utilisateur." });
                 }
@@ -37,7 +37,7 @@ module.exports = class User {
                 sql = `INSERT INTO ${type} (User_id) VALUES (?)`;
                 values = [id];
 
-                connection.execute(sql, values, (err, results, fields) => {
+                pool.execute(sql, values, (err, results, fields) => {
                     if (err) {
                         return res.status(401).send({ message: "Une erreur s'est produite lors de la création de l'utilisateur." + err.message });
                     }
@@ -52,23 +52,21 @@ module.exports = class User {
     }
 
     login(res) {
-        const connection = dbconnection();
+        ;
 
         let sql = 'select * from User where email = ?';
         let values = [this.email];
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                res.status(500).send({
+                return res.status(500).send({
                     message: "Une erreur s'est produite lors du login. " + err.message
                 });
-                return;
             }
             if (results.length === 0) {
-                res.status(404).send({
+                return res.status(404).send({
                     message: "Utilisateur non trouvé."
                 });
-                return;
             }
             if (results[0].verified == 0) {
                 return res.status(400).send({ message: "L'utilisateur n'est pas vérifié" })
@@ -84,7 +82,7 @@ module.exports = class User {
             sql = "Select id from Joueurs where User_id = ?;Select id from Selectionneurs where User_id = ?;Select id from Organisateurs where User_id = ?;Select id from Admin where User_id = ?;"
             values = [user.id, user.id, user.id, user.id]
 
-            connection.query(sql, values, (err, results) => {
+            pool.query(sql, values, (err, results) => {
                 if (err) {
                     return res.status(500).send({ message: "Une erreur s'est produite lors du login. " + err.message })
                 }
@@ -120,12 +118,12 @@ module.exports = class User {
 
     static delete(req, res) {
 
-        const connection = dbconnection()
+        
 
         const sql = "DELETE FROM User WHERE id = ?"
         const values = [req.params.id]
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(401).send({ message: "Erreur l'hors de la suppression de l'utilisateur " + req.params.id + err.message })
             }
@@ -137,7 +135,7 @@ module.exports = class User {
     }
 
     static info(req, res) {
-        const connection = dbconnection()
+        
 
         const sql = `
         select id,prenom,nom,email from User where id = ?;
@@ -156,7 +154,7 @@ module.exports = class User {
             value = [req.tokenData.id, req.tokenData.id, req.tokenData.id, req.tokenData.id]
         }
 
-        connection.query(sql, value, (err, results, fields) => {
+        pool.query(sql, value, (err, results, fields) => {
             if (err) {
                 return res.status(500).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " + req.tokenData.id + err.message })
             }
@@ -172,7 +170,7 @@ module.exports = class User {
     }
 
     static update(req, res) {
-        const connection = dbconnection()
+        
 
         let arg = ""
         let sql;
@@ -201,7 +199,7 @@ module.exports = class User {
         sql = "update User set " + arg + " where id = " + req.tokenData.id
 
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(401).send({ message: "Erreur l'hors de la modification des données de l'utilisateur " + req.tokenData.id + err.message })
             }
@@ -210,7 +208,7 @@ module.exports = class User {
         })
     }
     static getVerif(req, res) {
-        const connection = dbconnection()
+        
 
         let sql;
 
@@ -220,7 +218,7 @@ module.exports = class User {
             sql = "SELECT User.id FROM Joueurs JOIN User ON Joueurs.User_id = User.id WHERE User.verified = 0"
         }
 
-        connection.execute(sql, [], (err, results, field) => {
+        pool.execute(sql, [], (err, results, field) => {
             if (err) {
                 return res.status(500).send({ message: "Erreur lors de la récupération des utilisateurs non vérifiés. " + err.message })
             }
@@ -228,13 +226,13 @@ module.exports = class User {
         })
     }
     static putVerif(req, res) {
-        const connection = dbconnection()
+        
 
         if (req.tokenData.type == "Admin") {
             const sql = "Update User set verified = ? where id = ?"
             const values = [req.body.value, req.body.id]
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(400).send({ message: "Erreur lors de la verification" })
                 }
@@ -248,7 +246,7 @@ module.exports = class User {
             let sql = "SELECT User.id FROM Joueurs JOIN User ON Joueurs.User_id = User.id WHERE User.id = ?"
             let values = [req.body.id]
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(400).send({ message: "Erreur lors de la verification. " + err })
                 }
@@ -258,7 +256,7 @@ module.exports = class User {
                     sql = "Update User set verified = ? where id = ?"
                     values = [req.body.value, req.body.id]
 
-                    connection.execute(sql, values, (err, results, fields) => {
+                    pool.execute(sql, values, (err, results, fields) => {
                         if (err) {
                             return res.status(400).send({ message: "Erreur lors de la verification. " + err })
                         }

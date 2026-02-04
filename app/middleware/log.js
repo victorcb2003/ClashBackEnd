@@ -14,7 +14,6 @@ module.exports = app => {
 
             console.log(` [FINISH] ${req.method} ${req.url} -> ${couleur} ${res.statusCode} \x1b[37m  (${Date.now() - start}ms) | UserIP : ${ip} ${user}`)
         })
-
         next()
     });
 }

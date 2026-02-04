@@ -1,14 +1,14 @@
-const dbconnection = require('../db/connection');
+const pool = require('../db/connection');
 
 module.exports = class Groupe {
 
     static create(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "insert into Groupes (nom,Owner_id) values (?,?)"
         let values = [req.body.nom, req.tokenData.id]
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(401).send({
                     message: "Une erreur s'est produite lors de la création du groupe. " + err.message
@@ -18,12 +18,12 @@ module.exports = class Groupe {
             sql = "Select id from Groupes where nom = ?"
             values = [req.body.nom]
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
 
                     sql = "Delete from Groupes where nom = ?"
                     values = [req.body.nom]
-                    connection.execute(sql, values)
+                    pool.execute(sql, values)
 
                     return res.status(401).send({ message: "Une erreur s'est produite lors de la création du groupe. " + err.message })
                 }
@@ -31,7 +31,7 @@ module.exports = class Groupe {
                 sql = "insert into Groupes_Membres (Groupe_id,User_id) values (?,?)"
                 values = [results[0].id, req.tokenData.id]
 
-                connection.execute(sql, values, (err, results, fields) => {
+                pool.execute(sql, values, (err, results, fields) => {
                     if (err) {
                         return res.status(401).send({ message: "Une erreur s'est produite lors de la création du groupe. " + err.message })
                     }
@@ -42,12 +42,12 @@ module.exports = class Groupe {
     }
 
     static add(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "Select id from Groupes_Membres where User_id = ? and Groupe_id = ?"
         let values = [req.tokenData.id, req.body.groupe_id]
 
-        connection.query(sql, values, (err, results, fields) => {
+        pool.query(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de l'ajout du membre au groupe." + err.message })
             }
@@ -59,7 +59,7 @@ module.exports = class Groupe {
             sql = "insert into Groupes_Membres (Groupe_id,User_id) values (?,?)"
             values = [req.body.groupe_id, req.body.user_id]
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors de l'ajout du user au groupe. " + err.message })
                 }
@@ -68,12 +68,12 @@ module.exports = class Groupe {
         })
     }
     static info(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "Select nom from Groupes where id = ?;Select User_id from Groupes_Membres where Groupe_id = ?"
         let values = [req.params.id, req.params.id]
 
-        connection.query(sql, values, (err, results, fields) => {
+        pool.query(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des info du groupe " + err.message })
             }
@@ -92,7 +92,7 @@ module.exports = class Groupe {
                 values.push(user.User_id)
             })
 
-            connection.query(sql, values, (err, result, fields) => {
+            pool.query(sql, values, (err, result, fields) => {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des info du groupe " + err.message })
                 }
@@ -108,11 +108,11 @@ module.exports = class Groupe {
     }
 
     static findAll(req, res) {
-        const connection = dbconnection();
+        ;
 
         let sql = "Select id,nom from Groupes"
 
-        connection.execute(sql, (err, groupes, fields) => {
+        pool.execute(sql, (err, groupes, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des noms des équipes " + err.message })
             }
@@ -128,7 +128,7 @@ module.exports = class Groupe {
                 values.push(groupe.id)
             })
 
-            connection.query(sql, values, (err, results, fields) => {
+            pool.query(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des noms des équipes " + err.message })
                 }
@@ -148,12 +148,12 @@ module.exports = class Groupe {
         })
     }
     static delete(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "Select Owner_id from Groupes where id = ?"
         let values = [req.params.id]
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la suppression du groupe " + err.message })
             }
@@ -167,7 +167,7 @@ module.exports = class Groupe {
             sql = "Delete from Groupes where id = ?"
             values = [req.body.groupe_id]
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors de la suppression du groupe " + err.message })
                 }
@@ -176,12 +176,12 @@ module.exports = class Groupe {
         })
     }
     static remove(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "Select Owner_id from Groupes where id = ?; Select id from Groupes_Membres where User_id = ? and Groupe_id = ?"
         let values = [req.body.groupe_id, req.body.user_id, req.body.groupe_id]
 
-        connection.query(sql, values, (err, results, fields) => {
+        pool.query(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération de la suppression du user du groupe " + err.message })
             }
@@ -198,7 +198,7 @@ module.exports = class Groupe {
             sql = "Delete from Groupes_Membres where Groupe_id = ? and User_id = ?;"
             values = [req.body.groupe_id, req.body.user_id]
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération de la suppression du user du groupe. " + err.message })
                 }
@@ -207,12 +207,12 @@ module.exports = class Groupe {
         })
     }
     static rename(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "Select Owner_id from Groupes where id = ?"
         let values = [req.body.groupe_id]
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors du changement de nom du groupe " + err.message })
             }
@@ -226,7 +226,7 @@ module.exports = class Groupe {
             sql = "Update Groupes Set nom = ? where id = ?"
             values = [req.body.nom, req.body.groupe_id]
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors du changement de nom du groupe " + err.message })
                 }
@@ -236,11 +236,11 @@ module.exports = class Groupe {
     }
 
     static messageCreate(req, res) {
-        const connection = dbconnection()
+        
 
         const sql = "Insert into Groupes_Messages (expediteur_id,Groupe_id,message) values (?,?,?)"
         const values = [req.tokenData.id, req.body.groupe_id, req.body.message]
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(500).send({ message: "Une erreur s'est produite lors de la création du message. " + err.message })
             }
@@ -250,12 +250,12 @@ module.exports = class Groupe {
     }
 
     static messageDelete(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "select expediteur_id from Groupes_Messages where id = ?"
         let values = [req.params.id]
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(500).send({ message: "Une erreur s'est produite lors de la suppression du message. " + err.message })
             }
@@ -268,7 +268,7 @@ module.exports = class Groupe {
 
             sql = "delete from Groupes_Messages where id = ?"
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(500).send({ message: "Une erreur s'est produite lors de la suppression du message. " + err.message })
                 }
@@ -279,12 +279,12 @@ module.exports = class Groupe {
     }
 
     static messageFindAll(req, res) {
-        const connection = dbconnection()
+        
 
         const sql = "SELECT Groupes_Messages.* FROM Groupes_Messages JOIN Groupes_Membres ON Groupes_Messages.Groupe_id = Groupes_Membres.Groupe_id WHERE Groupes_Membres.User_id = ?"
         const values = [req.params.id]
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(500).send({ message: "Une erreur s'est produite lors de la récupération des messages. " + err.message })
             }
@@ -293,12 +293,12 @@ module.exports = class Groupe {
     }
 
     static messageUpdate(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "Select expediteur_id from Groupes_Messages where id = ?"
         let values = [req.body.message_id]
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(500).send({ message: "Une erreur s'est produite lors de la modification du message. " + err.message })
             }
@@ -312,7 +312,7 @@ module.exports = class Groupe {
             sql = "update Groupes_Messages Set message = ? where id = ?"
             values = [req.body.message, req.body.message_id]
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(500).send({ message: "Une erreur s'est produite lors de la modification du message. " + err.message })
                 }

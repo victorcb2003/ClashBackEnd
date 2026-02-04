@@ -1,16 +1,16 @@
 const User = require("./user.class.js");
-const dbconnection = require('../db/connection');
+const pool = require('../db/connection');
 
 module.exports = class Organisateur extends User {
     constructor(prenom, nom, email, password) {
         super(prenom, nom, email, password);
     }
     static findAll(req, res) {
-        const connection = dbconnection()
+        
 
         const sql = "SELECT User.id, User.prenom, User.nom from User Join Organisateurs On Organisateurs.User_id = User.id"
 
-        connection.execute(sql, (err, results, fields) => {
+        pool.execute(sql, (err, results, fields) => {
             if (err) {
                 res.status(401).send({ message: "Erreur dans la requête " + err.message })
             }

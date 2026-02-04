@@ -1,15 +1,15 @@
-const dbconnection = require('../db/connection');
+const pool = require('../db/connection');
 
 module.exports = class But {
 
     static create(req, res) {
-        const connection = dbconnection()
+        
 
         const sql = "insert into Buts (date_heure, User_id, Match_id, Type_But) values ( ?, ?, ?,?)"
 
         const values = [req.body.date_heure, req.body.User_id, req.body.Match_id, req.body.Type_But]
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(500).send({
                     message: "Une erreur s'est produite lors de la création du but. " + err.message
@@ -20,12 +20,12 @@ module.exports = class But {
     }
 
     static info(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "Select date_heure,User_id,Match_id,Type_But from But where id = ?"
         let values = [req.params.id, req.params.id]
 
-        connection.query(sql, values, (err, results, fields) => {
+        pool.query(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(500).send({ message: "Une erreur s'est produite lors de la récupération des informations du but." + err.message })
             }
@@ -40,13 +40,13 @@ module.exports = class But {
     }
 
     static findAll(req, res) {
-        const connection = dbconnection();
+        ;
 
         let sql = `
         Select id, date_heure, User_id, Match_id, Type_but from Buts where Match_id = ?
         `
 
-        connection.query(sql, req.params.id, (err, results, fields) => {
+        pool.query(sql, req.params.id, (err, results, fields) => {
             if (err) {
                 return res.status(500).send({ message: "Une erreur s'est produite lors de la récupération des buts." + err.message })
             }
@@ -58,12 +58,12 @@ module.exports = class But {
         })
     }
     static delete(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "delete from Buts where id = ?"
         let values = [req.params.id]
 
-        connection.execute(sql, values, (err, results) => {
+        pool.execute(sql, values, (err, results) => {
             if (err) {
                 return res.status(500).send({ message: "Une erreur s'est produite lors de la suppression du but" + err.message })
             }
@@ -75,7 +75,7 @@ module.exports = class But {
     }
 
     static update(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "update from But "
         let values = []
@@ -89,7 +89,7 @@ module.exports = class But {
             }
         }
 
-        connection.execute(sql, values, (err, results) => {
+        pool.execute(sql, values, (err, results) => {
             if (err) {
                 return res.status(500).send({ message: "Une erreur s'est produite lors de la modification du but." + err.message })
             }

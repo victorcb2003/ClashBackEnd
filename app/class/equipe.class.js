@@ -1,14 +1,14 @@
-const dbconnection = require('../db/connection');
+const pool = require('../db/connection');
 
 module.exports = class Equipe {
 
     static create(req, res) {
-        const connection = dbconnection()
+        
 
         const sql = "insert into Equipes (nom, Selectionneurs_id) values ( ?, ?)"
         const values = [req.body.nom, req.tokenData.id]
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(401).send({
                     message: "Une erreur s'est produite lors de la création de l'équipe. " + err.message
@@ -19,12 +19,12 @@ module.exports = class Equipe {
     }
 
     static addJoueur(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "Select Selectionneurs_id from Equipes where id = ?; Select id from Joueurs where User_id = ?"
         let values = [req.body.Equipe_id, req.body.Joueur_id]
 
-        connection.query(sql, values, (err, results, fields) => {
+        pool.query(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération de l'id du selectionneur " + err.message })
             }
@@ -40,7 +40,7 @@ module.exports = class Equipe {
             sql = "UPDATE Joueurs SET Equipe_id = ? WHERE User_id = ?;"
             values = [req.body.Equipe_id, req.body.Joueur_id]
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(500).send({ message: "Une erreur s'est produite lors de l'ajout d'un joueur a l'équipe. " + err.message })
                 }
@@ -49,12 +49,12 @@ module.exports = class Equipe {
         })
     }
     static info(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "Select User.id,User.email,User.prenom,User.nom from User inner join Joueurs where Joueurs.Equipe_id = ? AND Joueurs.User_id = User.id;Select id,nom from Equipes where id = ?"
         let values = [req.params.id, req.params.id]
 
-        connection.query(sql, values, (err, results, fields) => {
+        pool.query(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(500).send({ message: "Une erreur s'est produite lors de la récupération des info de l'Équipe " + err.message })
             }
@@ -71,11 +71,11 @@ module.exports = class Equipe {
     }
 
     static findAll(req, res) {
-        const connection = dbconnection();
+        ;
 
         let sql = "Select id,nom,Selectionneurs_id from Equipes"
 
-        connection.execute(sql, (err, equipes, fields) => {
+        pool.execute(sql, (err, equipes, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des noms des équipes " + err.message })
             }
@@ -88,7 +88,7 @@ module.exports = class Equipe {
                 sql += "Select prenom,nom from User where id = ?;"
                 values.push(equipe.Selectionneurs_id)
             })
-            connection.query(sql, values, (err, results, fields) => {
+            pool.query(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des noms des équipes " + err.message })
                 }
@@ -108,12 +108,12 @@ module.exports = class Equipe {
         })
     }
     static delete(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "Select Selectionneurs_id from Equipes where id = ?"
         let values = [req.body.Equipe_id]
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la suppression de l'équipe " + err.message })
             }
@@ -127,7 +127,7 @@ module.exports = class Equipe {
             sql = "Delete from Equipes where id = ?"
             values = [req.body.Equipe_id]
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors de la suppression de l'équipe " + err.message })
                 }
@@ -136,12 +136,12 @@ module.exports = class Equipe {
         })
     }
     static removeJoueur(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "Select Selectionneurs_id from Equipes where id = ?; Select Equipe_id from Joueurs where User_id = ?"
         let values = [req.body.Equipe_id, req.body.Joueur_id]
 
-        connection.query(sql, values, (err, results, fields) => {
+        pool.query(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération de l'id du selectionneur " + err.message })
             }
@@ -160,7 +160,7 @@ module.exports = class Equipe {
             sql = "UPDATE Joueurs SET Equipe_id = ? WHERE User_id = ?;"
             values = [null, req.body.Joueur_id]
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors de la suppression du joueur a l'équipe. " + err.message })
                 }
@@ -169,12 +169,12 @@ module.exports = class Equipe {
         })
     }
     static rename(req, res) {
-        const connection = dbconnection()
+        
 
         let sql = "Select Selectionneurs_id from Equipes where id = ?"
         let values = [req.body.Equipe_id]
 
-        connection.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(403).send({ message: "Une erreur s'est produite lors du changement de nom de l'équipe " + err.message })
             }
@@ -188,7 +188,7 @@ module.exports = class Equipe {
             sql = "Update Equipes Set nom = ? where id = ?"
             values = [req.body.nom, req.body.Equipe_id]
 
-            connection.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
                     return res.status(403).send({ message: "Une erreur s'est produite lors du changement de nom de l'équipe " + err.message })
                 }
