@@ -11,7 +11,7 @@ module.exports = class Tournois {
 
         connection.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(401).send({
+                return res.status(500).send({
                     message: "Une erreur s'est produite lors de la création du tournois. " + err.message
                 });
             }
@@ -27,7 +27,7 @@ module.exports = class Tournois {
         Select Equipes.id,Equipes.nom from Equipes
         Inner Join Participants On Participants.Equipe_id = Equipes.id
         where Participants.Tournois_id = ?;
-        select date_heure,lieu,Equipe1_id,Equipe2_id,score from Matchs where Tournois_id = ?;
+        select date_heure,lieu,Equipe1_id,Equipe2_id from Matchs where Tournois_id = ?;
         `
         let values = [req.params.id,req.params.id,req.params.id]
 
@@ -255,8 +255,8 @@ module.exports = class Tournois {
                     return res.status(403).send({ message: "Il y a pas asser d'équipe inscrite a ce tournois" })
                 }
 
-                if (Math.sqrt(equipes.length) != Math.round(Math.sqrt(equipes.length))) {
-                    return res.status(403).send({ message: `Il y a ${equipes.length} équipes dans le tournois, il faut que se soit un carré de 2` })
+                if (![2,4,8,16,32,64,128].includes(equipes.length)) {
+                    return res.status(400).send({ message: `Il y a ${equipes.length} équipes dans le tournois, il faut que se soit un carré de 2` })
                 }
 
                 const date_debut = new Date(results[0].date_debut)

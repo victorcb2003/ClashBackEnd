@@ -43,7 +43,7 @@ module.exports = class But {
         const connection = dbconnection();
 
         let sql = `
-        Select date_heure, User_id, Match_id, Type_but from Buts where Match_id = ?
+        Select id, date_heure, User_id, Match_id, Type_but from Buts where Match_id = ?
         `
 
         connection.query(sql, req.params.id, (err, results, fields) => {
@@ -54,7 +54,7 @@ module.exports = class But {
                 return res.status(200).send({ buts: [] })
             }
 
-            return res.status(200).send({ buts: results[0] })
+            return res.status(200).send({ buts: results })
         })
     }
     static delete(req, res) {

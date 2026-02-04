@@ -8,7 +8,10 @@ module.exports = function dbConnection() {
     port: 3306,
     password: process.env.DB_PASSWORD,
     database: process.env.DATABASE,
-    multipleStatements: true
+    multipleStatements: true, 
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
   });
 
   connection.connect((err) => {

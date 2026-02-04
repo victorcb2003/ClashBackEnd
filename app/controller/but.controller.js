@@ -21,13 +21,15 @@ exports.create = (req, res) => {
     // if (!regex.test(req.body.date_heure)) {
     //     return res.status(400).send({ message: "La date doit être au format 'YYYY-MM-DD HH:mm:SS'."  })
     // }
-    if (typeof(req.body.Match_id) != "number" || parseInt(req.body.Match_id) != req.body.Match_id){
+    if (parseInt(req.body.Match_id) != req.body.Match_id){
         return res.status(400).send({message : "req.body.Match_id est pas un entier"})
     }
-    if (typeof(req.body.Type_But) != "number" || [0,1].includes(req.body.Type_But)){
+    console.log(req.body.Type_But)
+    if ([0,1].includes(req.body.Type_But)){
         return res.status(400).send({message : "req.body.Type_But doit être soit 1 ou 0"})
     }
-    if (typeof(req.body.User_id) != "number" || parseInt(req.body.User_id) != req.body.User_id){
+    console.log(req.body.User_id)
+    if (parseInt(req.body.User_id) != req.body.User_id){
         return res.status(400).send({message : "req.body.User_id est pas un entier"})
     }
 
