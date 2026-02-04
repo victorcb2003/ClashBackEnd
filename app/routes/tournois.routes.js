@@ -20,7 +20,7 @@ module.exports = app => {
 
     router.post("/start", tournois.start);
 
-    router.get("/:id", tournois.info);
+    router.get("/info/:id", tournois.info);
 
     app.use('/api/tournois', router);
 };
