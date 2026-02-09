@@ -30,7 +30,7 @@ module.exports = class User {
 
             pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
-                    return res.status(500).send({ message: "Une erreur s'est produite lors de la récupération de l'ID de l'utilisateur." });
+                    return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération de l'ID de l'utilisateur." });
                 }
                 const id = results[0].id;
 
@@ -84,7 +84,7 @@ module.exports = class User {
 
             pool.query(sql, values, (err, results) => {
                 if (err) {
-                    return res.status(500).send({ message: "Une erreur s'est produite lors du login. " + err.message })
+                    return res.status(500).send({ error: "Une erreur s'est produite lors du login. " + err.message })
                 }
                 let done = false;
                 types.forEach((type, index) => {
@@ -118,7 +118,7 @@ module.exports = class User {
 
     static delete(req, res) {
 
-        
+
 
         const sql = "DELETE FROM User WHERE id = ?"
         const values = [req.params.id]
@@ -135,9 +135,9 @@ module.exports = class User {
     }
 
     static info(req, res) {
-        
 
-        const sql = `
+
+        let sql = `
         select id,prenom,nom,email from User where id = ?;
         select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.Tournois_id from Matchs
         left join Joueurs ON Joueurs.Equipe_id = Matchs.Equipe1_id OR Joueurs.Equipe_id = Matchs.Equipe2_id
@@ -156,21 +156,23 @@ module.exports = class User {
 
         pool.query(sql, value, (err, results, fields) => {
             if (err) {
-                return res.status(500).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " + req.tokenData.id + err.message })
+                return res.status(500).send({ error: "Erreur l'hors de l'obtention des données de l'utilisateur " + err.message })
             }
             const user = results[0]
             const match = results[1] ? results[1] : results[2] ? results[2] : results[3]
 
             if (user == null || user == undefined) {
-                return res.status(401).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " + req.tokenData.id })
+                return res.status(401).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " })
             }
-            user[0].type = (req.tokenData.type)
+            if (!req.params.id && user[0]) {
+                user[0].type = (req.tokenData.type)
+            }
             return res.status(200).send({ user, match })
         })
     }
 
     static update(req, res) {
-        
+
 
         let arg = ""
         let sql;
@@ -208,7 +210,7 @@ module.exports = class User {
         })
     }
     static getVerif(req, res) {
-        
+
 
         let sql;
 
@@ -220,13 +222,13 @@ module.exports = class User {
 
         pool.execute(sql, [], (err, results, field) => {
             if (err) {
-                return res.status(500).send({ message: "Erreur lors de la récupération des utilisateurs non vérifiés. " + err.message })
+                return res.status(500).send({ error: "Erreur lors de la récupération des utilisateurs non vérifiés. " + err.message })
             }
             return res.status(200).send({ results: results })
         })
     }
     static putVerif(req, res) {
-        
+
 
         if (req.tokenData.type == "Admin") {
             const sql = "Update User set verified = ? where id = ?"

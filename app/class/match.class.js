@@ -8,7 +8,7 @@ module.exports = class match {
 
         pool.execute(sql, [req.params.id], (err, results) => {
             if (err) {
-                return res.status(500).send({ message: "Érreur lors de la création d'un match " + err.message })
+                return res.status(500).send({ error: "Érreur lors de la création d'un match " + err.message })
             }
             return res.status(200).send({ matchs: results })
         })
@@ -21,7 +21,7 @@ module.exports = class match {
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(500).send({ message: "Érreur lors de la modification d'un match " + err.message })
+                return res.status(500).send({ error: "Érreur lors de la modification d'un match " + err.message })
             }
             if (results.length == 0) {
                 return res.status(400).send({ message: "Il y a aucun match avec cette id" })
@@ -54,7 +54,7 @@ module.exports = class match {
 
             pool.query(sql, values, (err, results, fields) => {
                 if (err) {
-                    return res.status(500).send({ message: "Érreur lors de la modification d'un match " + err.message })
+                    return res.status(500).send({ error: "Érreur lors de la modification d'un match " + err.message })
                 }
                 return res.status(200).send({ message: "Le match a bien été mise a jour." })
             })
@@ -68,7 +68,7 @@ module.exports = class match {
 
         pool.query(sql, value, (err, results) => {
             if (err) {
-                return res.status(500).send({ message: `Érreur lors de la création du match ${err.message}` })
+                return res.status(500).send({ error: `Érreur lors de la création du match ${err.message}` })
             }
             return res.status(201).send({ message: "Le Match a bien été créé" })
         })
@@ -82,7 +82,7 @@ module.exports = class match {
 
         pool.query(sql, value, (err, results) => {
             if (err) {
-                return res.status(500).send({ message: `Érreur lors de la récupération d'un match ${err.message}` })
+                return res.status(500).send({ error: `Érreur lors de la récupération d'un match ${err.message}` })
             }
             return res.status(200).send({ match: results[0] })
         })

@@ -11,9 +11,7 @@ module.exports = class But {
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(500).send({
-                    message: "Une erreur s'est produite lors de la création du but. " + err.message
-                });
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la création du but. " + err.message});
             }
             return res.status(201).send({ message: "Le but a bien été enregistré." })
         })
@@ -27,10 +25,10 @@ module.exports = class But {
 
         pool.query(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(500).send({ message: "Une erreur s'est produite lors de la récupération des informations du but." + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération des informations du but." + err.message })
             }
             if (results.length == 0) {
-                return res.status(404).send({ message: `Le but avec l'id ${req.params.id} n'a pas été trouvé` })
+                return res.status(404).send({ error: `Le but avec l'id ${req.params.id} n'a pas été trouvé` })
             }
 
             return res.status(200).send({
@@ -48,7 +46,7 @@ module.exports = class But {
 
         pool.query(sql, req.params.id, (err, results, fields) => {
             if (err) {
-                return res.status(500).send({ message: "Une erreur s'est produite lors de la récupération des buts." + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération des buts." + err.message })
             }
             if (results.length == 0) {
                 return res.status(200).send({ buts: [] })
@@ -65,10 +63,10 @@ module.exports = class But {
 
         pool.execute(sql, values, (err, results) => {
             if (err) {
-                return res.status(500).send({ message: "Une erreur s'est produite lors de la suppression du but" + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la suppression du but" + err.message })
             }
             if (results.affectedRows == 0) {
-                return res.status(403).send({ message: "Il n'existe aucun but avec cet id." })
+                return res.status(403).send({ error: "Il n'existe aucun but avec cet id." })
             }
             return res.status(200).send({ message: "Le but a bien été supprimé" })
         })
@@ -91,10 +89,10 @@ module.exports = class But {
 
         pool.execute(sql, values, (err, results) => {
             if (err) {
-                return res.status(500).send({ message: "Une erreur s'est produite lors de la modification du but." + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la modification du but." + err.message })
             }
             if (results.affectedRows == 0) {
-                return res.status(403).send({ message: "Il y a aucun but avec cette id" })
+                return res.status(403).send({ error: "Il y a aucun but avec cette id" })
             }
             return res.status(200).send({message : "Le but a bien été modifié"})
         })

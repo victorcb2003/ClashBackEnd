@@ -38,7 +38,6 @@ exports.removeJoueur = (req,res) =>{
     if (!req.body.Equipe_id){
         return res.status(400).send({message : "req.body.Equipe_id est requis."})
     }
-
     Equipe.removeJoueur(req,res)
 }
 

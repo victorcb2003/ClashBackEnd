@@ -14,11 +14,11 @@ module.exports = app => {
 
     router.post("/create", equipe.create);
 
-    router.get("/:id", equipe.info);
-
     router.get("/findAll", equipe.findAll);
 
     router.delete("/delete", equipe.delete);
+
+    router.get("/:id", equipe.info);
 
     app.use('/api/equipe', router);
 };

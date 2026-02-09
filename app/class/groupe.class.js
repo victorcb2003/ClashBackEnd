@@ -242,7 +242,7 @@ module.exports = class Groupe {
         const values = [req.tokenData.id, req.body.groupe_id, req.body.message]
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(500).send({ message: "Une erreur s'est produite lors de la création du message. " + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la création du message. " + err.message })
             }
             return res.status(201).send({ message: "Le message a bien était créé" })
         })
@@ -257,7 +257,7 @@ module.exports = class Groupe {
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(500).send({ message: "Une erreur s'est produite lors de la suppression du message. " + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la suppression du message. " + err.message })
             }
             if (results.length == 0){
                 return res.status(400).send({ message : "aucun message avec cette id"})
@@ -270,7 +270,7 @@ module.exports = class Groupe {
 
             pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
-                    return res.status(500).send({ message: "Une erreur s'est produite lors de la suppression du message. " + err.message })
+                    return res.status(500).send({ error: "Une erreur s'est produite lors de la suppression du message. " + err.message })
                 }
                 return res.status(201).send({ message: "Le message a bien était supprimé" })
             })
@@ -286,7 +286,7 @@ module.exports = class Groupe {
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(500).send({ message: "Une erreur s'est produite lors de la récupération des messages. " + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération des messages. " + err.message })
             }
             res.status(200).send({ messages: results })
         })
@@ -300,7 +300,7 @@ module.exports = class Groupe {
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(500).send({ message: "Une erreur s'est produite lors de la modification du message. " + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la modification du message. " + err.message })
             }
             if (results.length == 0) {
                 res.status(400).send({ message: "L'id du message n'existe pas" })
@@ -314,7 +314,7 @@ module.exports = class Groupe {
 
             pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
-                    return res.status(500).send({ message: "Une erreur s'est produite lors de la modification du message. " + err.message })
+                    return res.status(500).send({ error: "Une erreur s'est produite lors de la modification du message. " + err.message })
                 }
                 return res.status(200).send({ message: "Le message a bien été modifié" })
             })
