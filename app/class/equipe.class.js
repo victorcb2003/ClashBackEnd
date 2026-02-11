@@ -53,6 +53,7 @@ module.exports = class Equipe {
         const sql = `
         Select User.id,User.email,User.prenom,User.nom from User inner join Joueurs on Joueurs.User_id = User.id where Joueurs.Equipe_id = ?;
         Select id,nom from Equipes where id = ?;
+        Select User.id,User.nom,User.prenom from User inner join Equipes where Equipes.Selectionneurs_id = User.id
         `
         const values = [req.params.id, req.params.id]
 
@@ -67,7 +68,8 @@ module.exports = class Equipe {
             return res.status(200).send({
                 id: results[1][0].id,
                 nom: results[1][0].nom,
-                Joueurs : results[0]
+                Joueurs : results[0],
+                Selectionneur : results[2][0]
             })
         })
     }

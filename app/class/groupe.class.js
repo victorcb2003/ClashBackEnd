@@ -10,8 +10,8 @@ module.exports = class Groupe {
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(401).send({
-                    message: "Une erreur s'est produite lors de la création du groupe. " + err.message
+                return res.status(500).send({
+                    error: "Une erreur s'est produite lors de la création du groupe. " + err.message
                 });
             }
 
@@ -25,7 +25,7 @@ module.exports = class Groupe {
                     values = [req.body.nom]
                     pool.execute(sql, values)
 
-                    return res.status(401).send({ message: "Une erreur s'est produite lors de la création du groupe. " + err.message })
+                    return res.status(500).send({ error: "Une erreur s'est produite lors de la création du groupe. " + err.message })
                 }
 
                 sql = "insert into Groupes_Membres (Groupe_id,User_id) values (?,?)"

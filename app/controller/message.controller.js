@@ -26,7 +26,7 @@ exports.findAll = (req, res) => {
     if (!req.tokenData) {
         return res.status(401).send({ message: "Accès non autorisé." })
     }
-
+    
     Message.findAll(req, res)
 }
 

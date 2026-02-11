@@ -1,6 +1,7 @@
 const But = require("../class/but.class.js")
 
 exports.create = (req, res) => {
+    console.log(req.tokenData)
     if (!req.tokenData || req.tokenData.type != "Organisateurs" && req.tokenData.type != "Admin"){
         return res.status(403).send({message : "Accès non autorisé."})
     }

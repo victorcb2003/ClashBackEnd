@@ -12,7 +12,7 @@ module.exports = class Form {
 
         pool.execute(sql,values,(err,results,fields)=>{
             if (err){
-                return res.status(400).send({message : err.message})
+                return res.status(500).send({ error : err.message})
             }
             Mail.sendMail(req,res)
         })
@@ -24,9 +24,9 @@ module.exports = class Form {
 
         pool.execute(sql,(err,results,fields)=>{
             if (err){
-                return res.status(400).send({message : err.message})
+                return res.status(500).send({ error : err.message})
             }
-            return res.status(200).send({message : results})
+            return res.status(200).send({results})
         })
     }
     
@@ -34,7 +34,7 @@ module.exports = class Form {
         const token =  Token.verifyToken(req.body.token,res);
 
         if (!token.email || !token.prenom || !token.nom || !token.type) {
-            return res.status(400).send({ message: "Accès non autorisé." });
+            return res.status(403).send({ error: "Accès non autorisé." });
         }
 
         const user = new User({

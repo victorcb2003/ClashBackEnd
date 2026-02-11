@@ -45,7 +45,7 @@ module.exports = class Message {
     static findAll(req, res) {
         
 
-        const sql = "Select * from Messages where expediteur_id = ? or destinataire_id = ?"
+        const sql = "Select id,expediteur_id,destinataire_id,lu,date_envoi from Messages where expediteur_id = ? or destinataire_id = ? order by date_envoi" 
         const values = [req.tokenData.id,req.tokenData.id]
 
         pool.execute(sql, values, (err, results, fields) => {

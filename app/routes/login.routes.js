@@ -11,8 +11,6 @@ module.exports = app => {
 
     router.get("/me", user.info);
 
-    router.get("/:id", user.info);
-
     router.put("/update/", user.update);
 
     router.delete("/delete/:id", user.delete);
@@ -22,6 +20,8 @@ module.exports = app => {
     router.get("/verif", user.getVerif);
 
     router.put("/verif", user.putVerif);
+
+    router.get("/:id", user.info);
 
     app.use('/api/user', router);
 };
