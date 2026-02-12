@@ -26,7 +26,7 @@ module.exports = class match {
             if (results.length == 0) {
                 return res.status(400).send({ error: "Il y a aucun match avec cette id" })
             }
-            if (results[0].Organisateurs_id != req.tokenData.id && req.tokenData.type != "Admin"){
+            if (results[0].Organisateur_id != req.tokenData.id && req.tokenData.type != "Admin"){
                 return res.status(403).send({error : "Vous ne pouvez pas modifier ce tournois"})
             }
             sql = "Update Matchs Set "
