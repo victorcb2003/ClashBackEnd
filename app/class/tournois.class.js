@@ -272,7 +272,7 @@ module.exports = class Tournois {
                 for (let y = 0; y < tours; y++) {
                     for (let i = 0; i < 2 ** (tours - y - 1); i++) {
 
-                        sql += "insert into Matchs (date_heure,lieu,tour,Tournois_id) values (?,?,?,?);"
+                        sql += "insert into Matchs (date_heure,lieu,tour,Tournois_id,Organisateur_id) values (?,?,?,?,?);"
 
                         const date = new Date(date_debut)
 
@@ -290,6 +290,7 @@ module.exports = class Tournois {
                         values.push(results[0].lieu)
                         values.push(y + 1)
                         values.push(req.body.Tournois_id)
+                        values.push(req.tokenData.id)
                     }
                 }
                 sql += "UPDATE Tournois SET lancer = 1 WHERE id = ?;"
