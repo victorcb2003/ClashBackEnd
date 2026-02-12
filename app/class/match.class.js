@@ -16,7 +16,7 @@ module.exports = class match {
     static update(req, res) {
         
 
-        let sql = "Select Tournois_id from Matchs where id = ?"
+        let sql = "Select Tournois_id,Organisateur_id from Matchs where id = ?"
         let values = [req.body.Match_id]
 
         pool.execute(sql, values, (err, results, fields) => {
@@ -24,7 +24,10 @@ module.exports = class match {
                 return res.status(500).send({ error: "Érreur lors de la modification d'un match " + err.message })
             }
             if (results.length == 0) {
-                return res.status(400).send({ message: "Il y a aucun match avec cette id" })
+                return res.status(400).send({ error: "Il y a aucun match avec cette id" })
+            }
+            if (results[0].Organisateurs_id != req.tokenData.id && req.tokenData.type != "Admin"){
+                return res.status(403).send({error : "Vous ne pouvez pas modifier ce tournois"})
             }
             sql = "Update Matchs Set "
             values = []

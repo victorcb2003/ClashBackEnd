@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS Participants (
 
 CREATE TABLE IF NOT EXISTS Matchs (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  Organisateurs_id INT,
+  Organisateur_id INT,
   date_heure DATETIME NOT NULL,
   lieu VARCHAR(100) NOT NULL,
   tour INT,
