@@ -4,7 +4,7 @@ module.exports = class match {
     static findAll(req, res) {
         
 
-        const sql = "Select * from Matchs where Tournois_id = ?"
+        const sql = "Select date_heure,lieu,Equipe1_id,Equipe2_id,tour,Tournois_id,Organisateur_id from Matchs where Tournois_id = ?"
 
         pool.execute(sql, [req.params.id], (err, results) => {
             if (err) {
@@ -16,7 +16,7 @@ module.exports = class match {
     static update(req, res) {
         
 
-        let sql = "Select Tournois_id,Organisateur_id from Matchs where id = ?"
+        let sql = "Select Organisateur_id from Matchs where id = ?"
         let values = [req.body.Match_id]
 
         pool.execute(sql, values, (err, results, fields) => {
@@ -64,8 +64,8 @@ module.exports = class match {
         })
     }
     static create(req, res) {
-        const sql = "insert into Matchs (date_heure,lieu,Equipe1_id,Equipe2_id) values (?,?,?,?)"
-        const value = [req.body.date_heure, req.body.lieu, req.body.Equipe1_id, req.body.Equipe2_id]
+        const sql = "insert into Matchs (date_heure,lieu,Equipe1_id,Equipe2_id,Organisateur_id) values (?,?,?,?)"
+        const value = [req.body.date_heure, req.body.lieu, req.body.Equipe1_id, req.body.Equipe2_id,req.tokenData.id]
 
         
 
@@ -78,7 +78,7 @@ module.exports = class match {
     }
 
     static getById(req, res) {
-        const sql = "select date_heure,lieu,Equipe1_id,Equipe2_id,tour,Tournois_id from Matchs where id = ?"
+        const sql = "select date_heure,lieu,Equipe1_id,Equipe2_id,tour,Tournois_id,Organisateur_id from Matchs where id = ?"
         const value = req.params.id
 
         
