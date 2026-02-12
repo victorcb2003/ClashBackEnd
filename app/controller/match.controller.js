@@ -24,7 +24,7 @@ exports.update = (req,res)=>{
 
     const regex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]) ([01]\d|2[0-3]):[0-5]\d:[0-5]\d$/;
 
-    if (!regex.test(req.body.date_heure)) {
+    if (req.body.date_heure && !regex.test(req.body.date_heure)) {
         return res.status(400).send({ error : "req.body.date est pas au format 'YYYY-MM-DD HH:mm:SS'"  })
     }
 
