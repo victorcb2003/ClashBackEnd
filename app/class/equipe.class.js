@@ -122,7 +122,7 @@ module.exports = class Equipe {
                 return res.status(400).send({ error: "Il y a aucune équipe avec cette id" })
             }
             if (results[0].Selectionneurs_id != req.tokenData.id && req.tokenData.type != "Admin") {
-                return res.status(401).send({ error: "Vous ne pouvez pas supprimer cette équipe" })
+                return res.status(403).send({ error: "Vous ne pouvez pas supprimer cette équipe" })
             }
 
             sql = "Delete from Equipes where id = ?"

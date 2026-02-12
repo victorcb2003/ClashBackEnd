@@ -29,16 +29,13 @@ module.exports = class Mail {
 </html>
     `;
 
-    // 2. Compiler le template
     const template = Handlebars.compile(templateSource);
 
-    // 3. Générer le HTML final avec variables
     const html = template({
       prenom: req.body.prenom,
       confirmUrl: `https://clashofleagues.fr/confirm.html?token=${Token.generateToken({ email: req.body.email, prenom: req.body.prenom, nom: req.body.nom, type: req.body.type }, '30m')}`,
     });
 
-    // 4. Préparer l’email
     const mailOptions = {
       from: '"Clash of Leagues" <no-reply@clashofleagues.fr>',
       to: req.body.email,
@@ -46,10 +43,9 @@ module.exports = class Mail {
       html,
     };
 
-    // Envoi du mail
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        return res.status(400).send({ message: error.message });
+        return res.status(500).send({ message: error.message });
       }
       return res.status(200).send({ message: "L'email a bien été envoyé. " + info.messageId })
     });

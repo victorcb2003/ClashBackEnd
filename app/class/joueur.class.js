@@ -13,7 +13,7 @@ module.exports = class Joueur extends User {
 
         pool.execute(sql, (err, results, fields)=>{
             if (err){
-                res.status(401).send({message : "Erreur dans la requête "+err.message})
+                res.status(500).send({error : "Erreur dans la requête "+err.message})
             }
             res.status(200).send({Joueurs : results})
         })

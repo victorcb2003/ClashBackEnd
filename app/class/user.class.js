@@ -21,8 +21,8 @@ module.exports = class User {
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(401).send({
-                    message: "Une erreur s'est produite lors de la création de l'utilisateur. " + err.message
+                return res.status(500).send({
+                    error: "Une erreur s'est produite lors de la création de l'utilisateur. " + err.message
                 });
             }
             sql = 'Select id from User where email = ?';
@@ -39,9 +39,9 @@ module.exports = class User {
 
                 pool.execute(sql, values, (err, results, fields) => {
                     if (err) {
-                        return res.status(401).send({ message: "Une erreur s'est produite lors de la création de l'utilisateur." + err.message });
+                        return res.status(500).send({ error: "Une erreur s'est produite lors de la création de l'utilisateur." + err.message });
                     }
-                    return res.status(201).send({
+                    return res.status(200).send({
                         message: "Utilisateur créé avec succès.",
                         mdp: this.password,
                         hash: bcrypt.hashSync(this.password, 10)
@@ -60,21 +60,21 @@ module.exports = class User {
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(500).send({
-                    message: "Une erreur s'est produite lors du login. " + err.message
+                    error: "Une erreur s'est produite lors du login. " + err.message
                 });
             }
             if (results.length === 0) {
                 return res.status(404).send({
-                    message: "Utilisateur non trouvé."
+                    error: "Utilisateur non trouvé."
                 });
             }
             if (results[0].verified == 0) {
-                return res.status(400).send({ message: "L'utilisateur n'est pas vérifié" })
+                return res.status(401).send({ error: "L'utilisateur n'est pas vérifié" })
             }
             const user = results[0];
             if (!bcrypt.compareSync(this.password, user.password)) {
                 return res.status(401).send({
-                    message: "Mot de passe incorrect."
+                    error: "Mot de passe incorrect."
                 });
             }
             const types = ["Joueurs", "Selectionneurs", "Organisateurs", "Admin"]
@@ -111,7 +111,7 @@ module.exports = class User {
             res.clearCookie("token")
         }
         catch (err) {
-            res.status(400).send({ message: err })
+            res.status(500).send({ error: err.message })
         }
         res.status(200).send({ message: "Vous êtes déconnecté" })
     }
@@ -125,10 +125,10 @@ module.exports = class User {
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(401).send({ message: "Erreur l'hors de la suppression de l'utilisateur " + req.params.id + err.message })
+                return res.status(500).send({ error: "Erreur l'hors de la suppression de l'utilisateur " + req.params.id + err.message })
             }
             if (results.affectedRows == 0) {
-                return res.status(400).send({ message: "aucune utilisateur avec l'id " + req.params.id })
+                return res.status(400).send({ error: "aucune utilisateur avec l'id " + req.params.id })
             }
             return res.status(200).send({ message: "Suppression de l'utilisateur " + req.params.id })
         })
@@ -162,7 +162,7 @@ module.exports = class User {
             const match = results[1] ? results[1] : results[2] ? results[2] : results[3]
 
             if (user == null || user == undefined) {
-                return res.status(401).send({ message: "Erreur l'hors de l'obtention des données de l'utilisateur " })
+                return res.status(400).send({ error: "Erreur l'hors de l'obtention des données de l'utilisateur " })
             }
             if (!req.params.id && user[0]) {
                 user[0].type = (req.tokenData.type)
@@ -203,7 +203,7 @@ module.exports = class User {
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(401).send({ message: "Erreur l'hors de la modification des données de l'utilisateur " + req.tokenData.id + err.message })
+                return res.status(500).send({ error: "Erreur l'hors de la modification des données de l'utilisateur " + req.tokenData.id + err.message })
             }
 
             return res.status(200).send({ message: "modification des données de l'utilisateur " + req.tokenData.id })
@@ -236,39 +236,15 @@ module.exports = class User {
 
             pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
-                    return res.status(400).send({ message: "Erreur lors de la verification" })
+                    return res.status(500).send({ error: "Erreur lors de la verification" })
                 }
                 if (results.affectedRows == 0) {
-                    return res.status(400).send({ message: "aucune colonne a été modifié" })
+                    return res.status(400).send({ error: "aucune colonne a été modifié" })
                 }
                 return res.status(200).send({ message: "L'utilisateur a bien été verifié" })
             })
         } else {
-
-            let sql = "SELECT User.id FROM Joueurs JOIN User ON Joueurs.User_id = User.id WHERE User.id = ?"
-            let values = [req.body.id]
-
-            pool.execute(sql, values, (err, results, fields) => {
-                if (err) {
-                    return res.status(400).send({ message: "Erreur lors de la verification. " + err })
-                }
-                if (results.length == 0) {
-                    return res.status(400).send({ message: "Vous ne pouvez pas verifier cette utilisateur" })
-                } else {
-                    sql = "Update User set verified = ? where id = ?"
-                    values = [req.body.value, req.body.id]
-
-                    pool.execute(sql, values, (err, results, fields) => {
-                        if (err) {
-                            return res.status(400).send({ message: "Erreur lors de la verification. " + err })
-                        }
-                        if (results.affectedRows == 0) {
-                            return res.status(400).send({ message: "aucune colonne a été modifié" })
-                        }
-                        return res.status(200).send({ message: "L'utilisateur a bien été verifié" })
-                    })
-                }
-            })
+            res.status(403).send({error : "Vous ne pouvez pas vérifier des utilisateurs"})
         }
     }
 };

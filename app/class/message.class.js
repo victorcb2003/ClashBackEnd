@@ -26,7 +26,7 @@ module.exports = class Message {
             if (err) {
                 return res.status(500).send({ error: "Une erreur s'est produite lors de la suppression du message. " + err.message })
             }
-            if (results[0].expediteur_id != req.tokenData.id) {
+            if (results[0].expediteur_id != req.tokenData.id && req.tokenData.type != "Admin") {
                 res.status(403).send({ message: "L'id de l'expediteur est différent de l'utilisateur connecté" })
             }
 
@@ -36,7 +36,7 @@ module.exports = class Message {
                 if (err) {
                     return res.status(500).send({ error: "Une erreur s'est produite lors de la suppression du message. " + err.message })
                 }
-                return res.status(201).send({ message: "Le message a bien était supprimé" })
+                return res.status(200).send({ message: "Le message a bien était supprimé" })
             })
         })
 
@@ -67,10 +67,10 @@ module.exports = class Message {
                 return res.status(500).send({ error: "Une erreur s'est produite lors de la modification du message. " + err.message })
             }
             if (results.length == 0) {
-                res.status(400).send({ message: "L'id du message n'existe pas" })
+                res.status(400).send({ error: "L'id du message n'existe pas" })
             }
-            if (results[0].expediteur_id != req.tokenData.id) {
-                return res.status(401).send({ message: "L'id de l'expediteur est différent de l'utilisateur connecté" })
+            if (results[0].expediteur_id != req.tokenData.id && req.tokenData.type != "Admin") {
+                return res.status(403).send({ error: "L'id de l'expediteur est différent de l'utilisateur connecté" })
             }
 
             sql = "update Messages Set message = ? where id = ?"

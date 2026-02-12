@@ -66,7 +66,7 @@ module.exports = class But {
                 return res.status(500).send({ error: "Une erreur s'est produite lors de la suppression du but" + err.message })
             }
             if (results.affectedRows == 0) {
-                return res.status(403).send({ error: "Il n'existe aucun but avec cet id." })
+                return res.status(400).send({ error: "Il n'existe aucun but avec cet id." })
             }
             return res.status(200).send({ message: "Le but a bien été supprimé" })
         })
@@ -92,7 +92,7 @@ module.exports = class But {
                 return res.status(500).send({ error: "Une erreur s'est produite lors de la modification du but." + err.message })
             }
             if (results.affectedRows == 0) {
-                return res.status(403).send({ error: "Il y a aucun but avec cette id" })
+                return res.status(400).send({ error: "Il y a aucun but avec cette id" })
             }
             return res.status(200).send({message : "Le but a bien été modifié"})
         })

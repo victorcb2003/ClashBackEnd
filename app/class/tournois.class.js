@@ -12,7 +12,7 @@ module.exports = class Tournois {
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(500).send({
-                    message: "Une erreur s'est produite lors de la création du tournois. " + err.message
+                    error: "Une erreur s'est produite lors de la création du tournois. " + err.message
                 });
             }
             return res.status(200).send({ message: "Tournois créé avec succès" })
@@ -33,7 +33,7 @@ module.exports = class Tournois {
 
         pool.query(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération du tournois " + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération du tournois " + err.message })
             }
             res.status(200).send({Tournois : results[0],Equipes_Participantes : results[1],Matchs: results[2]})
         })
@@ -46,10 +46,10 @@ module.exports = class Tournois {
 
         pool.execute(sql, [], (err, Tournois, fields) => {
             if (err) {
-                return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des tournois " + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération des tournois " + err.message })
             }
             if (Tournois.length == 0) {
-                return res.status(403).send({ Tournois: [] })
+                return res.status(200).send({ Tournois: [] })
             }
             sql = ""
             let values = []
@@ -59,10 +59,10 @@ module.exports = class Tournois {
             })
             pool.query(sql, values, (err, results, fields) => {
                 if (err) {
-                    return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des tournois" + err.message })
+                    return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération des tournois" + err.message })
                 }
                 if (results.length == 0) {
-                    return res.status(403).send({ message: "Une erreur s'est produite lors de la récupération des tournois" })
+                    return res.status(400).send({ error: "Une erreur s'est produite lors de la récupération des tournois" })
                 }
                 const tournois = []
                 for (let i = 0; i < results.length; i++) {
@@ -86,13 +86,13 @@ module.exports = class Tournois {
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(403).send({ message: "Une erreur s'est produite lors de la suppression du tournois " + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la suppression du tournois " + err.message })
             }
             if (results.length == 0) {
-                return res.status(403).send({ message: "Il y a aucun tournois avec cette id" })
+                return res.status(400).send({ error: "Il y a aucun tournois avec cette id" })
             }
-            if (results[0].Organisateurs_id != req.tokenData.id) {
-                return res.status(401).send({ message: "Vous ne pouvez pas supprimer cette équipe" })
+            if (results[0].Organisateurs_id != req.tokenData.id && req.tokenData.type != "Admin") {
+                return res.status(403).send({ error: "Vous ne pouvez pas supprimer cette équipe" })
             }
 
             sql = "Delete from Tournois where id = ?"
@@ -100,7 +100,7 @@ module.exports = class Tournois {
 
             pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
-                    return res.status(403).send({ message: "Une erreur s'est produite lors de la suppression de l'équipe " + err.message })
+                    return res.status(500).send({ error: "Une erreur s'est produite lors de la suppression de l'équipe " + err.message })
                 }
                 return res.status(200).send({ message: "L'équipe a bien été supprimé" })
             })
@@ -115,13 +115,13 @@ module.exports = class Tournois {
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(403).send({ message: "Une erreur s'est produite lors des changement du tournois " + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors des changement du tournois " + err.message })
             }
             if (results.length == 0) {
-                return res.status(403).send({ message: "Il y a aucun tournois avec cette id" })
+                return res.status(400).send({ error: "Il y a aucun tournois avec cette id" })
             }
-            if (results[0].Organisateurs_id != req.tokenData.id) {
-                return res.status(401).send({ message: "Vous ne pouvez pas faire de changement dans ce tournois" })
+            if (results[0].Organisateurs_id != req.tokenData.id && req.tokenData.type != "Admin") {
+                return res.status(403).send({ error: "Vous ne pouvez pas faire de changement dans ce tournois" })
             }
 
             let input = ""
@@ -138,9 +138,9 @@ module.exports = class Tournois {
 
             sql = `Update Tournois SET ${input} where id = ?`
 
-            pool.execute(sql, values, (err, results, fields) => {
+            pool.execute(sql, values, (err) => {
                 if (err) {
-                    return res.status(403).send({ message: "Une erreur s'est produite lors du changement de nom de l'équipe " + err.message })
+                    return res.status(500).send({ message: "Une erreur s'est produite lors du changement de nom de l'équipe " + err.message })
                 }
                 return res.status(200).send({ message: "Le nom de l'équipe a bien été changé" })
             })
@@ -154,13 +154,13 @@ module.exports = class Tournois {
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(403).send({ message: "Une erreur s'est produite lors de l'ajout de l'équipe au tournois " + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de l'ajout de l'équipe au tournois " + err.message })
             }
             if (results.length == 0) {
-                return res.status(403).send({ message: "Il y a aucun tournois avec cette id" })
+                return res.status(400).send({ error: "Il y a aucun tournois avec cette id" })
             }
-            if (results[0].Organisateurs_id != req.tokenData.id) {
-                return res.status(401).send({ message: "Vous ne pouvez pas faire de changement dans ce tournois" })
+            if (results[0].Organisateurs_id != req.tokenData.id && req.tokenData.type != "Admin") {
+                return res.status(403).send({ error: "Vous ne pouvez pas faire de changement dans ce tournois" })
             }
 
             sql = "Insert into Participants (Equipe_id,Tournois_id) values (?,?)"
@@ -168,7 +168,7 @@ module.exports = class Tournois {
 
             pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
-                    return res.status(403).send({ message: "Une erreur s'est produite lors de l'ajout de l'équipe au tournois " + err.message })
+                    return res.status(500).send({ error: "Une erreur s'est produite lors de l'ajout de l'équipe au tournois " + err.message })
                 }
                 return res.status(200).send({ message: "L'équipe a bien été ajouté au tournois" })
             })
@@ -180,18 +180,18 @@ module.exports = class Tournois {
         let sql = "Select Organisateurs_id from Tournois where id = ?;Select id from Participants where Tournois_id = ? and Equipe_id = ?"
         let values = [req.body.Tournois_id, req.body.Tournois_id, req.body.Equipe_id]
 
-        pool.query(sql, values, (err, results, fields) => {
+        pool.query(sql, values, (err, results) => {
             if (err) {
-                return res.status(403).send({ message: "Une erreur s'est produite lors de la suppression de l'équipe du tournois " + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la suppression de l'équipe du tournois " + err.message })
             }
             if (results[0].length == 0) {
-                return res.status(403).send({ message: "Il y a aucun tournois avec cette id" })
+                return res.status(400).send({ error: "Il y a aucun tournois avec cette id" })
             }
-            if (results[0][0].Organisateurs_id != req.tokenData.id) {
-                return res.status(401).send({ message: "Vous ne pouvez pas faire de changement dans ce tournois" })
+            if (results[0][0].Organisateurs_id != req.tokenData.id && req.tokenData.type != "Admin") {
+                return res.status(403).send({ error: "Vous ne pouvez pas faire de changement dans ce tournois" })
             }
             if (results[1].length == 0) {
-                return res.status(403).send({ message: "Il y a aucun équipe avec cette id dans le tournois" })
+                return res.status(400).send({ error: "Il y a aucun équipe avec cette id dans le tournois" })
             }
 
             sql = "Delete from Participants where id = ?"
@@ -199,7 +199,7 @@ module.exports = class Tournois {
 
             pool.execute(sql, values, (err, results, fields) => {
                 if (err) {
-                    return res.status(403).send({ message: "Une erreur s'est produite lors de la suppression de l'équipe du tournois " + err.message })
+                    return res.status(500).send({ error: "Une erreur s'est produite lors de la suppression de l'équipe du tournois " + err.message })
                 }
                 return res.status(200).send({ message: "L'équipe a bien été supprimé au tournois" })
             })
@@ -220,18 +220,18 @@ module.exports = class Tournois {
         let sql = "Select Organisateurs_id,date_debut,lieu,lancer from Tournois where id = ?"
         let values = [req.body.Tournois_id]
 
-        pool.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results) => {
             if (err) {
-                return res.status(403).send({ message: "Une erreur s'est produite lors du démarrage tournois " + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors du démarrage tournois " + err.message })
             }
             if (results.length == 0) {
-                return res.status(403).send({ message: "Il y a aucun tournois avec cette id" })
+                return res.status(400).send({ error: "Il y a aucun tournois avec cette id" })
             }
-            if (results[0].Organisateurs_id != req.tokenData.id) {
-                return res.status(401).send({ message: "Vous ne pouvez pas faire de changement dans ce tournois" })
+            if (results[0].Organisateurs_id != req.tokenData.id && req.tokenData.type != "Admin") {
+                return res.status(403).send({ error: "Vous ne pouvez pas faire de changement dans ce tournois" })
             }
             if (results[0].lancer == 1) {
-                return res.status(403).send({ message: "Ce tournois a déja été lancé" })
+                return res.status(400).send({ error: "Ce tournois a déja été lancé" })
             }
 
             sql = "Select Equipe_id from Participants where Tournois_id = ?"
@@ -239,10 +239,10 @@ module.exports = class Tournois {
 
             pool.execute(sql, values, (err, equipe, fields) => {
                 if (err) {
-                    return res.status(403).send({ message: "Une erreur s'est produite lors du démarrage tournois " + err.message })
+                    return res.status(500).send({ error: "Une erreur s'est produite lors du démarrage tournois " + err.message })
                 }
                 if (results.length == 0) {
-                    return res.status(403).send({ message: "Il y a aucun équipe inscrite a ce tournois" })
+                    return res.status(400).send({ error: "Il y a aucun équipe inscrite a ce tournois" })
                 }
 
                 const equipes = []
@@ -252,11 +252,11 @@ module.exports = class Tournois {
                 })
 
                 if (equipes.length <= 1) {
-                    return res.status(403).send({ message: "Il y a pas asser d'équipe inscrite a ce tournois" })
+                    return res.status(400).send({ error: "Il y a pas asser d'équipe inscrite a ce tournois" })
                 }
 
                 if (![2,4,8,16,32,64,128].includes(equipes.length)) {
-                    return res.status(400).send({ message: `Il y a ${equipes.length} équipes dans le tournois, il faut que se soit un carré de 2` })
+                    return res.status(400).send({ error: `Il y a ${equipes.length} équipes dans le tournois, il faut que se soit un carré de 2` })
                 }
 
                 const date_debut = new Date(results[0].date_debut)
@@ -294,10 +294,10 @@ module.exports = class Tournois {
                 }
                 sql += "UPDATE Tournois SET lancer = 1 WHERE id = ?;"
                 values.push(req.body.Tournois_id)
-                pool.query(sql, values, (err, results1, fields) => {
+                pool.query(sql, values, (err) => {
                     if (err) {
                         Tournois.abortStart()
-                        return res.status(403).send({ message: "Une erreur s'est produite lors du démarrage tournois " + err.message })
+                        return res.status(500).send({ error: "Une erreur s'est produite lors du démarrage tournois " + err.message })
                     }
 
                     const arbre = []
@@ -316,7 +316,7 @@ module.exports = class Tournois {
                     pool.execute(sql, values, (err, results, fields) => {
                         if (err) {
                             Tournois.abortStart()
-                            return res.status(403).send({ message: "Une erreur s'est produite lors du démarrage tournois " + err.message })
+                            return res.status(500).send({ error: "Une erreur s'est produite lors du démarrage tournois " + err.message })
                         }
 
                         sql = ""
@@ -331,7 +331,7 @@ module.exports = class Tournois {
                         pool.query(sql, values, (err, results, fields) => {
                             if (err) {
                                 Tournois.abortStart()
-                                return res.status(403).send({ message: "Une erreur s'est produite lors du démarrage tournois " + err.message })
+                                return res.status(500).send({ error: "Une erreur s'est produite lors du démarrage tournois " + err.message })
                             }
                             return res.status(200).send({ message: "Le tournois a bien été lancé" })
                         })
