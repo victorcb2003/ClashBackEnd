@@ -246,7 +246,7 @@ module.exports = class User {
     }
 
     static search(req,res){
-        const sql = "Select id, prenom, nom, email from User where prenom like ? or nom like ?"
+        const sql = "Select id, prenom, nom, email from User where prenom like ? or nom like ? limit 15"
         const value = ["%"+req.params.input+"%","%"+req.params.input+"%"]
 
         pool.execute(sql, value, (err, results, fields) => {
