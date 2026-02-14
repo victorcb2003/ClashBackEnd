@@ -13,6 +13,9 @@ module.exports = class But {
             if (err) {
                 return res.status(500).send({ error: "Une erreur s'est produite lors de la création du but. " + err.message});
             }
+
+            But.updateScore(req,res, req.body.Match_id)
+
             return res.status(201).send({ message: "Le but a bien été enregistré." })
         })
     }
@@ -68,6 +71,9 @@ module.exports = class But {
             if (results.affectedRows == 0) {
                 return res.status(400).send({ error: "Il n'existe aucun but avec cet id." })
             }
+
+            But.updateScore(req,res, req.params.id)
+
             return res.status(200).send({ message: "Le but a bien été supprimé" })
         })
     }
@@ -94,7 +100,46 @@ module.exports = class But {
             if (results.affectedRows == 0) {
                 return res.status(400).send({ error: "Il y a aucun but avec cette id" })
             }
+
+            But.updateScore(req,res, req.body.Match_id)
+
             return res.status(200).send({message : "Le but a bien été modifié"})
+        })
+    }
+    static updateScore(req,res, matchId){
+        let sql = `
+        select Equipe1_id, Equipe2_id from Matchs where id = ?;
+        select Joueurs.Equipe_id from Joueurs 
+        inner join Buts on Buts.User_id = Joueurs.User_id
+        where Match_id = ?;
+        `
+        let value = [matchId,matchId]
+    
+        pool.query(sql, value, (err, results) => {
+            if (err) {
+                return console.error( "Érreur lors de la mise à jour du score " + err.message )
+            }
+            let scoreEquipe1 = 0
+            let scoreEquipe2 = 0
+
+            const match = results[0]
+
+            results[1].forEach(but => {
+                if (but.Equipe_id == match[0].Equipe1_id) {
+                    scoreEquipe1++
+                } else {
+                    scoreEquipe2++
+                }
+            });
+
+            sql = "update Matchs set score = ? where id = ?"
+            value = [`${scoreEquipe1}-${scoreEquipe2}`, matchId]
+
+            pool.execute(sql, value, (err) => {
+                if (err) {
+                    return console.error( "Érreur lors de la mise à jour du score " + err.message )
+                }
+            })
         })
     }
 }

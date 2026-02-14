@@ -78,16 +78,23 @@ module.exports = class match {
     }
 
     static getById(req, res) {
-        const sql = "select date_heure,lieu,Equipe1_id,Equipe2_id,tour,Tournois_id,Organisateur_id from Matchs where id = ?"
-        const value = req.params.id
-
-        
+        const sql = `select date_heure,lieu,Equipe1_id,Equipe2_id,tour,Tournois_id,Organisateur_id from Matchs where id = ?;
+        Select Buts.date_heure, Buts.User_id , Buts.Type_but, User.prenom, User.nom, Joueurs.Equipe_id
+        from Buts 
+        left join User on User.id = Buts.User_id
+        left join Joueurs on Joueurs.User_id = Buts.User_id
+        where Match_id = ?`
+        const value = [ req.params.id, req.params.id]
 
         pool.query(sql, value, (err, results) => {
             if (err) {
                 return res.status(500).send({ error: `Érreur lors de la récupération d'un match ${err.message}` })
             }
-            return res.status(200).send({ match: results[0] })
+
+            return res.status(200).send({ 
+                match: results[0],
+                buts: results[1]
+             })
         })
     }
 }

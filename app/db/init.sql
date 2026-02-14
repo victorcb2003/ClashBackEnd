@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS Matchs (
   Organisateur_id INT,
   date_heure DATETIME NOT NULL,
   lieu VARCHAR(100) NOT NULL,
+  score VARCHAR(20) DEFAULT "0-0", 
   tour INT,
   Equipe1_id INT DEFAULT NULL,
   Equipe2_id INT DEFAULT NULL,
