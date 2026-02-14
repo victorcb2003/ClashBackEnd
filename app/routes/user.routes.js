@@ -1,7 +1,7 @@
 const express = require("express");
 
 module.exports = app => {
-    const user = require("../controller/login.controller.js");
+    const user = require("../controller/user.controller.js");
 
     let router = express.Router();
 
@@ -18,6 +18,8 @@ module.exports = app => {
     router.get("/verif", user.getVerif);
 
     router.put("/verif", user.putVerif);
+
+    router.get("/search/:input", user.search)
 
     router.get("/:id", user.info);
 

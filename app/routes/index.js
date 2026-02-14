@@ -3,7 +3,7 @@ module.exports = app => {
     // middleware
 
     require("./joueur.routes.js")(app);
-    require("./login.routes.js")(app);
+    require("./user.routes.js")(app);
     require("./selectionneur.routes.js")(app);
     require("./organisateur.routes.js")(app);
     require("./equipe.routes.js")(app);

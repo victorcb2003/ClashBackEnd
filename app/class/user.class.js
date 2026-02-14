@@ -227,7 +227,6 @@ module.exports = class User {
     }
     static putVerif(req, res) {
 
-
         if (req.tokenData.type == "Admin") {
             const sql = "Update User set verified = ? where id = ?"
             const values = [req.body.value, req.body.id]
@@ -244,5 +243,17 @@ module.exports = class User {
         } else {
             res.status(403).send({error : "Vous ne pouvez pas vérifier des utilisateurs"})
         }
+    }
+
+    static search(req,res){
+        const sql = "Select id, prenom, nom, email from User where prenom like ? or nom like ?"
+        const value = ["%"+req.params.input+"%","%"+req.params.input+"%"]
+
+        pool.execute(sql, value, (err, results, fields) => {
+            if (err) {
+                return res.status(500).send({ error: "Erreur lors de la recherche d'utilisateurs. " + err.message })
+            }
+            return res.status(200).send({ results: results })
+        })
     }
 };

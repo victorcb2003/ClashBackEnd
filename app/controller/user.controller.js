@@ -57,7 +57,7 @@ exports.update = (req, res) => {
 };
 
 exports.getVerif = (req, res) => {
-  if (!req.tokenData || ["Admin", "Selectionneurs", "Organisateurs"].include(req.tokenData.type)) {
+  if (!req.tokenData || req.tokenData.type != "Admin") {
     return res.status(403).send({ error: "Accès non autorisé." })
   }
 
@@ -65,7 +65,7 @@ exports.getVerif = (req, res) => {
 }
 
 exports.putVerif = (req, res) => {
-  if (!req.tokenData || ["Admin", "Selectionneurs", "Organisateurs"].include(req.tokenData.type)) {
+  if (!req.tokenData || req.tokenData.type != "Admin") {
     return res.status(403).send({ error: "Accès non autorisé." })
   }
   if (!req.body.id) {
@@ -76,4 +76,15 @@ exports.putVerif = (req, res) => {
   }
 
   User.putVerif(req, res)
+}
+
+exports.search = (req,res) =>{
+  if (!req.tokenData){
+    return res.status(403).send({ error: "Accès non autorisé." })
+  }
+  if (!req.params.input){
+    return res.status(400).send({ error: "req.params.input est requis." })
+  }
+
+  User.search(req,res)
 }
