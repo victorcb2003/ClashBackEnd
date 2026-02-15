@@ -23,7 +23,7 @@ module.exports = class Tournois {
         
 
         let sql = `
-        Select nom,lieu,date_debut,lancer,Organisateurs_id from Tournois where id = ?;
+        Select nom,lieu,date_debut,lancer,Organisateurs_id,date_fin from Tournois where id = ?;
         Select Equipes.id,Equipes.nom from Equipes
         Inner Join Participants On Participants.Equipe_id = Equipes.id
         where Participants.Tournois_id = ?;
@@ -42,7 +42,7 @@ module.exports = class Tournois {
     static findAll(req, res) {
         ;
 
-        let sql = "Select id,nom,date_debut,lieu,Organisateurs_id from Tournois"
+        let sql = "Select id,nom,date_debut,lieu,Organisateurs_id,date_fin from Tournois"
 
         pool.execute(sql, [], (err, Tournois, fields) => {
             if (err) {
