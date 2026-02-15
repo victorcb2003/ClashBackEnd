@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS Tournois (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nom VARCHAR(100) NOT NULL,
   date_debut DATE NOT NULL,
+  date_fin DATE NOT NULL,
   lieu VARCHAR(100) NOT NULL,
   Organisateurs_id INT,
   lancer BOOLEAN DEFAULT FALSE,

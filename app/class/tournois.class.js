@@ -205,14 +205,15 @@ module.exports = class Tournois {
             })
         })
     }
-    static abortStart(req) {
-        
+    static abortStart(req, res) {
+        const sql = "UPDATE Tournois SET lancer = 1 WHERE id = ?;Delete from Matchs where Tournois_id = ?"
+        const values = [req.body.Tournois_id, req.body.Tournois_id]
 
-        sql = "UPDATE Tournois SET lancer = 1 WHERE id = ?;Delete from Matchs where Tournois_id = ?"
-        values = [req.body.Tournois_id, req.body.Tournois_id]
-
-        pool.query(sql, values)
-
+        pool.query(sql, values, (err) => {
+            if (err) {
+                console.error("Erreur lors de l'annulation du tournois: " + err.message)
+            }
+        })
     }
     static start(req, res) {
         
@@ -293,11 +294,18 @@ module.exports = class Tournois {
                         values.push(req.tokenData.id)
                     }
                 }
-                sql += "UPDATE Tournois SET lancer = 1 WHERE id = ?;"
+                sql += "UPDATE Tournois SET lancer = 1, date_fin = ? WHERE id = ?"
+                
+                const date_fin = new Date(values[values.length - 5])
+                date_fin.setDate(date_fin.getDate() + 1)
+                date_fin.setHours(0, 0, 0, 0)
+                
+                values.push(date_fin)
                 values.push(req.body.Tournois_id)
+
                 pool.query(sql, values, (err) => {
                     if (err) {
-                        Tournois.abortStart()
+                        Tournois.abortStart(req, res)
                         return res.status(500).send({ error: "Une erreur s'est produite lors du démarrage tournois " + err.message })
                     }
 
@@ -316,7 +324,7 @@ module.exports = class Tournois {
 
                     pool.execute(sql, values, (err, results, fields) => {
                         if (err) {
-                            Tournois.abortStart()
+                            Tournois.abortStart(req, res)
                             return res.status(500).send({ error: "Une erreur s'est produite lors du démarrage tournois " + err.message })
                         }
 
@@ -331,7 +339,7 @@ module.exports = class Tournois {
                         }
                         pool.query(sql, values, (err, results, fields) => {
                             if (err) {
-                                Tournois.abortStart()
+                                Tournois.abortStart(req, res)
                                 return res.status(500).send({ error: "Une erreur s'est produite lors du démarrage tournois " + err.message })
                             }
                             return res.status(200).send({ message: "Le tournois a bien été lancé" })

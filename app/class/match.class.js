@@ -4,7 +4,7 @@ module.exports = class match {
     static findAll(req, res) {
         
 
-        const sql = "Select date_heure,lieu,Equipe1_id,Equipe2_id,tour,Tournois_id,Organisateur_id from Matchs where Tournois_id = ?"
+        const sql = `Select date_heure,lieu,Equipe1_id,Equipe2_id,tour,Tournois_id,Organisateur_id from Matchs where Tournois_id = ?`
 
         pool.execute(sql, [req.params.id], (err, results) => {
             if (err) {
