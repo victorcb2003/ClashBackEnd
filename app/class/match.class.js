@@ -78,7 +78,7 @@ module.exports = class match {
     }
 
     static getById(req, res) {
-        const sql = `select date_heure,lieu,Equipe1_id,Equipe2_id,tour,Tournois_id,Organisateur_id from Matchs where id = ?;
+        const sql = `select score,date_heure,lieu,Equipe1_id,Equipe2_id,tour,Tournois_id,Organisateur_id from Matchs where id = ?;
         Select Buts.date_heure, Buts.User_id , Buts.Type_but, User.prenom, User.nom, Joueurs.Equipe_id
         from Buts 
         left join User on User.id = Buts.User_id
