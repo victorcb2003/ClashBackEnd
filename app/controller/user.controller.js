@@ -59,10 +59,30 @@ exports.update = (req, res) => {
   if (req.tokenData.id != req.params.id && req.tokenData.type != "Admin") {
     return res.status(403).send({ error: "Accès non autorisé." })
   }
-  if (!req.body.nom && !req.body.prenom && !req.body.password) {
-    return res.status(400).send({ error: "Au moins un des champs suivants doit être fourni: nom, prenom, password." })
+  if (!req.body.nom && !req.body.prenom ) {
+    return res.status(400).send({ error: "Au moins un des champs suivants doit être fourni: nom, prenom." })
   }
   User.update(req, res)
+};
+
+exports.changePassword = (req, res) => {
+  if (!req.tokenData) {
+    return res.status(401).send({ error: "Accès non autorisé." })
+  }
+  if (!req.params.id) {
+    return res.status(400).send({ error: "params.id est requis." })
+  }
+  if (req.tokenData.id != req.params.id) {
+    return res.status(403).send({ error: "Accès non autorisé." })
+  }
+  if (!req.body.currentPassword) {
+    return res.status(400).send({ error: "req.body.currentPassword est requis." })
+  }
+  if (!req.body.newPassword) {
+    return res.status(400).send({ error: "req.body.newPassword est requis." })
+  }
+
+  User.changePassword(req, res)
 };
 
 exports.getVerif = (req, res) => {

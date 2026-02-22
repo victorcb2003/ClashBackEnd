@@ -187,11 +187,6 @@ module.exports = class User {
             values.push(req.body.nom)
         }
 
-        if (req.body.password != null && req.body.password != undefined) {
-            arg += "password = ?, "
-            values.push(bcrypt.hashSync(req.body.password, 10))
-        }
-
         if (arg.length === 0) {
             return res.status(400).send({ message: "Aucune donnée à mettre à jour." });
         }
@@ -256,6 +251,41 @@ module.exports = class User {
                 return res.status(500).send({ error: "Erreur lors de la recherche d'utilisateurs. " + err.message })
             }
             return res.status(200).send({ results: results })
+        })
+    }
+
+    static changePassword(req, res) {
+        const sqlSelect = "SELECT password FROM User WHERE id = ?"
+        const selectValues = [req.params.id]
+
+        pool.execute(sqlSelect, selectValues, (err, results) => {
+            if (err) {
+                return res.status(500).send({ error: "Erreur lors de la vérification du mot de passe. " + err.message })
+            }
+            if (results.length === 0) {
+                return res.status(404).send({ error: "L'utilisateur n'existe pas" })
+            }
+
+            const currentHash = results[0].password
+            const isValid = bcrypt.compareSync(req.body.currentPassword, currentHash)
+
+            if (!isValid) {
+                return res.status(401).send({ error: "Mot de passe actuel incorrect." })
+            }
+
+            const newHash = bcrypt.hashSync(req.body.newPassword, 10)
+            const sqlUpdate = "UPDATE User SET password = ? WHERE id = ?"
+            const updateValues = [newHash, req.params.id]
+
+            pool.execute(sqlUpdate, updateValues, (err, updateResults) => {
+                if (err) {
+                    return res.status(500).send({ error: "Erreur lors du changement de mot de passe. " + err.message })
+                }
+                if (updateResults.affectedRows === 0) {
+                    return res.status(400).send({ error: "Aucune modification effectuée." })
+                }
+                return res.status(200).send({ message: "Mot de passe mis à jour." })
+            })
         })
     }
 

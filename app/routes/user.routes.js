@@ -15,6 +15,8 @@ module.exports = app => {
 
     router.put("/update/:id", user.update);
 
+    router.put("/changePassword/:id", user.changePassword);
+
     router.post("/image/:id", upload.single("image"), user.uploadImage);
 
     router.delete("/image/:id", user.deleteImage);
