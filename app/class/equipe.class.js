@@ -205,10 +205,10 @@ module.exports = class Equipe {
 
         console.log(req.tokenData)
 
-        if (!req.tokenData.type == "Joueurs"){
+        if (req.tokenData.type == "Joueurs"){
             sql = "Select Equipe_id from Joueurs where User_id = ?"
             values = [req.tokenData.id]
-        } else if (!req.tokenData.type == "Selectionneurs"){
+        } else if (req.tokenData.type == "Selectionneurs"){
             sql = "Select id from Equipes where Selectionneurs_id = ?"
             values = [req.tokenData.id]
         } else {
