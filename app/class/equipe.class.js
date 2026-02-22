@@ -1,4 +1,6 @@
 const pool = require('../db/connection');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = class Equipe {
 
@@ -52,7 +54,7 @@ module.exports = class Equipe {
 
         const sql = `
         Select User.id,User.email,User.prenom,User.nom from User inner join Joueurs on Joueurs.User_id = User.id where Joueurs.Equipe_id = ?;
-        Select id,nom from Equipes where id = ?;
+        Select id,nom,img_url from Equipes where id = ?;
         Select User.id,User.nom,User.prenom from User inner join Equipes where Equipes.Selectionneurs_id = User.id
         `
         const values = [req.params.id, req.params.id]
@@ -68,6 +70,7 @@ module.exports = class Equipe {
             return res.status(200).send({
                 id: results[1][0].id,
                 nom: results[1][0].nom,
+                img_url: results[1][0].img_url,
                 Joueurs : results[0],
                 Selectionneur : results[2][0]
             })
@@ -77,7 +80,7 @@ module.exports = class Equipe {
     static findAll(req, res) {
         ;
 
-        let sql = "Select id,nom,Selectionneurs_id from Equipes"
+        let sql = "Select id,nom,Selectionneurs_id,img_url from Equipes"
 
         pool.execute(sql, (err, equipes, fields) => {
             if (err) {
@@ -101,6 +104,7 @@ module.exports = class Equipe {
                     equipe.push({
                         id: equipes[i].id,
                         nom: equipes[i].nom,
+                        img_url: equipes[i].img_url,
                         Selectionneurs: results[i]
                     })
                 }
@@ -203,8 +207,6 @@ module.exports = class Equipe {
         let sql;
         let values;
 
-        console.log(req.tokenData)
-
         if (req.tokenData.type == "Joueurs"){
             sql = "Select Equipe_id from Joueurs where User_id = ?"
             values = [req.tokenData.id]
@@ -214,8 +216,6 @@ module.exports = class Equipe {
         } else {
             return res.status(200).send({equipe : null})
         }
-
-        console.log(sql,values)
         
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
@@ -237,6 +237,62 @@ module.exports = class Equipe {
                 }
                 return res.status(200).send({ equipe: results[0] })
             })
+        })
+    }
+
+    static uploadImage(req, res) {
+        if (!req.file) {
+            return res.status(400).send({ error: "Aucun fichier n'a été fourni" })
+        }
+
+        const uploadDir = path.join(__dirname, '../../uploads')
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true })
+        }
+
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9)
+        const filename = uniqueSuffix + "-" + req.file.originalname
+        const filepath = path.join(uploadDir, filename)
+        const imagePath = `/uploads/${filename}`
+
+        fs.writeFile(filepath, req.file.buffer, (writeErr) => {
+            if (writeErr) {
+                return res.status(500).send({ error: "Erreur lors de la sauvegarde du fichier: " + writeErr.message })
+            }
+
+            const sql = "UPDATE Equipes SET img_url = ? WHERE id = ?"
+            const values = [imagePath, req.params.id]
+
+            pool.execute(sql, values, (err, results) => {
+                if (err) {
+                    fs.unlink(filepath, (unlinkErr) => {
+                        if (unlinkErr) console.error(unlinkErr)
+                    })
+                    return res.status(500).send({ error: "Erreur lors de l'upload de l'image: " + err.message })
+                }
+                if (results.affectedRows === 0) {
+                    fs.unlink(filepath, (unlinkErr) => {
+                        if (unlinkErr) console.error(unlinkErr)
+                    })
+                    return res.status(404).send({ error: "L'équipe n'existe pas" })
+                }
+                return res.status(200).send({ message: "L'image a bien été uploadée", imagePath: imagePath })
+            })
+        })
+    }
+
+    static deleteImage(req, res) {
+        const sql = "UPDATE Equipes SET img_url = NULL WHERE id = ?"
+        const values = [req.params.id]
+
+        pool.execute(sql, values, (err, results) => {
+            if (err) {
+                return res.status(500).send({ error: "Erreur lors de la suppression de l'image: " + err.message })
+            }
+            if (results.affectedRows === 0) {
+                return res.status(404).send({ error: "L'équipe n'existe pas" })
+            }
+            return res.status(200).send({ message: "L'image a bien été supprimée" })
         })
     }
 }

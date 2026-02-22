@@ -92,3 +92,28 @@ exports.me = (req,res) =>{
 
     Equipe.me(req,res)
 }
+
+exports.uploadImage = (req, res) => {
+    if (!req.tokenData || req.tokenData.type != "Selectionneurs" && req.tokenData.type != "Admin"){
+        return res.status(403).send({error : "Accès non autorisé."})
+    }
+    if (!req.params.id){
+        return res.status(400).send({error : "req.params.id est requis."})
+    }
+    if (!req.file){
+        return res.status(400).send({error : "req.file est requis."})
+    }
+
+    Equipe.uploadImage(req, res)
+}
+
+exports.deleteImage = (req, res) => {
+    if (!req.tokenData || req.tokenData.type != "Selectionneurs" && req.tokenData.type != "Admin"){
+        return res.status(403).send({error : "Accès non autorisé."})
+    }
+    if (!req.params.id){
+        return res.status(400).send({error : "req.params.id est requis."})
+    }
+
+    Equipe.deleteImage(req, res)
+}
