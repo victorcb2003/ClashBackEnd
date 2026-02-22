@@ -203,6 +203,8 @@ module.exports = class Equipe {
         let sql;
         let values;
 
+        console.log(req.tokenData)
+
         if (!req.tokenData.type == "Joueurs"){
             sql = "Select Equipe_id from Joueurs where User_id = ?"
             values = [req.tokenData.id]
