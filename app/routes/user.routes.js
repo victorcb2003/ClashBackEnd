@@ -1,7 +1,9 @@
 const express = require("express");
+const multer = require("multer");
 
 module.exports = app => {
     const user = require("../controller/user.controller.js");
+    const upload = multer({ storage: multer.memoryStorage() });
 
     let router = express.Router();
 
@@ -11,7 +13,11 @@ module.exports = app => {
 
     router.get("/me", user.info);
 
-    router.put("/update/", user.update);
+    router.put("/update/:id", user.update);
+
+    router.post("/image/:id", upload.single("image"), user.uploadImage);
+
+    router.delete("/image/:id", user.deleteImage);
 
     router.delete("/delete/:id", user.delete);
 

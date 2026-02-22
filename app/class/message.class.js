@@ -26,6 +26,7 @@ module.exports = class Message {
             if (err) {
                 return res.status(500).send({ error: "Une erreur s'est produite lors de la suppression du message. " + err.message })
             }
+            console.log(results)
             if (results[0].expediteur_id != req.tokenData.id && req.tokenData.type != "Admin") {
                 res.status(403).send({ message: "L'id de l'expediteur est différent de l'utilisateur connecté" })
             }

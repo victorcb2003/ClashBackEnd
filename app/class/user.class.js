@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt');
 const Token = require("./token.class.js");
 const connection = require('../db/connection');
 const Joueur = require('./joueur.class.js');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = class User {
 
@@ -136,7 +138,7 @@ module.exports = class User {
 
 
         let sql = `
-        select id,prenom,nom,email from User where id = ?;
+        select id,prenom,nom,email,img_url from User where id = ?;
         select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.Tournois_id from Matchs
         left join Joueurs ON Joueurs.Equipe_id = Matchs.Equipe1_id OR Joueurs.Equipe_id = Matchs.Equipe2_id
         left join Equipes ON Joueurs.Equipe_id = Equipes.id
@@ -196,15 +198,15 @@ module.exports = class User {
 
         arg = arg.slice(0, -2);
 
-        sql = "update User set " + arg + " where id = " + req.tokenData.id
-
+        sql = "update User set " + arg + " where id = ?"
+        values.push(req.params.id)
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
-                return res.status(500).send({ error: "Erreur l'hors de la modification des données de l'utilisateur " + req.tokenData.id + err.message })
+                return res.status(500).send({ error: "Erreur l'hors de la modification des données de l'utilisateur " + req.params.id + err.message })
             }
 
-            return res.status(200).send({ message: "modification des données de l'utilisateur " + req.tokenData.id })
+            return res.status(200).send({ message: "modification des données de l'utilisateur " + req.params.id })
         })
     }
     static getVerif(req, res) {
@@ -254,6 +256,62 @@ module.exports = class User {
                 return res.status(500).send({ error: "Erreur lors de la recherche d'utilisateurs. " + err.message })
             }
             return res.status(200).send({ results: results })
+        })
+    }
+
+    static uploadImage(req, res) {
+        if (!req.file) {
+            return res.status(400).send({ error: "Aucun fichier n'a été fourni" })
+        }
+
+        const uploadDir = path.join(__dirname, '../../uploads')
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true })
+        }
+
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9)
+        const filename = uniqueSuffix + "-" + req.file.originalname
+        const filepath = path.join(uploadDir, filename)
+        const imagePath = `/uploads/${filename}`
+
+        fs.writeFile(filepath, req.file.buffer, (writeErr) => {
+            if (writeErr) {
+                return res.status(500).send({ error: "Erreur lors de la sauvegarde du fichier: " + writeErr.message })
+            }
+
+            const sql = "UPDATE User SET img_url = ? WHERE id = ?"
+            const values = [imagePath, req.params.id]
+
+            pool.execute(sql, values, (err, results) => {
+                if (err) {
+                    fs.unlink(filepath, (unlinkErr) => {
+                        if (unlinkErr) console.error(unlinkErr)
+                    })
+                    return res.status(500).send({ error: "Erreur lors de l'upload de l'image: " + err.message })
+                }
+                if (results.affectedRows === 0) {
+                    fs.unlink(filepath, (unlinkErr) => {
+                        if (unlinkErr) console.error(unlinkErr)
+                    })
+                    return res.status(404).send({ error: "L'utilisateur n'existe pas" })
+                }
+                return res.status(200).send({ message: "L'image a bien été uploadée", imagePath: imagePath })
+            })
+        })
+    }
+
+    static deleteImage(req, res) {
+        const sql = "UPDATE User SET img_url = NULL WHERE id = ?"
+        const values = [req.params.id]
+
+        pool.execute(sql, values, (err, results) => {
+            if (err) {
+                return res.status(500).send({ error: "Erreur lors de la suppression de l'image: " + err.message })
+            }
+            if (results.affectedRows === 0) {
+                return res.status(404).send({ error: "L'utilisateur n'existe pas" })
+            }
+            return res.status(200).send({ message: "L'image a bien été supprimée" })
         })
     }
 };

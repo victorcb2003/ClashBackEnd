@@ -53,6 +53,15 @@ exports.update = (req, res) => {
   if (!req.tokenData) {
     return res.status(401).send({ error: "Accès non autorisé." })
   }
+  if (!req.params.id) {
+    return res.status(400).send({ error: "params.id est requis." })
+  }
+  if (req.tokenData.id != req.params.id && req.tokenData.type != "Admin") {
+    return res.status(403).send({ error: "Accès non autorisé." })
+  }
+  if (!req.body.nom && !req.body.prenom && !req.body.password) {
+    return res.status(400).send({ error: "Au moins un des champs suivants doit être fourni: nom, prenom, password." })
+  }
   User.update(req, res)
 };
 
@@ -88,3 +97,34 @@ exports.search = (req,res) =>{
 
   User.search(req,res)
 }
+
+exports.uploadImage = (req, res) => {
+  if (!req.tokenData) {
+    return res.status(401).send({ error: "Accès non autorisé." });
+  }
+  if (!req.file) {
+    return res.status(400).send({ error: "req.file est requis." });
+  }
+  if (!req.params.id) {
+    return res.status(400).send({ error: "req.params.id est requis." });
+  }
+  if (req.tokenData.id != req.params.id && req.tokenData.type != "Admin") {
+    return res.status(403).send({ error: "Accès non autorisé." });
+  }
+
+  User.uploadImage(req, res);
+};
+
+exports.deleteImage = (req, res) => {
+  if (!req.tokenData) {
+    return res.status(401).send({ error: "Accès non autorisé." });
+  }
+  if (!req.params.id) {
+    return res.status(400).send({ error: "req.params.id est requis." });
+  }
+  if (req.tokenData.id != req.params.id && req.tokenData.type != "Admin") {
+    return res.status(403).send({ error: "Accès non autorisé." });
+  }
+
+  User.deleteImage(req, res);
+};
