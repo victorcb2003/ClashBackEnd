@@ -197,4 +197,42 @@ module.exports = class Equipe {
             })
         })
     }
+
+    static me(req,res){
+
+        let sql;
+        let values;
+
+        if (!req.tokenData.type == "Joueurs"){
+            sql = "Select Equipe_id from Joueurs where User_id = ?"
+            values = [req.tokenData.id]
+        } else if (!req.tokenData.type == "Selectionneurs"){
+            sql = "Select id from Equipes where Selectionneurs_id = ?"
+            values = [req.tokenData.id]
+        } else {
+            return res.status(200).send({equipe : null})
+        }
+        
+        pool.execute(sql, values, (err, results, fields) => {
+            if (err) {
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération de votre équipe " + err.message })
+            }
+            if (results.length == 0) {
+                return res.status(200).send({ equipe: [] })
+            }
+
+            sql = "Select id,nom from Equipes where id = ?"
+            values = [results[0].Equipe_id]
+
+            pool.execute(sql, values, (err, results, fields) => {
+                if (err) {
+                    return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération de votre équipe " + err.message })
+                }
+                if (results.length == 0) {
+                    return res.status(200).send({ equipe: [] })
+                }
+                return res.status(200).send({ equipe: results[0] })
+            })
+        })
+    }
 }

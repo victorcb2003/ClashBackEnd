@@ -84,3 +84,11 @@ exports.rename = (req,res) =>{
 
     Equipe.rename(req,res)
 }
+
+exports.me = (req,res) =>{
+    if (!req.tokenData){
+        return res.status(403).send({error : "Accès non autorisé."})
+    }
+
+    Equipe.me(req,res)
+}
