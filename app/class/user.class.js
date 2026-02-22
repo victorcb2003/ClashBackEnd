@@ -210,7 +210,7 @@ module.exports = class User {
         let sql;
 
         if (req.tokenData.type == "Admin") {
-            sql = "Select id from User where verified = 0"
+            sql = "Select id,prenom,nom,email from User where verified = 0"
         } else {
             sql = "SELECT User.id FROM Joueurs JOIN User ON Joueurs.User_id = User.id WHERE User.verified = 0"
         }
