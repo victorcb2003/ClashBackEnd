@@ -214,6 +214,8 @@ module.exports = class Equipe {
         } else {
             return res.status(200).send({equipe : null})
         }
+
+        console.log(sql,values)
         
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
