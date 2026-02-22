@@ -225,7 +225,7 @@ module.exports = class Equipe {
                 return res.status(200).send({ equipe: [] })
             }
 
-            sql = "Select id,nom from Equipes where id = ?"
+            sql = "Select id,nom,img_url from Equipes where id = ?"
             values = [results[0].Equipe_id]
 
             pool.execute(sql, values, (err, results, fields) => {
