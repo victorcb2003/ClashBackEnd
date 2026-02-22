@@ -18,7 +18,7 @@ module.exports = app => {
 
     router.delete("/delete", equipe.delete);
 
-    router.get("me", equipe.me);
+    router.get("/me", equipe.me);
 
     router.get("/:id", equipe.info);
 
