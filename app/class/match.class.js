@@ -64,7 +64,7 @@ module.exports = class match {
         })
     }
     static create(req, res) {
-        const sql = "insert into Matchs (date_heure,lieu,Equipe1_id,Equipe2_id,Organisateur_id) values (?,?,?,?)"
+        const sql = "insert into Matchs (date_heure,lieu,Equipe1_id,Equipe2_id,Organisateur_id) values (?,?,?,?,?)"
         const value = [req.body.date_heure, req.body.lieu, req.body.Equipe1_id, req.body.Equipe2_id,req.tokenData.id]
 
         
