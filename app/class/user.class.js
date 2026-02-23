@@ -139,7 +139,7 @@ module.exports = class User {
 
         let sql = `
         select id,prenom,nom,email,img_url from User where id = ?;
-        select Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.Tournois_id from Matchs
+        select Matchs.id,Matchs.date_heure,Matchs.lieu,Matchs.Equipe1_id,Matchs.Equipe2_id,Matchs.Tournois_id from Matchs
         left join Joueurs ON Joueurs.Equipe_id = Matchs.Equipe1_id OR Joueurs.Equipe_id = Matchs.Equipe2_id
         left join Equipes ON Joueurs.Equipe_id = Equipes.id
         left join Tournois ON Matchs.Tournois_id = Tournois.id
