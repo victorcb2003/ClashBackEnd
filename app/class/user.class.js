@@ -145,8 +145,8 @@ module.exports = class User {
         left join Tournois ON Matchs.Tournois_id = Tournois.id
         where Joueurs.User_id = ?
         OR Equipes.Selectionneurs_id = ?
-        OR Tournois.Organisateurs_id = ?;
-        OR Matchs.Organisateur_id = ?
+        OR Tournois.Organisateurs_id = ?
+        OR Matchs.Organisateur_id = ?;
         `
         let value;
         if (req.params.id) {
