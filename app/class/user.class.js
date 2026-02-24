@@ -146,7 +146,8 @@ module.exports = class User {
         where Joueurs.User_id = ?
         OR Equipes.Selectionneurs_id = ?
         OR Tournois.Organisateurs_id = ?
-        OR Matchs.Organisateur_id = ?;
+        OR Matchs.Organisateur_id = ?
+        GROUP BY Matchs.id;
         `
         let value;
         if (req.params.id) {
