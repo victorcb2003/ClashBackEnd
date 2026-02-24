@@ -146,12 +146,13 @@ module.exports = class User {
         where Joueurs.User_id = ?
         OR Equipes.Selectionneurs_id = ?
         OR Tournois.Organisateurs_id = ?;
+        OR Matchs.Organisateur_id = ?
         `
         let value;
         if (req.params.id) {
-            value = [req.params.id, req.params.id, req.params.id, req.params.id]
+            value = [req.params.id, req.params.id, req.params.id, req.params.id, req.params.id]
         } else {
-            value = [req.tokenData.id, req.tokenData.id, req.tokenData.id, req.tokenData.id]
+            value = [req.tokenData.id, req.tokenData.id, req.tokenData.id, req.tokenData.id, req.tokenData.id]
         }
 
         pool.query(sql, value, (err, results, fields) => {
