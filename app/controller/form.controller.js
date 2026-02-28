@@ -31,7 +31,7 @@ exports.confirm = (req, res) => {
     Form.confirm(req, res)
 }
 
-exports.conrifmResetPassword = (req, res) => {
+exports.confirmResetPassword = (req, res) => {
     if (!req.body.token) {
         return res.status(400).send({error: "Le token est pas dans le body"});
     }

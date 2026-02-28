@@ -17,6 +17,7 @@
     "express": "^5.1.0",
     "handlebars": "^4.7.8",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
     "mysql2": "^3.15.1",
     "nodemailer": "^7.0.10",
     "prompts": "^2.4.2"
