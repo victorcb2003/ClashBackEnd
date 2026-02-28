@@ -83,7 +83,7 @@ module.exports = class Form {
         }
 
         const sql = "Update User Set password = ? where id = ?"
-        const values = [bcrypt.hashSync(req.body.password), token.id]
+        const values = [bcrypt.hashSync(req.body.password,10), token.id]
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
