@@ -1,4 +1,5 @@
 const pool = require('../db/connection');
+const bcrypt = require('bcrypt');
 const Mail = require("../mail/form.mail")
 const Token = require("../class/token.class.js")
 const User = require("../class/user.class.js")
@@ -82,7 +83,7 @@ module.exports = class Form {
         }
 
         const sql = "Update User Set password = ? where id = ?"
-        const values = [req.body.password, token.id]
+        const values = [bcrypt.hashSync(req.body.password), token.id]
 
         pool.execute(sql, values, (err, results, fields) => {
             if (err) {
