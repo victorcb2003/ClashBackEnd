@@ -46,4 +46,49 @@ module.exports = class Form {
 
         user.create(res, token.type);
     }
+
+    static resetPassword(req, res) {
+        if (!req.body.email) {
+            return res.status(400).send({ error: "req.body.email est requis." });
+        }
+
+        const sql = "Select id, prenom,nom from User where email = ?"
+        const values = [req.body.email]
+
+        pool.execute(sql, values, (err, results, fields) => {
+            if (err) {
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la réinitialisation du mot de passe. " + err.message })
+            }
+            if (results.length == 0) {
+                return res.status(404).send({ error: "Aucun utilisateur trouvé avec cet email." })
+            }
+
+            const user = {
+                id: results[0].id,
+                prenom: results[0].prenom,
+                nom: results[0].nom,
+                email: req.body.email
+            }
+
+            Mail.sendResetPassword(req, res, user)
+        })
+    }
+
+    static confirmResetPassword(req, res) {
+        const token =  Token.verifyToken(req.body.token,res);
+
+        if (!token.id) {
+            return res.status(403).send({ error: "Accès non autorisé." });
+        }
+
+        const sql = "Update User Set password = ? where id = ?"
+        const values = [req.body.password, token.id]
+
+        pool.execute(sql, values, (err, results, fields) => {
+            if (err) {
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la réinitialisation du mot de passe. " + err.message })
+            }
+            return res.status(200).send({ message: "Mot de passe réinitialisé avec succès." })
+        })
+    }
 }

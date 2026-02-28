@@ -12,5 +12,9 @@ module.exports = app => {
 
     router.post("/confirm", form.confirm);
 
+    router.post("/reset-password", form.resetPassword);
+
+    router.post("/confirm-reset-password", form.confirmResetPassword);
+
     app.use('/api/form', router);
 };
