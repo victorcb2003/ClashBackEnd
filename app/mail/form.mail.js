@@ -45,7 +45,7 @@ module.exports = class Mail {
     const html = template({
       prenom: user.prenom,
       nom: user.nom,
-      confirmUrl: `https://clashofleagues.fr/resetPassword?token=${Token.generateToken({ id: user.id }, "30m")}`,
+      confirmUrl: `https://clashofleagues.fr/confirm-reset-password?token=${Token.generateToken({ id: user.id }, "30m")}`,
     });
 
     const mailOptions = {
