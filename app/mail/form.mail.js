@@ -79,6 +79,7 @@ module.exports = class Mail {
     const template = Handlebars.compile(templateSource);
 
     const html = template({
+      prenom: req.body.prenom,
       confirmUrl: `https://clashofleagues.fr/confirmation?token=${Token.generateToken({ email: req.body.email, prenom: req.body.prenom, nom: req.body.nom, type: req.body.type }, "30m")}`,
     });
 
