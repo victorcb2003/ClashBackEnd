@@ -92,7 +92,10 @@ module.exports = class Equipe {
             sql = ""
             let values = []
             equipes.forEach((equipe) => {
-                sql += "Select prenom,nom from User where id = ?;"
+                sql += `Select prenom,nom from User where id = ?;
+                count (Joueurs.User_id) as nb_joueurs from Joueurs where Equipe_id = ?;
+                `
+
                 values.push(equipe.Selectionneurs_id)
             })
             pool.query(sql, values, (err, results, fields) => {
@@ -100,10 +103,11 @@ module.exports = class Equipe {
                     return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération des noms des équipes " + err.message })
                 }
                 const equipe = []
-                for (let i = 0; i < results.length; i++) {
+                for (let i = 0; i < results.length; i+=2) {
                     equipe.push({
                         id: equipes[i].id,
                         nom: equipes[i].nom,
+                        nb_joueurs: results[i+1][0].nb_joueurs,
                         img_url: equipes[i].img_url,
                         Selectionneurs: results[i]
                     })
