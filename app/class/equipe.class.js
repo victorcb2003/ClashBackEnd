@@ -78,41 +78,46 @@ module.exports = class Equipe {
     }
 
     static findAll(req, res) {
-        ;
-
-        let sql = "Select id,nom,Selectionneurs_id,img_url from Equipes"
+        let sql = "Select id, nom, Selectionneurs_id, img_url from Equipes"
 
         pool.execute(sql, (err, equipes, fields) => {
             if (err) {
-                return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération des noms des équipes " + err.message })
+                return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération des équipes " + err.message })
             }
             if (equipes.length == 0) {
                 return res.status(200).send({ equipes: [] })
             }
+
             sql = ""
             let values = []
-            equipes.forEach((equipe) => {
-                sql += `Select prenom,nom from User where id = ?;
-                count (Joueurs.User_id) as nb_joueurs from Joueurs where Equipe_id = ?;
-                `
 
+            equipes.forEach((equipe) => {
+                sql += "Select prenom, nom from User where id = ?; "
+                sql += "Select COUNT(Joueurs.User_id) as nb_joueurs from Joueurs where Equipe_id = ?; "
                 values.push(equipe.Selectionneurs_id)
+                values.push(equipe.id)
             })
+
             pool.query(sql, values, (err, results, fields) => {
                 if (err) {
-                    return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération des noms des équipes " + err.message })
+                    return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération des équipes " + err.message })
                 }
-                const equipe = []
-                for (let i = 0; i < results.length; i+=2) {
-                    equipe.push({
+
+                const equipesFormatted = []
+                for (let i = 0; i < equipes.length; i++) {
+                    const selectionneur = results[i * 2][0]
+                    const nbJoueurs = results[i * 2 + 1][0].nb_joueurs
+
+                    equipesFormatted.push({
                         id: equipes[i].id,
                         nom: equipes[i].nom,
-                        nb_joueurs: results[i+1][0].nb_joueurs,
                         img_url: equipes[i].img_url,
-                        Selectionneurs: results[i]
+                        nb_joueurs: nbJoueurs,
+                        Selectionneurs: selectionneur
                     })
                 }
-                return res.status(200).send({ equipes: equipe })
+
+                return res.status(200).send({ equipes: equipesFormatted })
             })
         })
     }
