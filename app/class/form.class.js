@@ -14,7 +14,7 @@ module.exports = class Form {
             if (err){
                 return res.status(500).send({ error : err.message})
             }
-            Mail.sendMail(req,res)
+            Mail.sendConfirmationEmail(req,res)
         })
     }
 
