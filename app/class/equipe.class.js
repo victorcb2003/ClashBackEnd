@@ -82,11 +82,11 @@ module.exports = class Equipe {
         let values = []
 
         if (req.query.input) {
-            sql+="where nom like ?"
+            sql+=" where nom like ?"
             values.push("%"+req.params.input+"%")
         }
         if (req.query.offset){
-            sql+="limit 10 offset ?"
+            sql+=" limit 10 offset ?"
             values.push(req.params.offset)
         }
         sql+=';'
