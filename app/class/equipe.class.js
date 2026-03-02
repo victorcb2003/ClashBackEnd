@@ -87,7 +87,7 @@ module.exports = class Equipe {
         }
         if (req.query.page){
             sql+=" limit 10 offset ?"
-            values.push((parseInt(req.params.page)-1)*10)
+            values.push(req.params.page)
         }
         sql+=';'
 
