@@ -91,7 +91,7 @@ module.exports = class Equipe {
         }
         sql+=';'
 
-        console.log(sql,values)
+        console.log(sql,values[0])
         console.log(req.query.input, req.query.page)
 
         pool.execute(sql,values, (err, equipes, fields) => {
