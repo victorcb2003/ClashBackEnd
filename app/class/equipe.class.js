@@ -81,11 +81,11 @@ module.exports = class Equipe {
         let sql = "Select id,nom,Selectionneurs_id,img_url from Equipes"
         let values = []
 
-        if (req.params.input) {
+        if (req.query.input) {
             sql+="where nom like ?"
             values.push("%"+req.params.input+"%")
         }
-        if (req.params.offset){
+        if (req.query.offset){
             sql+="limit 10 offset ?"
             values.push(req.params.offset)
         }
