@@ -91,6 +91,8 @@ module.exports = class Equipe {
         }
         sql+=';'
 
+        console.log(sql,values)
+
         pool.execute(sql,values, (err, equipes, fields) => {
             if (err) {
                 return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération des équipes " + err.message })
