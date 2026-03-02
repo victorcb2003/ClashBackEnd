@@ -78,9 +78,20 @@ module.exports = class Equipe {
     }
 
     static findAll(req, res) {
-        let sql = "Select id, nom, Selectionneurs_id, img_url from Equipes"
+        let sql = "Select id,nom,Selectionneurs_id,img_url from Equipes"
+        let values = []
 
-        pool.execute(sql, (err, equipes, fields) => {
+        if (req.params.input) {
+            sql+="where nom like ?"
+            values.push("%"+req.params.input+"%")
+        }
+        if (req.params.offset){
+            sql+="limit 10 offset ?"
+            values.push(req.params.offset)
+        }
+        sql+=';'
+
+        pool.execute(sql,values, (err, equipes, fields) => {
             if (err) {
                 return res.status(500).send({ error: "Une erreur s'est produite lors de la récupération des équipes " + err.message })
             }
@@ -89,7 +100,7 @@ module.exports = class Equipe {
             }
 
             sql = ""
-            let values = []
+            values = []
 
             equipes.forEach((equipe) => {
                 sql += "Select prenom, nom from User where id = ?; "
