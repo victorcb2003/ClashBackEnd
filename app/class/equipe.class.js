@@ -85,9 +85,9 @@ module.exports = class Equipe {
             sql+=" where nom like ?"
             values.push("%"+req.params.input+"%")
         }
-        if (req.query.offset){
+        if (req.query.page){
             sql+=" limit 10 offset ?"
-            values.push(req.params.offset)
+            values.push((req.params.page-1)*10)
         }
         sql+=';'
 
