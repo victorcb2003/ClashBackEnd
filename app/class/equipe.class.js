@@ -83,15 +83,15 @@ module.exports = class Equipe {
 
         if (req.query.input) {
             sql+=" where nom like ?"
-            values.push("%"+req.params.input+"%")
+            values.push("%"+req.query.input+"%")
         }
         if (req.query.page){
             sql+=" limit 10 offset ?"
-            values.push(req.params.page)
+            values.push((parseInt(req.query.page)-1)*10)
         }
         sql+=';'
 
-        console.log(sql,values[0])
+        console.log(sql,values)
         console.log(req.query.input, req.query.page)
 
         pool.execute(sql,values, (err, equipes, fields) => {
