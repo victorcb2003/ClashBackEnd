@@ -42,7 +42,7 @@ module.exports = class Tournois {
     static findAll(req, res) {
         ;
 
-        let sql = "Select id,nom,date_debut,lieu,Organisateurs_id,date_fin from Tournois"
+        let sql = "Select id,nom,date_debut,lieu,Organisateurs_id,date_fin,lancer from Tournois"
 
         pool.execute(sql, [], (err, Tournois, fields) => {
             if (err) {
