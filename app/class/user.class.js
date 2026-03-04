@@ -224,6 +224,7 @@ module.exports = class User {
             if (err) {
                 return res.status(500).send({ error: "Erreur lors de la récupération des utilisateurs non vérifiés. " + err.message })
             }
+            console.log(results)
             return res.status(200).send({ results: results })
         })
     }
