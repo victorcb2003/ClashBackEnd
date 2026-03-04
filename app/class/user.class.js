@@ -209,22 +209,15 @@ module.exports = class User {
     static getVerif(req, res) {
 
 
-        let sql;
-
-        if (req.tokenData.type == "Admin") {
-            sql = "Select id,prenom,nom,email from User where verified = 0"
-        } else {
-            sql = `select DISTINCT User.id, Forms.prenom, Forms.nom, Forms.email, Forms.Utype from User
+        const sql = `select DISTINCT User.id, Forms.prenom, Forms.nom, Forms.email, Forms.Utype from User
             inner join Forms on User.email = Forms.email
             where User.verified = 0
             GROUP BY User.id;`
-        }
 
-        pool.execute(sql, [], (err, results, field) => {
+        pool.query(sql, [], (err, results, field) => {
             if (err) {
                 return res.status(500).send({ error: "Erreur lors de la récupération des utilisateurs non vérifiés. " + err.message })
             }
-            console.log(results)
             return res.status(200).send({ results: results })
         })
     }
