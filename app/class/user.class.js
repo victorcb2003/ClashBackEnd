@@ -214,9 +214,10 @@ module.exports = class User {
         if (req.tokenData.type == "Admin") {
             sql = "Select id,prenom,nom,email from User where verified = 0"
         } else {
-            sql = `select User.id Forms.prenom, Forms.nom, Forms.email, Forms.Utype from Forms
-            inner join User on User.email = Forms.email
-            where User.verified = 0`
+            sql = `select DISTINCT User.id, Forms.prenom, Forms.nom, Forms.email, Forms.Utype from User
+            inner join Forms on User.email = Forms.email
+            where User.verified = 0
+            GROUP BY User.id;`
         }
 
         pool.execute(sql, [], (err, results, field) => {

@@ -7,6 +7,12 @@ exports.post = (req, res) => {
         });
     }
 
+    if (req.body.type != "Joueur" && req.body.type != "Selectionneurs" && req.body.type != "Organisateur") {
+        return res.status(400).send({
+            error: "Type d'utilisateur invalide."
+        });
+    }
+
     Form.post(req,res)
 }
 
