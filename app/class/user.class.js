@@ -214,7 +214,9 @@ module.exports = class User {
         if (req.tokenData.type == "Admin") {
             sql = "Select id,prenom,nom,email from User where verified = 0"
         } else {
-            sql = "SELECT User.id FROM Joueurs JOIN User ON Joueurs.User_id = User.id WHERE User.verified = 0"
+            sql = `select User.id Forms.prenom, Forms.nom, Forms.email, Forms.Utype from Forms
+            inner join User on User.email = Forms.email
+            where User.verified = 0`
         }
 
         pool.execute(sql, [], (err, results, field) => {
