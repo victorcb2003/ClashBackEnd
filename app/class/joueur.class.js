@@ -20,7 +20,7 @@ module.exports = class Joueur extends User {
     }
     static setPendingEquipe(req,res){
         const sql = "UPDATE Joueurs SET Pending_Equipe = ? WHERE User_id = ?"
-        const values = [req.body.Equipe_id, req.body.User]
+        const values = [req.body.Equipe_id, req.tokenData.id]
 
         pool.execute(sql, values, (err, results, fields)=>{
             if (err){
@@ -32,7 +32,7 @@ module.exports = class Joueur extends User {
 
     static deletePendingEquipe(req,res){
         const sql = "UPDATE Joueurs SET Pending_Equipe = NULL WHERE User_id = ?"
-        const values = [req.body.User]
+        const values = [req.tokenData.id]
 
         pool.execute(sql, values, (err, results, fields)=>{
             if (err){
