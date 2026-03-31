@@ -18,18 +18,6 @@ module.exports = class Form {
             Mail.sendConfirmationEmail(req,res)
         })
     }
-
-    static get(req,res){
-        
-        const sql = "Select * from Forms"
-
-        pool.execute(sql,(err,results,fields)=>{
-            if (err){
-                return res.status(500).send({ error : err.message})
-            }
-            return res.status(200).send({results})
-        })
-    }
     
     static confirm(req, res) {
         const token =  Token.verifyToken(req.body.token,res);

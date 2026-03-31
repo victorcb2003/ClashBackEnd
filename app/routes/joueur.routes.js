@@ -8,5 +8,9 @@ module.exports = app => {
 
     router.get("/findAll", joueur.findAll);
 
+    router.post("/setPendingEquipe", joueur.setPendingEquipe);
+    
+    router.post("/deletePendingEquipe", joueur.deletePendingEquipe);
+
     app.use('/api/joueur', router);
 };

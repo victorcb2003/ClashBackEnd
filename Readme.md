@@ -76,13 +76,6 @@
 ### GET : api/but/findAllByMatch/:id      Renvoie tous les buts d’un match
 ### DELETE : api/but/delete/:id           Supprime un but
 
-## Message
-
-### POST : api/message/create             Crée un message
-### PUT : api/message/update              Modifie un message
-### DELETE : api/message/delete/:id       Supprime un message
-### GET : api/message/findAll             Renvoie tous les messages
-
 ## Formulaire
 
 ### POST : api/form/                      Envoie un formulaire

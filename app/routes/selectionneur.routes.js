@@ -7,5 +7,7 @@ module.exports = app => {
 
     router.get("/findAll", selectionneur.findAll);
 
+    router.post("/accept", selectionneur.accept);
+
     app.use('/api/selectionneur', router);
 };

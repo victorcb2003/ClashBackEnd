@@ -8,8 +8,6 @@ module.exports = app => {
 
     router.post("/", form.post);
 
-    router.get("/", form.get)
-
     router.post("/confirm", form.confirm);
 
     router.post("/reset-password", form.resetPassword);
