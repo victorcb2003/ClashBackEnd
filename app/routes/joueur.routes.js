@@ -10,7 +10,7 @@ module.exports = app => {
 
     router.post("/setPendingEquipe", joueur.setPendingEquipe);
     
-    router.post("/deletePendingEquipe", joueur.deletePendingEquipe);
+    router.delete("/deletePendingEquipe", joueur.deletePendingEquipe);
 
     app.use('/api/joueur', router);
 };
