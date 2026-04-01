@@ -19,7 +19,7 @@ module.exports = class Selectionneur extends User {
     }
 
     static async acceptJoueur(req, res) {
-        let sql = "select selectionneurs_id from Equipe where id = ?"
+        let sql = "select selectionneurs_id from Equipes where id = ?"
         let values = [req.body.Equipe_id]
 
         await pool.execute(sql, values, (err, results, fields) => {
