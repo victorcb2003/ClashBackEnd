@@ -29,7 +29,7 @@ module.exports = class Selectionneur extends User {
             if (results.length == 0) {
                 return res.status(404).send({ error: "Aucune équipe trouvée avec cet id." })
             }
-            if (results[0].selectionneurs_id != req.tokenData.id || req.tokenData.type != "Admin") {
+            if (results[0].selectionneurs_id != req.tokenData.id && req.tokenData.type != "Admin") {
                 return res.status(403).send({ error: "Accès non autorisé." })
             }
             sql = "UPDATE Joueurs SET Equipe_id = ?, Pending_Equipe = NULL WHERE User_id = ?"
