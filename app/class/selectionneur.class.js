@@ -22,26 +22,25 @@ module.exports = class Selectionneur extends User {
         let sql = "select selectionneurs_id from Equipes where id = ?"
         let values = [req.body.Equipe_id]
 
-        await pool.execute(sql, values, (err, results, fields) => {
+        pool.execute(sql, values, (err, results, fields) => {
             if (err) {
                 return res.status(500).send({ error: "Erreur dans la requête " + err.message })
             }
             if (results.length == 0) {
                 return res.status(404).send({ error: "Aucune équipe trouvée avec cet id." })
             }
-            if (results[0].selectionneurs_id != req.tokenData.id) {
+            if (results[0].selectionneurs_id != req.tokenData.id || req.tokenData.type != "Admin") {
                 return res.status(403).send({ error: "Accès non autorisé." })
             }
-        })
+            sql = "UPDATE Joueurs SET Equipe_id = ?, Pending_Equipe = NULL WHERE User_id = ?"
+            values = [req.body.Equipe_id, req.body.User_id]
 
-        sql = "UPDATE Joueurs SET Equipe_id = ?, Pending_Equipe = NULL WHERE User_id = ?"
-        values = [req.body.Equipe_id, req.body.User_id]
-
-        pool.execute(sql, values, (err, results, fields) => {
-            if (err) {
-                return res.status(500).send({ error: "Erreur dans la requête " + err.message })
-            }
-            res.status(200).send({ message: "Joueur accepté dans l'équipe" })
+            pool.execute(sql, values, (err, results, fields) => {
+                if (err) {
+                    return res.status(500).send({ error: "Erreur dans la requête " + err.message })
+                }
+                res.status(200).send({ message: "Joueur accepté dans l'équipe" })
+            })
         })
     }
 };
