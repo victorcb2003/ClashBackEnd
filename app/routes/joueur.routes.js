@@ -12,5 +12,7 @@ module.exports = app => {
     
     router.delete("/deletePendingEquipe", joueur.deletePendingEquipe);
 
+    router.delete('/quitEquipe', joueur.quitEquipe);
+
     app.use('/api/joueur', router);
 };

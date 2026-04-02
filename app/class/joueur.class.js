@@ -41,5 +41,16 @@ module.exports = class Joueur extends User {
             res.status(200).send({message : "Demande d'adhésion annulée"})
         })
     }
+    static quitEquipe(req,res){
+        const sql = "UPDATE Joueurs SET Equipe_id = NULL, Pending_Equipe = NULL WHERE User_id = ?"
+        const values = [req.tokenData.id]
+
+        pool.execute(sql, values, (err, results, fields)=>{
+            if (err){
+                res.status(500).send({error : "Erreur dans la requête "+err.message})
+            }
+            res.status(200).send({message : "Vous avez quitté l'équipe"})
+        })
+    }
 };
 

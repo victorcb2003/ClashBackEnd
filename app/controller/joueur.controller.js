@@ -33,3 +33,10 @@ exports.deletePendingEquipe = (req, res) => {
   }
   Joueur.deletePendingEquipe(req, res)
 }
+
+exports.quitEquipe = (req, res) => {
+  if (!req.tokenData && req.tokenData.type != "Joueurs") {
+    return res.status(401).send({ error : "Accès non autorisé." })
+  }
+  Joueur.quitEquipe(req, res)
+}
