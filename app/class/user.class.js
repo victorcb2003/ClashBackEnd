@@ -209,8 +209,8 @@ module.exports = class User {
     static async getVerif(req, res) {
 
 
-        let sql = `select DISTINCT id, prenom, nom, email from User
-            where User.verified = 0;`
+        let sql = `select id, prenom, nom, email from User
+            where verified = 0;`
 
         pool.query(sql, [], (err, results, field) => {
             if (err) {
