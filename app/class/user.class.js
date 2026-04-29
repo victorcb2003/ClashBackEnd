@@ -206,20 +206,21 @@ module.exports = class User {
             return res.status(200).send({ message: "modification des données de l'utilisateur " + req.params.id })
         })
     }
-    static getVerif(req, res) {
+    static async getVerif(req, res) {
 
 
-        const sql = `select DISTINCT User.id, Forms.prenom, Forms.nom, Forms.email, Forms.Utype from User
-            inner join Forms on User.email = Forms.email
-            where User.verified = 0
-            GROUP BY User.id;`
+        let sql = `select DISTINCT id, prenom, nom, email,from User where User.verified = 0;`
 
-        pool.query(sql, [], (err, results, field) => {
-            if (err) {
+        const infoUser = await pool.query(sql)
+
+        console.log(infoUser)
+
+        if (infoUser.err) {
                 return res.status(500).send({ error: "Erreur lors de la récupération des utilisateurs non vérifiés. " + err.message })
             }
-            return res.status(200).send({ results: results })
-        })
+
+        return res.status(200).send({ results: infoUser[0] })
+
     }
     static putVerif(req, res) {
 
