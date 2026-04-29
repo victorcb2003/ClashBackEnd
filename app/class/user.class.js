@@ -209,18 +209,16 @@ module.exports = class User {
     static async getVerif(req, res) {
 
 
-        let sql = `select DISTINCT id, prenom, nom, email,from User where User.verified = 0;`
+        let sql = `select DISTINCT id, prenom, nom, emailfrom User
+            where User.verified = 0;`
 
-        const infoUser = await pool.query(sql)
-
-        console.log(infoUser)
-
-        if (infoUser.err) {
+        pool.query(sql, [], (err, results, field) => {
+            if (err) {
                 return res.status(500).send({ error: "Erreur lors de la récupération des utilisateurs non vérifiés. " + err.message })
             }
-
-        return res.status(200).send({ results: infoUser[0] })
-
+            
+            return res.status(200).send({ results: results })
+        })
     }
     static putVerif(req, res) {
 
