@@ -97,7 +97,7 @@ exports.update = (req,res) =>{
     }
     if (req.body.Match_id && (parseInt(req.body.Match_id) != req.body.Match_id)){
         return res.status(400).send({error : "req.body.Match_id est pas un entier"})
-    }vide
+    }
     if (req.body.Type_But && ([0,1].includes(req.body.Type_But))){
         return res.status(400).send({error : "req.body.Type_But doit être soit 1 ou 0"})
     }
