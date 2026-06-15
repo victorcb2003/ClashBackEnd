@@ -25,6 +25,10 @@ middleware.decrypteToken(app)
 const routes =  require("./app/routes/index");
 routes(app);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
-});
+if (require.main === module) {
+  app.listen(process.env.PORT, () => {
+    console.log(`Server is running on port ${process.env.PORT}`);
+  });
+}
+
+module.exports = app;
