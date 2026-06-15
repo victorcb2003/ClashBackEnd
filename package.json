@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+  "start": "node server.js",
+  "test": "mysql -u root -proot -e 'drop database clash_test; create database clash_test' && mysql -u root -proot clash_test < ./app/db/init.test.sql && DB_NAME=clash_test jest --runInBand --forceExit"
+},
+  "jest": {
+  "testEnvironment": "node",
+  "verbose": true,
+  "testTimeout": 10000
   },
   "keywords": [],
   "author": "",
@@ -20,5 +26,9 @@
     "mysql2": "^3.15.1",
     "nodemailer": "^7.0.10",
     "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2",
+    "supertest": "^7.2.2"
   }
 }

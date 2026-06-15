@@ -9,8 +9,6 @@ module.exports = app => {
     require("./equipe.routes.js")(app);
     require("./tournois.routes.js")(app);
     require("./match.routes.js")(app);
-    require("./message.routes.js")(app);
-    require("./groupe.routes.js")(app)
     require("./form.routes.js")(app)
     require("./but.routes.js")(app)
 
