@@ -81,17 +81,8 @@ module.exports = class But {
     static update(req, res) {
         
 
-        let sql = "update from But "
-        let values = []
-
-        const allowedFields = ["date_heure", "User_id", "Match_id", "Type_But"];
-
-        for (const key of allowedFields) {
-            if (req.body[key] !== undefined) {
-                sql += (`${key} = ?`);
-                values.push(req.body[key]);
-            }
-        }
+        let sql = "update from But set date_heure = ?, User_id = ?, Match_id = ?, Type_But = ? where id = ?"
+        let values = [body.date_heure, req.body.User_id, req.body.Match_id, req.body.Type_But, req.body.But_id]
 
         pool.execute(sql, values, (err, results) => {
             if (err) {
