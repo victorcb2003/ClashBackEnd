@@ -82,7 +82,7 @@ module.exports = class But {
         
 
         let sql = "update from But set date_heure = ?, User_id = ?, Match_id = ?, Type_But = ? where id = ?"
-        let values = [req.body.date_heure, req.body.User_id, req.body.Match_id, req.body.Type_But, req.body.But_id]
+        let values = [req.body.date_heure, req.body.User_id, req.body.Match_id, req.body.Type_but, req.body.But_id]
 
         pool.execute(sql, values, (err, results) => {
             if (err) {
