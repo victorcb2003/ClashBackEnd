@@ -33,9 +33,7 @@ module.exports = class Form {
             password: req.body.password
         });
 
-        console.log(token.type)
-
-        if (token.type != "Joueur" && token.type != "Selectionneurs" && token.type != "Organisateur") {
+        if (token.type != "Joueurs" && token.type != "Selectionneurs" && token.type != "Organisateur") {
             return res.status(400).send({ error: "Type d'utilisateur invalide." });
         }
 
