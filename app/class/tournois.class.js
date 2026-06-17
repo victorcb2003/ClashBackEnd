@@ -263,7 +263,7 @@ module.exports = class Tournois {
                 const date_debut = new Date(results[0].date_debut)
                 date_debut.setHours(date_debut.getHours()+10)
 
-                const tours = Math.floor(Math.sqrt(equipes.length))
+                const tours = equipe.length == 2 ? 1 : Math.ceil(Math.sqrt(equipes.length))
 
                 sql = ""
                 values = []
