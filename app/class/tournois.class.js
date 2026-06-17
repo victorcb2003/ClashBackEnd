@@ -257,7 +257,7 @@ module.exports = class Tournois {
                 }
 
                 if (![2,4,8,16,32,64,128].includes(equipes.length)) {
-                    return res.status(400).send({ error: `Il y a ${equipes.length} équipes dans le tournois, il faut que se soit un carré de 2` })
+                    return res.status(400).send({ error: `Il y a ${equipes.length} équipes dans le tournois, il faut que se soit une puissance de 2` })
                 }
 
                 const date_debut = new Date(results[0].date_debut)
