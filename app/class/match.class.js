@@ -59,6 +59,7 @@ module.exports = class match {
                 if (err) {
                     return res.status(500).send({ error: "Érreur lors de la modification d'un match " + err.message })
                 }
+                
                 return res.status(200).send({ message: "Le match a bien été mise a jour." })
             })
         })
