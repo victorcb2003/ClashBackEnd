@@ -86,7 +86,7 @@ module.exports = class Selec {
             INNER JOIN Equipes e ON e.id = jm.Equipe_id
             WHERE jm.Match_id = ? and jm.Equipe_id = ?
         `
-        const values = [req.params.match_id, req.query.equipe_id]
+        const values = [req.params.match_id, 37]
 
 
         pool.query(sql, values, (err, results) => {
