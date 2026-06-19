@@ -53,7 +53,7 @@ module.exports = class Equipe {
         
 
         const sql = `
-        Select User.id,User.email,User.prenom,User.nom from User inner join Joueurs on Joueurs.User_id = User.id where Joueurs.Equipe_id = ?;
+        Select User.id,User.email,User.prenom,User.nom,Joueurs.id from User inner join Joueurs on Joueurs.User_id = User.id where Joueurs.Equipe_id = ?;
         Select id,nom,img_url from Equipes where id = ?;
         Select User.id,User.nom,User.prenom from User inner join Equipes where Equipes.Selectionneurs_id = User.id;
         Select User.id,User.email,User.prenom,User.nom from User inner join Joueurs on Joueurs.User_id = User.id where Joueurs.Pending_Equipe = ?;
