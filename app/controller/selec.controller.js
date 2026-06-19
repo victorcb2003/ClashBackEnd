@@ -62,6 +62,12 @@ exports.findByMatch = (req, res) => {
     if (parseInt(req.params.match_id) != req.params.match_id) {
         return res.status(400).send({ error: "req.params.match_id n'est pas un entier." })
     }
+    if (!req.params.equipe_id) {
+        return res.status(400).send({ error: "req.params.match_id est requis." })
+    }
+    if (parseInt(req.params.equipe_id) != req.params.equipe_id) {
+        return res.status(400).send({ error: "req.params.match_id n'est pas un entier." })
+    }
 
     Selec.findByMatch(req, res)
 }

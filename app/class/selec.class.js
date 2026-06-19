@@ -84,9 +84,9 @@ module.exports = class Selec {
             INNER JOIN Joueurs j ON j.id = jm.Joueur_id
             INNER JOIN User u ON u.id = j.User_id
             INNER JOIN Equipes e ON e.id = jm.Equipe_id
-            WHERE jm.Match_id = ?
+            WHERE jm.Match_id = ? and jm.Equipe_id = ?
         `
-        const values = [req.params.match_id]
+        const values = [req.params.match_id, req.params.equipe_id]
 
 
         pool.query(sql, values, (err, results) => {
