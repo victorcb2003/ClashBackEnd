@@ -115,3 +115,24 @@ CREATE TABLE IF NOT EXISTS JoueursMatch (
 
   CONSTRAINT unique_joueur_match UNIQUE (Joueur_id, Match_id)
 );
+
+-- Ici je crée la table des modes de paiement (Carte, Espèces) et la table des paiements fictifs
+CREATE TABLE IF NOT EXISTS ModePaiement (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  libelle VARCHAR(50) NOT NULL UNIQUE
+);
+
+INSERT IGNORE INTO ModePaiement (id, libelle) VALUES (1, 'Carte'), (2, 'Espèces');
+
+CREATE TABLE IF NOT EXISTS Paiement (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  User_id INT NOT NULL,
+  Tournois_id INT NOT NULL,
+  ModePaiement_id INT NOT NULL,
+  montant DECIMAL(10,2) NOT NULL,
+  statut VARCHAR(20) DEFAULT 'accepte',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (User_id) REFERENCES User(id) ON DELETE CASCADE,
+  FOREIGN KEY (Tournois_id) REFERENCES Tournois(id) ON DELETE CASCADE,
+  FOREIGN KEY (ModePaiement_id) REFERENCES ModePaiement(id) ON DELETE CASCADE
+);

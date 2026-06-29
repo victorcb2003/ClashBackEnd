@@ -12,6 +12,8 @@ module.exports = app => {
     require("./form.routes.js")(app)
     require("./but.routes.js")(app)
     require("./selectionné.js")(app)
+    // j'atoue ma route 
+    require("./paiement.routes.js")(app)
 
     app.use((req, res) => {
         res.status(404).json({ message: "Route non trouvée "+req.path });
